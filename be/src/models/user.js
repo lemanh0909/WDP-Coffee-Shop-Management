@@ -1,30 +1,69 @@
-const mongoose = require("mongoose");
-const User = new mongoose.Schema({
-    username: {
+import mongoose from "mongoose";
+
+const { String, Date, Number, Boolean, ObjectId } = mongoose.Schema.Types;
+
+const User = mongoose.model(
+  "User",
+  new mongoose.Schema(
+    {
+      fullName: {
         type: String,
         required: true,
-        minlength: 6,
-        maxlength: 20,
-        unique: true
-    },
-    email: {
+      },
+      email: {
         type: String,
         required: true,
-        minlength: 10,
-        maxlength: 50,
-        unique: true
-    },
-    password: {
+        unique: true,
+      },
+      picture: {
         type: String,
-        required: true,
-        minlength: 6,
-    },
-    admin: {
+        default: null,
+      },
+      password: {
+        type: String,
+        default: "123456",
+      },
+      dob: {
+        type: Date,
+        default: null,
+      },
+      gender: {
+        type: Number,
+        default: 1,
+      },
+      phone: {
+        type: String,
+        default: null,
+      },
+      address: {
+        type: String,
+        default: null,
+      },
+      refreshToken: {
+        type: String,
+        default: null,
+      },
+      provider: {
+        type: String,
+        default: "Coffee",
+      },
+      role: {
+        type: {
+          id: Number,
+          name: String,
+        },
+        default: {
+          id: 3,
+          name: "member",
+        },
+      },
+      isDelete: {
         type: Boolean,
         default: false,
+      },
     },
-    refreshToken:{
-        type:String,
-    }
-}, { timestamps: true });
-module.exports = mongoose.model("User", User);
+    { timestamps: true }
+  )
+);
+
+export default User;
