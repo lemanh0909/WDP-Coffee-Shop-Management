@@ -5,14 +5,12 @@ import { authService } from "../services";
 import { response } from "../utils/baseResponse";
 
 // ** Constants
-import { authConstant, httpConstant, userConstant } from "../constant";
+import { authConstant, httpConstant, userConstant } from "../constant/index";
 
 // ** Validator
 import { validation } from "../utils/validation";
 
-// ** Libs
-import crypto from "crypto";
-import { transporter } from "../config/nodemailer";
+
 
 export const AuthController = {
   register: async (req, res) => {
