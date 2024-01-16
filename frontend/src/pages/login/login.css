@@ -51,6 +51,14 @@ input::placeholder {
     color: #ccc;
 }
 
+.success-message {
+    color: green;
+}
+
+.error-message {
+    color: red;
+}
+
 /**
    * * Bounce to the left side
    * */
@@ -209,7 +217,7 @@ input::placeholder {
     top: 50%;
     left: 30px;
     width: calc(50% - 30px);
-    min-height: 420px;
+    min-height: 500px;
     background-color: #fff;
     border-radius: 3px;
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.25);

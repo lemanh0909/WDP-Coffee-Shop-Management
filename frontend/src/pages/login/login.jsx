@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import Axios
 import './login.css';
 
 function Login() {
     const [isLoginForm, setIsLoginForm] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [gender, setGender] = useState('1');
 
     const handleSignupClick = () => {
         setIsLoginForm(false);
@@ -10,6 +15,35 @@ function Login() {
 
     const handleLoginClick = () => {
         setIsLoginForm(true);
+        const data = {
+            email: email,
+            password: password
+        };
+        axios.post('http://localhost:5000/api/v1/auth/login', data)
+            .then(response => {
+                console.log('Login successful:', response.json());
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+            });
+
+    };
+
+    const handleRegisterClick = () => {
+        setIsLoginForm(true);
+        const data = {
+            fullName: fullName,
+            email: email,
+            password: password,
+            gender: gender
+        };
+        axios.post('http://localhost:5000/api/v1/auth/register', data)
+            .then(response => {
+                console.log('Successful registration:', response.data);
+            })
+            .catch(error => {
+                console.error('Registration error:', error);
+            });
     };
 
     const userFormsClassName = isLoginForm ? 'bounceRight' : 'bounceLeft';
@@ -43,17 +77,23 @@ function Login() {
                         <form className="forms_form">
                             <fieldset className="forms_fieldset">
                                 <div className="forms_field">
-                                    <input type="email" placeholder="Email" className="forms_field-input" required autoFocus />
+                                    <input type="email" placeholder="Email" className="forms_field-input" required autoFocus onChange={(e) => setEmail(e.target.value)} value={email} />
                                 </div>
                                 <div className="forms_field">
-                                    <input type="password" placeholder="Password" className="forms_field-input" required />
+                                    <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
                                 </div>
+
                             </fieldset>
                             <div className="forms_buttons">
                                 <button type="button" className="forms_buttons-forgot">
                                     Forgot password?
                                 </button>
-                                <input type="submit" value="Log In" className="forms_buttons-action" />
+                                <input
+                                    type="submit"
+                                    value="Log In"
+                                    className="forms_buttons-action"
+                                    onClick={handleLoginClick}
+                                />
                             </div>
                         </form>
                     </div>
@@ -62,17 +102,24 @@ function Login() {
                         <form className="forms_form">
                             <fieldset className="forms_fieldset">
                                 <div className="forms_field">
-                                    <input type="text" placeholder="Full Name" className="forms_field-input" required />
+                                    <input type="text" placeholder="Full Name" className="forms_field-input" required onChange={(e) => setFullName(e.target.value)} value={fullName} />
                                 </div>
                                 <div className="forms_field">
-                                    <input type="email" placeholder="Email" className="forms_field-input" required />
+                                    <input type="email" placeholder="Email" className="forms_field-input" required autoFocus onChange={(e) => setEmail(e.target.value)} value={email} />
                                 </div>
                                 <div className="forms_field">
-                                    <input type="password" placeholder="Password" className="forms_field-input" required />
+                                    <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
+                                </div>
+                                <div className="forms_field">
+                                    <label htmlFor="gender">Gender</label>
+                                    <select id="gender" className="forms_field-input" required onChange={(e) => setGender(e.target.value)}>
+                                        <option value="1">Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
                                 </div>
                             </fieldset>
                             <div className="forms_buttons">
-                                <input type="submit" value="Sign up" className="forms_buttons-action" />
+                                <input type="submit" value="Sign up" className="forms_buttons-action" onClick={handleRegisterClick} />
                             </div>
                         </form>
                     </div>
