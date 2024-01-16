@@ -13,7 +13,8 @@ function Login() {
         setIsLoginForm(false);
     };
 
-    const handleLoginClick = () => {
+    const handleLoginClick = (e) => {
+        e.preventDefault();
         setIsLoginForm(true);
         const data = {
             email: email,
@@ -21,7 +22,11 @@ function Login() {
         };
         axios.post('http://localhost:5000/api/v1/auth/login', data)
             .then(response => {
-                console.log('Login successful:', response.json());
+                if (response.data.isSuccess == true) {
+                    console.log('Login successful', response);
+                } else {
+                    console.log('Login failed', response);
+                }
             })
             .catch(error => {
                 console.error('Login error:', error);
@@ -29,7 +34,8 @@ function Login() {
 
     };
 
-    const handleRegisterClick = () => {
+    const handleRegisterClick = (e) => {
+        e.preventDefault();
         setIsLoginForm(true);
         const data = {
             fullName: fullName,
@@ -39,7 +45,11 @@ function Login() {
         };
         axios.post('http://localhost:5000/api/v1/auth/register', data)
             .then(response => {
-                console.log('Successful registration:', response.data);
+                if (response.data.isSuccess == true) {
+                    console.log('Successful registration:', response);
+                } else {
+                    console.log('Regiter failed', response);
+                }
             })
             .catch(error => {
                 console.error('Registration error:', error);
