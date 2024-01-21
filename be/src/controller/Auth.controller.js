@@ -184,7 +184,7 @@ export const AuthController = {
     const { email } = req.body;
 
     try {
-      const isSuccess = await authService.verifyResetPassword({ email, req });
+      const isSuccess = await authService.verifyForgotPassword({ email, req });
 
       res.status(200).json(
         response.success({
@@ -203,6 +203,7 @@ export const AuthController = {
       );
     }
   },
+
   resetPasswordToken: async (req, res) => {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
