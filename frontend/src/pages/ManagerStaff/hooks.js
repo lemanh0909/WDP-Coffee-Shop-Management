@@ -10,9 +10,9 @@ export const usePagination = (items, itemsPerPage) => {
     };
 
     const getPaginatedItems = () => {
-        const indexOfLastItem = activePage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+        const startIndex = (activePage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const currentItems = items.slice(startIndex, endIndex);
         return currentItems;
     };
 

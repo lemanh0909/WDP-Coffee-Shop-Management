@@ -1,27 +1,8 @@
 import React from 'react';
 import { useEmployees, usePagination } from './hooks';
-import { Table, Badge, Tooltip, Pagination, OverlayTrigger } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Container, Form } from 'react-bootstrap';
+import { StyledTable, StyledPagination } from './managerStaffStyles';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './managerStaff.css';
-
-const ToggleBadge = ({ value, onClick, textTrue, textFalse }) => {
-  return (
-    <OverlayTrigger
-      placement="top"
-      overlay={<Tooltip>{value ? textTrue : textFalse}</Tooltip>}
-    >
-      <Badge
-        bg={value ? 'success' : 'secondary'}
-        onClick={onClick}
-        className="toggle-badge"
-      >
-        <FontAwesomeIcon icon={value ? faCheck : faTimes} />
-      </Badge>
-    </OverlayTrigger>
-  );
-};
 
 const EmployeeManagement = () => {
   const initialEmployees = [
@@ -55,19 +36,21 @@ const EmployeeManagement = () => {
         <td>{employee.email}</td>
         <td>{employee.phone}</td>
         <td>
-          <ToggleBadge
-            value={employee.isAdmin}
-            onClick={() => handleToggleAdmin(employee.id)}
-            textTrue="Admin right"
-            textFalse="Not admin right"
+          <Form.Check
+            type="switch"
+            id={`admin-switch-${employee.id}`}
+            label=""
+            checked={employee.isAdmin}
+            onChange={() => handleToggleAdmin(employee.id)}
           />
         </td>
         <td>
-          <ToggleBadge
-            value={employee.allowLogin}
-            onClick={() => handleToggleAllowLogin(employee.id)}
-            textTrue="Allow"
-            textFalse="Not allow"
+          <Form.Check
+            type="switch"
+            id={`allow-login-switch-${employee.id}`}
+            label=""
+            checked={employee.allowLogin}
+            onChange={() => handleToggleAllowLogin(employee.id)}
           />
         </td>
       </tr>
@@ -78,29 +61,22 @@ const EmployeeManagement = () => {
     const items = [];
     for (let number = 1; number <= totalPages; number++) {
       items.push(
-        <Pagination.Item
+        <StyledPagination.Item
           key={number}
           active={number === activePage}
           onClick={() => handlePageChange(number)}
         >
           {number}
-        </Pagination.Item>
+        </StyledPagination.Item>
       );
     }
     return items;
   };
 
   return (
-    <div className="container mt-4">
+    <Container className="mt-4">
       <h1 className="text-center mb-4">Manager Staff</h1>
-      <Table
-        responsive="sm"
-        striped
-        bordered
-        hover
-        size="sm"
-        className="text-center align-middle"
-      >
+      <StyledTable className="text-center align-middle table-hover">
         <thead>
           <tr>
             <th>Username</th>
@@ -112,12 +88,11 @@ const EmployeeManagement = () => {
           </tr>
         </thead>
         <tbody>{renderTableRows()}</tbody>
-      </Table>
-      <div className="pagination-container d-flex justify-content-center mt-4">
-        <Pagination size="sm">{renderPaginationItems()}</Pagination>
-      </div>
-    </div>
+      </StyledTable>
+      <StyledPagination size="sm">{renderPaginationItems()}</StyledPagination>
+    </Container>
   );
 };
 
 export default EmployeeManagement;
+

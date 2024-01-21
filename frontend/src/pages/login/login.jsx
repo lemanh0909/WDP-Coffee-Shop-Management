@@ -24,7 +24,7 @@ function Login() {
         };
         axios.post('http://localhost:5000/api/v1/auth/login', data)
             .then(response => {
-                if (response.data.isSuccess == true) {
+                if (response.data.isSuccess === true) {
                     console.log('Login successful', response);
                     navigate("/employee-management");
                 } else {
@@ -48,7 +48,7 @@ function Login() {
         };
         axios.post('http://localhost:5000/api/v1/auth/register', data)
             .then(response => {
-                if (response.data.isSuccess == true) {
+                if (response.data.isSuccess === true) {
                     console.log('Successful registration:', response);
                 } else {
                     console.log('Regiter failed', response);
