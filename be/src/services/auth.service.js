@@ -156,28 +156,28 @@ export const authService = {
 
     return userJson;
   },
-  // verifyResetPassword: async ({ email, req }) => {
-  //   const user = await User.findOne({ email });
-  //   if (!user) throw new Error(userConstant.USER_NOT_EXIST);
+  verifyForgotPassword: async ({ email, req }) => {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error(userConstant.USER_NOT_EXIST);
 
-  //   const token = crypto.randomBytes(20).toString("hex");
+    const token = crypto.randomBytes(20).toString("hex");
 
-  //   req.session[token] = email;
+    req.session[token] = email;
 
-  //   const CLIENT_URL = process.env.CLIENT_URL;
+    const CLIENT_URL = process.env.CLIENT_URL;
 
-  //   await transporter.sendMail({
-  //     from: "BOT",
-  //     to: email,
-  //     subject: "Notification",
-  //     html: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
-  //     Please click on the following link, or paste this into your browser to complete the process:\n\n
-  //     <a href="${CLIENT_URL}/reset-password/${token}">reset password</a>\n\n
-  //     If you did not request this, please ignore this email and your password will remain unchanged.\n`,
-  //   });
+    await transporter.sendMail({
+      from: "BOT",
+      to: email,
+      subject: "Notification",
+      html: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
+      Please click on the following link, or paste this into your browser to complete the process:\n\n
+      <a href="${CLIENT_URL}/reset-password/${token}">reset password</a>\n\n
+      If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    });
 
-  //   return true;
-  // },
+    return true;
+  },
   updatePassword: async ({ email, password }) => {
     const user = await User.findOne({ email });
     if (!user) throw new Error(userConstant.USER_NOT_EXIST);
@@ -189,4 +189,5 @@ export const authService = {
 
     return true;
   },
+  
 };
