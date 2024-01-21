@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
+import { useNavigate } from "react-router-dom";
 import './login.css';
 
 function Login() {
     const [isLoginForm, setIsLoginForm] = useState(true);
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
@@ -22,8 +24,9 @@ function Login() {
         };
         axios.post('http://localhost:5000/api/v1/auth/login', data)
             .then(response => {
-                if (response.data.isSuccess == true) {
+                if (response.data.isSuccess === true) {
                     console.log('Login successful', response);
+                    navigate("/employee-management");
                 } else {
                     console.log('Login failed', response);
                 }
@@ -45,7 +48,7 @@ function Login() {
         };
         axios.post('http://localhost:5000/api/v1/auth/register', data)
             .then(response => {
-                if (response.data.isSuccess == true) {
+                if (response.data.isSuccess === true) {
                     console.log('Successful registration:', response);
                 } else {
                     console.log('Regiter failed', response);
