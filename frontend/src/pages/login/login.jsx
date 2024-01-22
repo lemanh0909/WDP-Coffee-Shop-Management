@@ -4,20 +4,28 @@ import { useNavigate } from "react-router-dom";
 import './login.css';
 
 function Login() {
-    const [isLoginForm, setIsLoginForm] = useState(true);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [gender, setGender] = useState('1');
+    const [emailError, setEmailError] = useState('');
+    const [currentForm, setCurrentForm] = useState('login');
+    const [registerSuccess, setRegisterSuccess] = useState(false);
+
+
+    const validateEmail = (email) => {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+        return regex.test(email);
+    };
 
     const handleSignupClick = () => {
-        setIsLoginForm(false);
+        setCurrentForm('signup');
     };
 
     const handleLoginClick = (e) => {
         e.preventDefault();
-        setIsLoginForm(true);
+
         const data = {
             email: email,
             password: password
@@ -34,12 +42,16 @@ function Login() {
             .catch(error => {
                 console.error('Login error:', error);
             });
-
     };
 
     const handleRegisterClick = (e) => {
         e.preventDefault();
-        setIsLoginForm(true);
+
+        if (!validateEmail(email)) {
+            setEmailError('Invalid email address');
+            return;
+        }
+
         const data = {
             fullName: fullName,
             email: email,
@@ -50,16 +62,18 @@ function Login() {
             .then(response => {
                 if (response.data.isSuccess === true) {
                     console.log('Successful registration:', response);
+                    setRegisterSuccess(true);
                 } else {
-                    console.log('Regiter failed', response);
+                    console.log('Register failed', response);
                 }
             })
+
             .catch(error => {
                 console.error('Registration error:', error);
             });
     };
 
-    const userFormsClassName = isLoginForm ? 'bounceRight' : 'bounceLeft';
+    const userFormsClassName = currentForm === 'login' ? 'bounceRight' : 'bounceLeft';
 
     return (
         <section className="user">
@@ -67,8 +81,7 @@ function Login() {
                 <div className="user_options-text">
                     <div className="user_options-unregistered">
                         <h2 className="user_unregistered-title">Don't have an account?</h2>
-                        <p className="user_unregistered-text">Banjo tote bag bicycle rights, High Life sartorial cray craft beer
-                            whatever street art fap.</p>
+                        <p className="user_unregistered-text">Join us and explore a world of delicious coffee!</p>
                         <button className="user_unregistered-signup" id="signup-button" onClick={handleSignupClick}>
                             Sign up
                         </button>
@@ -76,66 +89,72 @@ function Login() {
 
                     <div className="user_options-registered">
                         <h2 className="user_registered-title">Have an account?</h2>
-                        <p className="user_registered-text">Banjo tote bag bicycle rights, High Life sartorial cray craft beer
-                            whatever street art fap.</p>
-                        <button className="user_registered-login" id="login-button" onClick={handleLoginClick}>
+                        <p className="user_registered-text">Welcome back! Login to enjoy our coffee selection and more.</p>
+                        <button className="user_registered-login" id="login-button" onClick={() => setCurrentForm('login')}>
                             Login
                         </button>
                     </div>
                 </div>
 
                 <div className={`user_options-forms ${userFormsClassName}`} id="user_options-forms">
-                    <div className="user_forms-login">
-                        <h2 className="forms_title">Login</h2>
-                        <form className="forms_form">
-                            <fieldset className="forms_fieldset">
-                                <div className="forms_field">
-                                    <input type="email" placeholder="Email" className="forms_field-input" required autoFocus onChange={(e) => setEmail(e.target.value)} value={email} />
+                    {currentForm === 'login' ? (
+                        <div className="user_forms-login">
+                            <h2 className="forms_title">Login</h2>
+                            <form className="forms_form">
+                                <fieldset className="forms_fieldset">
+                                    <div className="forms_field">
+                                        <input type="email" placeholder="Email" className="forms_field-input" required autoFocus onChange={(e) => setEmail(e.target.value)} value={email} />
+                                    </div>
+                                    <div className="forms_field">
+                                        <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
+                                    </div>
+                                </fieldset>
+                                <div className="forms_buttons">
+                                    <button type="button" className="forms_buttons-forgot">
+                                        Forgot password?
+                                    </button>
+                                    <input
+                                        type="submit"
+                                        value="Log In"
+                                        className="forms_buttons-action"
+                                        onClick={handleLoginClick}
+                                    />
                                 </div>
-                                <div className="forms_field">
-                                    <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
+                            </form>
+                        </div>
+                    ) : (
+                        <div className="user_forms-signup">
+                            <h2 className="forms_title">Sign Up</h2>
+                            <form className="forms_form">
+                                <fieldset className="forms_fieldset">
+                                    <div className="forms_field">
+                                        <input type="text" placeholder="Full Name" className="forms_field-input" required onChange={(e) => setFullName(e.target.value)} value={fullName} />
+                                    </div>
+                                    <div className="forms_field">
+                                        <input type="email" placeholder="Email" className="forms_field-input" required autoFocus onChange={(e) => {
+                                            setEmail(e.target.value);
+                                            setEmailError('');
+                                        }} value={email} />
+                                        {emailError && <p className="error-message">{emailError}</p>}
+                                    </div>
+                                    <div className="forms_field">
+                                        <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
+                                    </div>
+                                    <div className="forms_field">
+                                        <label htmlFor="gender">Gender</label>
+                                        <select id="gender" className="forms_field-input" required onChange={(e) => setGender(e.target.value)}>
+                                            <option value="1">Male</option>
+                                            <option value="0">Female</option>
+                                        </select>
+                                    </div>
+                                </fieldset>
+                                <div className="forms_buttons">
+                                    <input type="submit" value="Sign up" className="forms_buttons-action" onClick={handleRegisterClick} />
                                 </div>
-
-                            </fieldset>
-                            <div className="forms_buttons">
-                                <button type="button" className="forms_buttons-forgot">
-                                    Forgot password?
-                                </button>
-                                <input
-                                    type="submit"
-                                    value="Log In"
-                                    className="forms_buttons-action"
-                                    onClick={handleLoginClick}
-                                />
-                            </div>
-                        </form>
-                    </div>
-                    <div className="user_forms-signup">
-                        <h2 className="forms_title">Sign Up</h2>
-                        <form className="forms_form">
-                            <fieldset className="forms_fieldset">
-                                <div className="forms_field">
-                                    <input type="text" placeholder="Full Name" className="forms_field-input" required onChange={(e) => setFullName(e.target.value)} value={fullName} />
-                                </div>
-                                <div className="forms_field">
-                                    <input type="email" placeholder="Email" className="forms_field-input" required autoFocus onChange={(e) => setEmail(e.target.value)} value={email} />
-                                </div>
-                                <div className="forms_field">
-                                    <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
-                                </div>
-                                <div className="forms_field">
-                                    <label htmlFor="gender">Gender</label>
-                                    <select id="gender" className="forms_field-input" required onChange={(e) => setGender(e.target.value)}>
-                                        <option value="1">Male</option>
-                                        <option value="0">Female</option>
-                                    </select>
-                                </div>
-                            </fieldset>
-                            <div className="forms_buttons">
-                                <input type="submit" value="Sign up" className="forms_buttons-action" onClick={handleRegisterClick} />
-                            </div>
-                        </form>
-                    </div>
+                            </form>
+                            {registerSuccess && <p className="success-message">Register successful!</p>}
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
