@@ -21,7 +21,6 @@ export const AuthController = {
     const data = req.body;
     try {
       const user = await authService.createUser(data);
-
       res.status(200).json(
         response.success({
           data: { user },
@@ -33,7 +32,8 @@ export const AuthController = {
         res.status(200).json(
           response.error({
             code: 409,
-            message: authConstant.EMAIL_EXISTED,
+            message: err,
+            // message: authConstant.EMAIL_EXISTED,
           })
         );
       else
