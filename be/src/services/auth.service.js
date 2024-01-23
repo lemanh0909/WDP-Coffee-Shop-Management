@@ -1,5 +1,5 @@
 // ** Models
-import User from "../models/User";
+import User from '../models/user';
 
 // ** Service
 import { jwtService } from "../utils/jwt";
@@ -14,12 +14,13 @@ import { authConstant} from "../constant/index";
 // import { transporter } from "../config/nodemailer";
 
 export const authService = {
-  createUser: async ({ email, fullName, password, gender }) => {
+  createUser: async ({ email, fullName, password, dob,phoneNumber  }) => {
     const user = new User({
       email,
       fullName,
       password,
-      gender,
+      dob,
+      phoneNumber,
     });
 
     const salt = bcrypt.genSaltSync();
@@ -37,7 +38,6 @@ export const authService = {
   login: async ({ email, password }) => {
     const user = await User.findOne(
       { email },
-      { folders: false, studySets: false }
     );
 
     if (!user) throw new Error(authConstant.EMAIL_NOT_EXIST);
@@ -63,64 +63,7 @@ export const authService = {
       refreshToken,
     };
   },
-  loginThirdParty: async ({ email, fullName, picture, provider }) => {
-    const user = await User.findOne({ email });
-
-    if (user && user.provider.toLowerCase().includes("quizroom"))
-      throw new Error(authConstant.FORBIDDEN);
-
-    // ** Exist user
-    if (user) {
-      user.fullName = fullName;
-      user.picture = picture;
-
-      const payload = { id: user.id, fullName: user.fullName, role: user.role };
-
-      const { accessToken, refreshToken } = await jwtService.getTokens(payload);
-      user.refreshToken = refreshToken;
-
-      await user.save();
-
-      const userJson = user.toJSON();
-
-      delete userJson.password;
-      delete userJson.refreshToken;
-
-      return {
-        user: userJson,
-        accessToken,
-        refreshToken,
-      };
-    } else {
-      // Create user
-      const user = new User({
-        fullName,
-        email,
-        provider,
-        picture,
-      });
-
-      await user.save();
-
-      const payload = { id: user.id, fullName: user.fullName, role: user.role };
-      const { accessToken, refreshToken } = await jwtService.getTokens(payload);
-
-      user.refreshToken = refreshToken;
-
-      await user.save();
-
-      const userJson = user.toJSON();
-
-      delete userJson.password;
-      delete userJson.refreshToken;
-
-      return {
-        user: userJson,
-        accessToken,
-        refreshToken,
-      };
-    }
-  },
+  
   refreshToken: async ({ payload, refreshToken }) => {
     const user = await User.findById(payload.id);
 

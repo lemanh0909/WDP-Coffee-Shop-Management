@@ -6,56 +6,47 @@ const User = mongoose.model(
   "User",
   new mongoose.Schema(
     {
-      fullName: {
-        type: String,
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Account', // Liên kết với mô hình Account
         required: true,
       },
       email: {
         type: String,
         required: true,
-        unique: true,
       },
-      picture: {
+      fullName: {
         type: String,
-        default: null,
+        required: true,
+      },
+      dob: {
+        type: Date,
+      },
+      phoneNumber: {
+        type: String,
       },
       password: {
         type: String,
         default: "123456",
       },
-      dob: {
-        type: Date,
-        default: null,
-      },
-      gender: {
-        type: Number,
-        default: 1,
-      },
-      phone: {
-        type: String,
-        default: null,
-      },
-      address: {
-        type: String,
-        default: null,
-      },
       refreshToken: {
         type: String,
         default: null,
       },
-      provider: {
+      description: {
         type: String,
-        default: "Coffee",
+      },
+      salary: {
+        type: Number,
+      },
+      isVerified: {
+        type: Boolean,
+        default: false,
       },
       role: {
-        type: {
-          id: Number,
-          name: String,
-        },
-        default: {
-          id: 3,
-          name: "member",
-        },
+        type: String,
+        enum: ["Manager", "Staff"],
+        default: "user",
       },
       isDelete: {
         type: Boolean,
