@@ -1,113 +1,188 @@
-// @ts-ignore
-const User = require('../models/user')
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { REFRESH_KEY, ACCESS_KEY } = process.env;
+// ** Models
+import User from "../models/User";
+import Account from "../models/account.js";
+import Shop from "../models/shop.js";
 
-class AuthService {
+// ** Service
+import { jwtService } from "../utils/jwt";
 
-    async registerUser(req, res) {
-        const { email, password, username } = req.body;
-        try {
-            // hash pass
-            const salt = await bcrypt.genSalt(10);
-            const hashed = await bcrypt.hash(password, salt);
+// ** Third Libs
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 
-            // create user in db
-            const result = await new User({
-                username: username,
-                email: email,
-                password: hashed,
+// ** Constants
+import { authConstant } from "../constant/index";
 
-            }).save();
-            return result;
+// import { transporter } from "../config/nodemailer";
 
-        } catch (error) {
-            throw error;
-        }
+export const authService = {
+    createUser: async ({ email, password, fullName, dob, phoneNumber, role, shopName, managerEmail }) => {
+
+    const existingAccount = await Account.findOne({ email });
+    if (existingAccount) throw new Error(authConstant.EMAIL_EXISTED);
+    const generateRandomCode = () => {
+      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let code = "";
+      for (let i = 0; i < 6; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters.charAt(randomIndex);
+      }
+      return code;
+    };
+    const verificationCode = generateRandomCode();
+    const newAccount = new Account({
+      email,
+      password,
+      verificationCode,
+      isVerified: false,
+    });
+    const salt = bcrypt.genSaltSync();
+    newAccount.password = bcrypt.hashSync(newAccount.password, salt);
+
+
+    // const userJson = user.toJSON();
+
+    // delete userJson.password;
+    // delete userJson.refreshToken;
+
+    var isVerified;
+    if (role == "Manager") {
+      isVerified = true;
+    } else {
+      isVerified = false;
     }
 
-    async genAccessToken(user){
-        return jwt.sign({
-            id: user.id,
-            admin: user.admin,
-        }, ACCESS_KEY, { expiresIn: "3h" });
-    }
-    async genRefreshToken(user){
-        return jwt.sign({
-            id: user.id,
-            admin: user.admin,
-        }, REFRESH_KEY, { expiresIn: "365d" });
-    }
-
-    async loginUser(req, res) {
-        try {
-            const findUser = await User.findOne({ username: req.body.username });
-            if (!findUser) {
-                res.status(401).json({ error: "Wrong username" });
-            }
-            const comparePassword = await bcrypt.compare(req.body.password, findUser.password);
-            if (!comparePassword) {
-                return res.status(401).json({ error: "Wrong password" });
-            }
-            const { password, refreshToken, ...others } = findUser._doc;
-            if (findUser && comparePassword) {
-                const genAccessToken =await this.genAccessToken(findUser);
-                const genRefreshToken =await this.genRefreshToken(findUser);
-
-                res.cookie("accessToken", genAccessToken, {
-                    httpOnly: true,
-                    secure: false,
-                    path: "/",
-                    sameSite: "strict",
-                })
-                await User.findByIdAndUpdate({ _id: findUser.id }, { refreshToken: genRefreshToken });
-                return { ...others };
-            }
-        } catch (error) {
-            throw error;
-        }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      console.error("Email already exists in User table.");
     }
 
 
-    async refreshAccessToken(req, res) {
-        const { id } = req.body;
-        const findUser = await User.findById(id);
-        if (!findUser) {
-            return res.status(404).json("Not found User");
-        }
-        
-        const getRefreshTokenInDB = findUser.refreshToken;
-    
-        try {
-            jwt.verify(getRefreshTokenInDB, REFRESH_KEY);
+    const newUser = new User({
+      _id: newAccount._id, // Mối quan hệ giữa User và Account thông qua userId
+      fullName,
+      dob,
+      phoneNumber,
+      description: "",
+      salary: 0,
+      isVerified,
+      role,
+    });
 
-
-            const newAccessToken =await this.genAccessToken(findUser);
-            const newRefreshToken =await this.genRefreshToken(findUser);
-    
-            res.cookie("accessToken", newAccessToken, {
-                httpOnly: true,
-                secure: false,
-                path: "/",
-                sameSite: "strict",
-            });
-    
-            await User.findByIdAndUpdate({ _id: findUser.id }, { refreshToken: newRefreshToken });
-    
-            res.status(200).json({accessToken:newAccessToken});
-        } catch (error) {
-            res.status(403).json("Invalid refreshToken");
-        }
+    await newAccount.save();
+    await newUser.save();
+    // console.log(newUser);
+    if (role == "Manager") {
+      const newShop = new Shop({
+        shopName,
+        managerId: newAccount._id,
+      });
+      await newShop.save();
+    }else{
+      const registerShopManager = await Account.findOne({ email: managerEmail });
+      const registerShop = await Shop.findOne({ managerId: registerShopManager._id });
+      if(!registerShop) throw new Error('Shop manager email not found');
+      registerShop.staffId.push(newAccount._id);
+      await registerShop.save();
     }
+    return newAccount;
+  },
+  login: async ({ email, password }) => {
+    const user = await User.findOne(
+      { email },
+    );
 
-    async logoutUser(req, res) {
-        res.clearCookie("accessToken");
-        res.status(200).json("Logout successful");
-    }
-    
+    if (!user) throw new Error(authConstant.EMAIL_NOT_EXIST);
 
+    const passwordOk = bcrypt.compareSync(password, user.password);
 
-}
+    if (!passwordOk) throw new Error(authConstant.PASSWORD_INVALID);
 
-module.exports = new AuthService();
+    const payload = { id: user.id, fullName: user.fullName, role: user.role };
+    const { accessToken, refreshToken } = await jwtService.getTokens(payload);
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    const userJson = user.toJSON();
+
+    delete userJson.password;
+    delete userJson.refreshToken;
+
+    return {
+      user: userJson,
+      accessToken,
+      refreshToken,
+    };
+  },
+  
+  refreshToken: async ({ payload, refreshToken }) => {
+    const user = await User.findById(payload.id);
+
+    if (!user) throw new Error(userConstant.USER_NOT_EXIST);
+
+    if (user.refreshToken !== refreshToken)
+      throw new Error(authConstant.UNAUTHORIZED);
+
+    const payloadParams = { ...payload };
+    delete payloadParams.iat;
+    delete payloadParams.exp;
+    const { accessToken } = jwtService.getAccessToken(payloadParams);
+
+    return {
+      accessToken,
+    };
+  },
+  changePassword: async ({ oldPassword, password, user }) => {
+    const userUpdate = await User.findById(user.id);
+
+    if (!bcrypt.compareSync(oldPassword, userUpdate.password))
+      throw new Error(authConstant.OLD_PASSWORD_INVALID);
+
+    const salt = bcrypt.genSaltSync();
+    userUpdate.password = bcrypt.hashSync(password, salt);
+
+    await userUpdate.save();
+
+    const userJson = userUpdate.toJSON();
+
+    delete userJson.password;
+    delete userJson.refreshToken;
+
+    return userJson;
+  },
+  verifyForgotPassword: async ({ email, req }) => {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error(userConstant.USER_NOT_EXIST);
+
+    const token = crypto.randomBytes(20).toString("hex");
+
+    req.session[token] = email;
+
+    const CLIENT_URL = process.env.CLIENT_URL;
+
+    await transporter.sendMail({
+      from: "BOT",
+      to: email,
+      subject: "Notification",
+      html: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
+      Please click on the following link, or paste this into your browser to complete the process:\n\n
+      <a href="${CLIENT_URL}/reset-password/${token}">reset password</a>\n\n
+      If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    });
+
+    return true;
+  },
+  updatePassword: async ({ email, password }) => {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error(userConstant.USER_NOT_EXIST);
+
+    const salt = bcrypt.genSaltSync();
+    user.password = bcrypt.hashSync(password, salt);
+
+    await user.save();
+
+    return true;
+  },
+  
+};

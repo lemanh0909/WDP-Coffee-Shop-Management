@@ -1,9 +1,20 @@
-const router = require('express').Router();
+// ** Express
+import express from "express";
+import { Router } from 'express';
+
+import authRouter from "./Auth.routes";
+import managerRouter from "./manager.routes";
+// import userRouter from "./User.routes";
 
 
-router.use('/auth',require('./auth.route'));
-router.use('/user',require('./user.route'));
-
-
-module.exports = router;
+export const mainRouter = (app) => {
+    // const v1Router = express.Router();
+    const v1Router = new Router();
+  
+    v1Router.use("/auth", authRouter);
+    // v1Router.use("/user", userRouter);
+    v1Router.use("/manager", managerRouter);
+  
+    app.use("/api/v1", v1Router);
+  };
 
