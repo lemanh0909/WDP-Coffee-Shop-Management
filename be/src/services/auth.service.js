@@ -1,15 +1,25 @@
 // ** Models
+<<<<<<< Updated upstream
 import User from "../models/User";
+=======
+import User from "../models/User.js";
+import Account from "../models/account.js";
+import Shop from "../models/shop.js";
+>>>>>>> Stashed changes
 
 // ** Service
-import { jwtService } from "../utils/jwt";
+import { jwtService } from "../utils/jwt.js";
 
 // ** Third Libs
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 
 // ** Constants
+<<<<<<< Updated upstream
 import { authConstant} from "../constant/index";
+=======
+import { authConstant } from "../constant/index.js";
+>>>>>>> Stashed changes
 
 // import { transporter } from "../config/nodemailer";
 

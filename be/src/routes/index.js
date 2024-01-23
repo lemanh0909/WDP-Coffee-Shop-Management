@@ -1,7 +1,12 @@
 // ** Express
 import express from "express";
 
+<<<<<<< Updated upstream
 import authRouter from "./Auth.routes";
+=======
+import authRouter from "./Auth.routes.js";
+import managerRouter from "./manager.routes.js";
+>>>>>>> Stashed changes
 // import userRouter from "./User.routes";
 
 

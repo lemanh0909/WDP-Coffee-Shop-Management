@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 
 // ** Constants
-import { authConstant } from "../constant/Auth.constant";
+import { authConstant } from "../constant/Auth.constant.js";
 
 export const jwtService = {
   async getTokens(payload) {

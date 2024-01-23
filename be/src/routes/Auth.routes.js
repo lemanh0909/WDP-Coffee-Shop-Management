@@ -2,14 +2,18 @@
 import express from "express";
 
 // ** Controllers
+<<<<<<< Updated upstream
 import { AuthController } from "../controller/auth.controller";
+=======
+import { AuthController } from "../controller/Auth.controller.js"
+>>>>>>> Stashed changes
 
 // ** Constants
-import { authConstant, userConstant } from "../constant";
+import { authConstant, userConstant } from "../constant/index.js";
 
 // ** Middlewares
 import { body } from "express-validator";
-import { verifyAccessToken, verifyRefreshToken } from "../middleware/jwt";
+import { verifyAccessToken, verifyRefreshToken } from "../middleware/jwt.js";
 
 const authRouter = express.Router();
 
