@@ -1,5 +1,7 @@
 // ** Models
-import User from '../models/user';
+import User from "../models/User";
+import Account from "../models/account.js";
+import Shop from "../models/shop.js";
 
 // ** Service
 import { jwtService } from "../utils/jwt";
@@ -9,31 +11,81 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 
 // ** Constants
-import { authConstant} from "../constant/index";
+import { authConstant } from "../constant/index";
 
 // import { transporter } from "../config/nodemailer";
 
 export const authService = {
-  createUser: async ({ email, fullName, password, dob,phoneNumber  }) => {
-    const user = new User({
+    createUser: async ({ email, password, fullName, dob, phoneNumber, role, shopName, managerEmail }) => {
+
+    const existingAccount = await Account.findOne({ email });
+    if (existingAccount) throw new Error(authConstant.EMAIL_EXISTED);
+    const generateRandomCode = () => {
+      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let code = "";
+      for (let i = 0; i < 6; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters.charAt(randomIndex);
+      }
+      return code;
+    };
+    const verificationCode = generateRandomCode();
+    const newAccount = new Account({
       email,
-      fullName,
       password,
+      verificationCode,
+      isVerified: false,
+    });
+    const salt = bcrypt.genSaltSync();
+    newAccount.password = bcrypt.hashSync(newAccount.password, salt);
+
+
+    // const userJson = user.toJSON();
+
+    // delete userJson.password;
+    // delete userJson.refreshToken;
+
+    var isVerified;
+    if (role == "Manager") {
+      isVerified = true;
+    } else {
+      isVerified = false;
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      console.error("Email already exists in User table.");
+    }
+
+
+    const newUser = new User({
+      _id: newAccount._id, // Mối quan hệ giữa User và Account thông qua userId
+      fullName,
       dob,
       phoneNumber,
+      description: "",
+      salary: 0,
+      isVerified,
+      role,
     });
 
-    const salt = bcrypt.genSaltSync();
-    user.password = bcrypt.hashSync(user.password, salt);
-
-    await user.save();
-
-    const userJson = user.toJSON();
-
-    delete userJson.password;
-    delete userJson.refreshToken;
-
-    return userJson;
+    await newAccount.save();
+    await newUser.save();
+    // console.log(newUser);
+    if (role == "Manager") {
+      const newShop = new Shop({
+        shopName,
+        managerId: newAccount._id,
+      });
+      await newShop.save();
+    }else{
+      const registerShopManager = await Account.findOne({ email: managerEmail });
+      const registerShop = await Shop.findOne({ managerId: registerShopManager._id });
+      if(!registerShop) throw new Error('Shop manager email not found');
+      registerShop.staffId.push(newAccount._id);
+      await registerShop.save();
+    }
+    return newAccount;
   },
   login: async ({ email, password }) => {
     const user = await User.findOne(

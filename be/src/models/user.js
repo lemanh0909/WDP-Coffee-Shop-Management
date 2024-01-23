@@ -11,10 +11,6 @@ const User = mongoose.model(
         ref: 'Account', // Liên kết với mô hình Account
         required: true,
       },
-      email: {
-        type: String,
-        required: true,
-      },
       fullName: {
         type: String,
         required: true,
@@ -48,9 +44,14 @@ const User = mongoose.model(
         enum: ["Manager", "Staff"],
         default: "user",
       },
-      isDelete: {
+      isVerified: {
         type: Boolean,
         default: false,
+      },
+      role: {
+        type: String,
+        enum: ["Manager", "Staff"],
+        default: "user",
       },
     },
     { timestamps: true }
