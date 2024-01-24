@@ -2,7 +2,7 @@
 import { validationResult } from "express-validator";
 
 // ** Base Response
-import { response } from "./baseResponse";
+import { response } from "./baseResponse.js";
 
 export const validation = {
   validationRequest: (req, res) => {

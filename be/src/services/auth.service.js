@@ -1,17 +1,21 @@
 // ** Models
-import User from "../models/User";
+
+import User from "../models/user.js";
 import Account from "../models/account.js";
 import Shop from "../models/shop.js";
 
+
 // ** Service
-import { jwtService } from "../utils/jwt";
+import { jwtService } from "../utils/jwt.js";
 
 // ** Third Libs
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 
 // ** Constants
-import { authConstant } from "../constant/index";
+
+import { authConstant } from "../constant/index.js";
+
 
 // import { transporter } from "../config/nodemailer";
 

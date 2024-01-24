@@ -2,7 +2,7 @@
 import express from "express";
 
 // ** Controllers
-import { managerController } from "../controller/manager.controller";
+import { managerController } from "../controller/manager.controller.js";
 
 // ** Constants
 import { authConstant, userConstant } from "../constant";

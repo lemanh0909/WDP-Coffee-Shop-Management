@@ -2,12 +2,11 @@
 import express from "express";
 
 // ** Config
-import { config } from "./config/config";
-import { connection } from "./config/database";
+import { config } from "./config/config.js";
+import { connection } from "./config/database.js";
 
-// ** Router
-import { mainRouter } from "./routes";
-
+// ** Router'
+import {mainRouter} from "./routes/index.js"
 
 // ** Paths
 import { fileURLToPath } from 'url';

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 // ** Constants
-import { authConstant } from "../constant";
+import { authConstant } from "../constant/index.js";
 
 const verifyAccessToken = async (req, res, next) => {
   try {
