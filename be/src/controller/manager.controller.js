@@ -12,6 +12,7 @@ import { validation } from "../utils/validation.js";
 
 
 
+
 export const managerController = {
   getAllStaff: async (req, res) => {
     const error = validation.validationRequest(req, res);
