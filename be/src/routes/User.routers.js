@@ -8,9 +8,8 @@ import { UserController } from "../controller/User.controller";
 // ** Validation
 
 import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt";
+const userRouter = express.Router();
 
+userRouter.get('/getAll', verifyAdminOrHigherToken, UserController.getAllUser)
+userRouter.put('/update', verifyAccessToken, UserController.updateUser)
 
-router.get('/getAll', verifyAdminOrHigherToken, UserController.getAllUser)
-router.put('/update', verifyAccessToken, UserController.updateUser)
-
-module.exports = router
