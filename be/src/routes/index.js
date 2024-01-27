@@ -2,8 +2,11 @@
 import express from "express";
 import { Router } from 'express';
 
-import authRouter from "./Auth.routes";
-import managerRouter from "./manager.routes";
+
+import authRouter from "./Auth.routes.js";
+import managerRouter from "./manager.routes.js";
+import userRouter from "./User.routers.js";
+import warehouseRouter from "./warehouse.routes.js";
 // import userRouter from "./User.routes";
 
 
@@ -14,7 +17,8 @@ export const mainRouter = (app) => {
     v1Router.use("/auth", authRouter);
     // v1Router.use("/user", userRouter);
     v1Router.use("/manager", managerRouter);
-  
+    v1Router.use("/user", userRouter);
+    v1Router.use("/warehouse", warehouseRouter);
     app.use("/api/v1", v1Router);
   };
 
