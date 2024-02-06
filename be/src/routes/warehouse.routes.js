@@ -2,7 +2,7 @@
 import express from "express";
 
 // ** Controllers
-import { warehouseController } from "../controller/warehouse.controller";
+import  {WarehouseController}  from "../controller/warehouse.controller";
 
 
 // ** Validation
@@ -10,11 +10,11 @@ import { warehouseController } from "../controller/warehouse.controller";
 import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt";
 const warehouseRouter = express.Router();
 
-warehouseRouter.get('/getAll', verifyAdminOrHigherToken, warehouseController.getAllWarehouses)
-warehouseRouter.get('/getDetail', verifyAdminOrHigherToken, warehouseController.getDetailWarehouse)
-warehouseRouter.put('/update', verifyAccessToken, warehouseController.updateWarehouse)
-warehouseRouter.post('/create',verifyAdminOrHigherToken, warehouseController.createWarehouse)
-warehouseRouter.delete('/delete', verifyAccessToken, warehouseController.deleteWarehouse)
+warehouseRouter.get('/getAll', verifyAdminOrHigherToken, WarehouseController.getAllWarehouses)
+warehouseRouter.get('/getDetail', verifyAdminOrHigherToken, WarehouseController.getDetailWarehouse)
+warehouseRouter.put('/update', verifyAccessToken, WarehouseController.updateWarehouse)
+warehouseRouter.post('/create',verifyAdminOrHigherToken, WarehouseController.createWarehouse)
+warehouseRouter.delete('/delete', verifyAccessToken, WarehouseController.deleteWarehouse)
 
 export default warehouseRouter;
 

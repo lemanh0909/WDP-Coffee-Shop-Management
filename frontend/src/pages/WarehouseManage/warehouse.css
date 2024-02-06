@@ -1,0 +1,49 @@
+.sidebar {
+    background-color: rgba(218, 218, 218, 1);
+}
+
+.custom-navbar {
+    background-color: rgba(224, 224, 224, 1);
+}
+
+.nav.link {
+    color: rgba(51, 51, 51, 1);
+}
+
+
+.sidebar {
+    background-color: rgba(224, 224, 224, 1);
+    height: 100%;
+    bottom: 0;
+    width: 250px;
+    padding: 20px;
+    color: #ecf0f1;
+}
+
+.sidebar h5 {
+    color: rgba(51, 51, 51, 1);
+    text-decoration: underline;
+    margin-bottom: 10px;
+
+}
+
+.filter-section {
+    margin-top: 20px;
+}
+
+.form-check {
+    color: rgba(51, 51, 51, 1);
+}
+
+.filter-section h5 {
+    margin-bottom: 10px;
+}
+
+.checkbox-label {
+    font-weight: normal;
+    color: rgba(51, 51, 51, 1)
+}
+
+.checkbox-input {
+    margin-right: 5px;
+}

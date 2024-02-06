@@ -4,7 +4,6 @@
 import { userService } from "../services";
 
 
-
 // ** Utils
 import { validationResult } from "express-validator";
 

@@ -14,4 +14,3 @@ userRouter.get('/getAll', verifyAdminOrHigherToken, UserController.getAllUser)
 userRouter.put('/update', verifyAccessToken, UserController.updateUser)
 
 export default userRouter
-
