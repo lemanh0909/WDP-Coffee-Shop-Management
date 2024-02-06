@@ -4,6 +4,8 @@
 import { userService } from "../services";
 
 
+// ** Utils
+import { validationResult } from "express-validator";
 
 export const UserController = {
     getAllUser: async (req, res) => {

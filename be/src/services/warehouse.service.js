@@ -1,4 +1,6 @@
-import Warehouse from '../models/warehouse'
+
+import Warehouse from "../models/warehouse.js"
+
 import ImportExportNote from '../models/exportimportNote';
 const LIMIT_WAREHOUSE = 10;
 
