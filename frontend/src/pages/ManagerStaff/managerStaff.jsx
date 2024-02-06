@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEmployees, usePagination } from './hooks';
+import { useEmployees, usePagination } from '../Common/hooks';
 import { Container, Form } from 'react-bootstrap';
 import { StyledTable, StyledPagination } from './managerStaffStyles';
 import 'bootstrap/dist/css/bootstrap.min.css';
