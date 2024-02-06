@@ -1,4 +1,4 @@
-const Warehouse = require("../models/warehouse");
+import Warehouse from "../models/warehouse.js"
 
 const LIMIT_WAREHOUSE = 10;
 

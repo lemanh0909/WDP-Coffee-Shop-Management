@@ -20,7 +20,7 @@ import { authConstant } from "../constant/index.js";
 // import { transporter } from "../config/nodemailer";
 
 export const authService = {
-    createUser: async ({ email, password, fullName, dob, phoneNumber, role, shopName, managerEmail }) => {
+    createUser: async ({ email, password, fullName, dob, phoneNumber, shopName }) => {
 
     const existingAccount = await Account.findOne({ email });
     if (existingAccount) throw new Error(authConstant.EMAIL_EXISTED);
@@ -49,13 +49,6 @@ export const authService = {
     // delete userJson.password;
     // delete userJson.refreshToken;
 
-    var isVerified;
-    if (role == "Manager") {
-      isVerified = true;
-    } else {
-      isVerified = false;
-    }
-
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       console.error("Email already exists in User table.");
@@ -69,26 +62,27 @@ export const authService = {
       phoneNumber,
       description: "",
       salary: 0,
-      isVerified,
-      role,
+      isVerified: true,
+      role: "Manager",
     });
 
     await newAccount.save();
     await newUser.save();
     // console.log(newUser);
-    if (role == "Manager") {
-      const newShop = new Shop({
-        shopName,
-        managerId: newAccount._id,
-      });
-      await newShop.save();
-    }else{
-      const registerShopManager = await Account.findOne({ email: managerEmail });
-      const registerShop = await Shop.findOne({ managerId: registerShopManager._id });
-      if(!registerShop) throw new Error('Shop manager email not found');
-      registerShop.staffId.push(newAccount._id);
-      await registerShop.save();
-    }
+    // if (role == "Manager") {
+
+    // }else{
+    //   const registerShopManager = await Account.findOne({ email: managerEmail });
+    //   const registerShop = await Shop.findOne({ managerId: registerShopManager._id });
+    //   if(!registerShop) throw new Error('Shop manager email not found');
+    //   registerShop.staffId.push(newAccount._id);
+    //   await registerShop.save();
+    // }
+    const newShop = new Shop({
+      shopName,
+      managerId: newAccount._id,
+    });
+    await newShop.save();
     return newAccount;
   },
   login: async ({ email, password }) => {

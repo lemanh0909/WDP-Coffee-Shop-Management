@@ -16,3 +16,5 @@ warehouseRouter.put('/update', verifyAccessToken, warehouseController.updateWare
 warehouseRouter.post('/create',verifyAdminOrHigherToken, warehouseController.createWarehouse)
 warehouseRouter.delete('/delete', verifyAccessToken, warehouseController.deleteWarehouse)
 
+export default warehouseRouter;
+
