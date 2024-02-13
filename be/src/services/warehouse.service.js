@@ -1,5 +1,11 @@
+<<<<<<< HEAD
+import Warehouse from "../models/warehouse.js"
+=======
+>>>>>>> 5856e60e9cd686a7a73492a6fb2e86a81142f1b5
+
 import Warehouse from "../models/warehouse.js"
 
+import ImportExportNote from '../models/exportimportNote';
 const LIMIT_WAREHOUSE = 10;
 
 export const warehouseService = {
@@ -35,7 +41,7 @@ export const warehouseService = {
     });
 },
 
- updateWarehouse :async (id, data) => {
+updateWarehouse: async (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkWarehouseExists = await Warehouse.findOne({
@@ -49,12 +55,29 @@ export const warehouseService = {
                 });
             }
 
-            await Warehouse.findByIdAndUpdate(id, data, { new: true });
+            const currentQuantity = checkWarehouseExists.quantity;
+
+            const updatedWarehouse = await Warehouse.findByIdAndUpdate(id, data, { new: true });
+
+            if (currentQuantity !== updatedWarehouse.quantity) {
+
+                const newNote = new ImportExportNote({
+                    userId: updatedWarehouse.userId, 
+                    quantity: updatedWarehouse.quantity - currentQuantity, 
+                    price: updatedWarehouse.price, 
+                    status: 'Pending', 
+                    description: `Quantity change for warehouse ${updatedWarehouse.name}`,
+                    image: updatedWarehouse.image,
+                });
+
+                // Save the new ImportExportNote
+                await newNote.save();
+            }
 
             resolve({
                 status: 'OK',
                 message: 'Warehouse updated successfully',
-                data
+                data: updatedWarehouse
             });
         } catch (err) {
             reject(err);

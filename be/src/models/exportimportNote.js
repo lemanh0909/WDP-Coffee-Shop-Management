@@ -31,7 +31,7 @@ const ExportImportNote = mongoose.model(
         type: String,
       },
       image: {
-        type: String, // You might want to use a different type if storing images, like Buffer or another library specific to handling images
+        type: String, 
       },
      
     },
