@@ -11,7 +11,7 @@ const ExportImportNote = mongoose.model(
         required: true,
       },
       userId: {
-        type: String, // You might want to use ObjectId here if it represents another user's ID
+        type: String, 
         required: true,
       },
       quantity: {
@@ -24,8 +24,8 @@ const ExportImportNote = mongoose.model(
       },
       status: {
         type: String,
-        enum: ["Pending", "Approved", "Rejected"], // Add relevant status values
-        default: "Pending",
+        enum: ["Imported", "Exported"], 
+        default: "Imported", 
       },
       description: {
         type: String,

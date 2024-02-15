@@ -14,6 +14,10 @@ const Warehouse = mongoose.model(
         type: String,
         required: true,
       },
+      unit: {
+        type: String,
+        required: true,
+      },
       quantity: {
         type: Number,
         required: true,
