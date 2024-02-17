@@ -15,12 +15,6 @@ const Account = mongoose.model(
                 required: true,
                 minlength: 6,
             },
-            verificationCode: {
-                type: String,
-            },
-            isVerified: {
-                type: Boolean
-            },
         },
         {timestamps: true},
     )

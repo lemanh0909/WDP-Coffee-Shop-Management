@@ -10,11 +10,10 @@ import { UserController } from "../controller/User.controller";
 import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt";
 const userRouter = express.Router();
 
-userRouter.get('/getAll', verifyAdminOrHigherToken, UserController.getAllUser)
-userRouter.put('/update', verifyAccessToken, UserController.updateUser)
+userRouter.get('/getAll', verifyAdminOrHigherToken, UserController.getAllUser);
+userRouter.put('/update', verifyAccessToken, UserController.updateUser);
+userRouter.get('/getStaffList', UserController.getStaffList);
+userRouter.put('/staffAuthorization', UserController.staffAuthorization);
+userRouter.post('/createStaff', UserController.createStaff);
 
 export default userRouter
-<<<<<<< HEAD
-
-=======
->>>>>>> 5856e60e9cd686a7a73492a6fb2e86a81142f1b5
