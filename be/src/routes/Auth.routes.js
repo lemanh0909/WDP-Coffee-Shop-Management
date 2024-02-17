@@ -109,4 +109,8 @@ authRouter.get(
   AuthController.refreshToken
 );
 
+authRouter.post(
+  "/sendMail",
+  AuthController.sendMail
+);
 export default authRouter;
