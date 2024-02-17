@@ -21,7 +21,7 @@ const Category = mongoose.model(
             required: true
           },
           products: [{
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
           }],
         },
