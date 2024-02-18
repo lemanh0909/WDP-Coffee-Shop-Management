@@ -68,7 +68,9 @@
     font-weight: bold;
   }
   
-  
+  .title h2 {
+    margin-right: auto; /* Đẩy thẻ h2 về bên trái */
+  }
   
  
   .selected {
@@ -77,6 +79,7 @@
   }
 .edit-btn{
     margin: 10px;
+    background-color: #3C6C3B;
 }
 .add-btn{
     margin: 10px;

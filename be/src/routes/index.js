@@ -9,8 +9,7 @@ import userRouter from "./User.routers.js";
 import warehouseRouter from "./warehouse.routes.js";
 import productRouter from "./product.routes.js";
 import productVariantRouter from "./productVariant.routes.js";
-import orderRouter from "./order.routes.js";
-import discountRouter from "./discount.routes.js";
+
 // import userRouter from "./User.routes";
 
 

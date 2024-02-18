@@ -14,7 +14,7 @@ import {
   FormControl,
   NavDropdown,
 } from "react-bootstrap";
-import "./warehouse.css";
+import "./productmanage.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -97,7 +97,7 @@ const fakeData = [
   },
 ];
 
-function Warehouse() {
+function ProductManage() {
   const itemsPerPage = 3;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] =
     usePagination(fakeData, itemsPerPage);
@@ -121,9 +121,9 @@ function Warehouse() {
   return (
     <>
       <Navbar expand="lg" className="custom-navbar">
-      <Container>
+        <Container>
           <Navbar.Brand href="#home" className="custom-brand">
-            Warehouse
+            Product Manage
           </Navbar.Brand>
           <Nav className="mr-auto">
             <Nav.Link href="#overview">Tổng quan</Nav.Link>
@@ -138,32 +138,23 @@ function Warehouse() {
                 Sản phẩm khác
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href="#store-list"><i class="fa-solid fa-store"></i> Danh sách cửa hàng</Nav.Link>
+            <Nav.Link href="#store-list">Danh sách cửa hàng</Nav.Link>
             <Nav.Link href="#transactions"><i class="fa-solid fa-money-bill-transfer"></i> Giao dịch</Nav.Link>
           </Nav>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
         </Container>
       </Navbar>
       <Row md={5} className="title">
-        <Col md={4}>  
-          <h2>Quản lý nhà kho</h2>
-        </Col><Col md ={4}/>
-        
-        <Col md={4} className="button-container">
-          <button type="button" className="btn btn-primary add-btn">
-          <i class="fa-solid fa-plus"></i> Thêm sản phẩm
-          </button>
-          <button type="button" className="btn btn-primary">
-          <i class="fa-solid fa-file-export"></i>
-                Xuất ra file
-          </button>
+        <Col md={6}>  
+          <h2>Quản lý hàng hóa</h2>
         </Col>
 
+        
       </Row>
 
       <Container fluid>
         <Row>
-          <Col md={2} className="sidebar">
+          <Col md={5} className="sidebar">
             <div>
               <InputGroup className="mb-7">
                 <FormControl
@@ -266,12 +257,9 @@ function Warehouse() {
                   <tr>
                     <th>Mã hàng hóa</th>
                     <th>Tên hàng hóa</th>
-                    <th>Giá nhập</th>
-                    <th>Giá bán</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày nhập</th>
-                    <th>Tồn kho</th>
                     <th></th>
+                    <th></th>
+                  
                   </tr>
                 </thead>
                 <tbody>
@@ -279,11 +267,7 @@ function Warehouse() {
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
-                      <td>{item["Giá nhập"]}</td>
-                      <td>{item["Giá bán"]}</td>
-                      <td>{item["Trạng thái"]}</td>
-                      <td>{item["Ngày nhập"]}</td>
-                      <td>{item["Tồn kho"]}</td>
+                      <td><a href="#home">Xem chi tiết</a></td>
                       <td>
                       <button type="button" className="btn btn-primary edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
 
@@ -328,4 +312,4 @@ function Warehouse() {
   );
 }
 
-export default Warehouse;
+export default ProductManage;
