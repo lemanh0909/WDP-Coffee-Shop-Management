@@ -31,7 +31,7 @@ export const discountService = {
     }
   },
 
-  getDiscountById: async ({discountId}) => {
+  getDiscountById: async (discountId) => {
     try {
       const discount = await Discount.findById(discountId);
       if (!discount) {

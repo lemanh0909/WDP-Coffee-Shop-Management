@@ -4,7 +4,7 @@ import { productVariantController } from '../controller/productVariant.controlle
 const productVariantRouter = express.Router();
 
 productVariantRouter.get("/getAllVariants", productVariantController.getAllProductVariants);
-productVariantRouter.get("/getProductVariant", productVariantController.getProductVariantById);
+productVariantRouter.get("/:productVariantId/getProductVariant", productVariantController.getProductVariantById);
 productVariantRouter.put("/updateVariant", productVariantController.updateProductVariant)
 productVariantRouter.post('/create', productVariantController.createProductVariant);
 productVariantRouter.delete('/delete', productVariantController.deleteProductVariant);

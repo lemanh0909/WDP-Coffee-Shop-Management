@@ -70,7 +70,7 @@ export const orderService = {
             throw error;
         }
     },
-    getOrderById: async ({orderId}) => {
+    getOrderById: async (orderId) => {
         return await Order.findById(orderId);
     },
 

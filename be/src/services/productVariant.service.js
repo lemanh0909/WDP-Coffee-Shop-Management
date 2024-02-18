@@ -80,7 +80,7 @@ export const ProductVariantService = {
         }
     },
 
-    getProductVariantById: async ({ productVariantId }) => {
+    getProductVariantById: async (productVariantId) => {
         try {
             // Lấy một ProductVariant dựa trên ID từ database
             const productVariant = await ProductVariant.findById(productVariantId);

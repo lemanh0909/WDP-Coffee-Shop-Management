@@ -9,6 +9,9 @@ import userRouter from "./User.routers.js";
 import warehouseRouter from "./warehouse.routes.js";
 import productRouter from "./product.routes.js";
 import productVariantRouter from "./productVariant.routes.js";
+import orderRouter from "./order.routes.js";
+import discountRouter from "./discount.routes.js";
+import categoryRouter from "./category.routes.js";
 
 // import userRouter from "./User.routes";
 
@@ -26,6 +29,7 @@ export const mainRouter = (app) => {
     v1Router.use("/productVariant", productVariantRouter);
     v1Router.use("/order", orderRouter);
     v1Router.use("/discount", discountRouter);
+    v1Router.use("/category", categoryRouter);
     app.use("/api/v1", v1Router);
   };
 

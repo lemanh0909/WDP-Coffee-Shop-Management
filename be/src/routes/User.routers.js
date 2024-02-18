@@ -12,7 +12,7 @@ const userRouter = express.Router();
 
 userRouter.get('/getAll', verifyAdminOrHigherToken, UserController.getAllUser);
 userRouter.put('/update', verifyAccessToken, UserController.updateUser);
-userRouter.get('/getStaffList', UserController.getStaffList);
+userRouter.get('/:managerId/getStaffList', UserController.getStaffList);
 userRouter.put('/staffAuthorization', UserController.staffAuthorization);
 userRouter.post('/createStaff', UserController.createStaff);
 
