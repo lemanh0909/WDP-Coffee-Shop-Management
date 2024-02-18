@@ -19,8 +19,8 @@ export const orderController = {
 
     getOrderById: async (req, res) => {
         try {
-            const data = req.body;
-            const order = await orderService.getOrderById(data);
+            const orderId = req.params.orderId;
+            const order = await orderService.getOrderById(orderId);
 
             if (!order) {
                 return res.status(404).json({

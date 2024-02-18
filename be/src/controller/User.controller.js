@@ -41,15 +41,15 @@ export const UserController = {
         }
     },
     getStaffList : async (req, res) => {
-        const data = req.body;
+        const managerId = req.params.managerId;
         try {
-            if (!data) {
+            if (!managerId) {
                 return res.status(200).json({
                     status: 'ERR',
                     message: 'The managerId is required'
                 })
             }
-            const response = await userService.getStaffList(data);
+            const response = await userService.getStaffList(managerId);
             return res.status(200).json(response)
         } catch (error) {
             return res.status(404).json({

@@ -42,10 +42,10 @@ export const productVariantController = {
         // const error = validation.validationRequest(req, res);
         // if (error) return res.status(200).json(error);
 
-        const data = req.body;
+        const productVariantId = req.params.productVariantId;
 
         try {
-            const productVariant = await ProductVariantService.getProductVariantById(data);
+            const productVariant = await ProductVariantService.getProductVariantById(productVariantId);
 
             res.status(200).json({
                 success: true,
