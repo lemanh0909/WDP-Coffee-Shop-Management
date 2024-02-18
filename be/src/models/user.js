@@ -6,10 +6,16 @@ const User = mongoose.model(
   "User",
   new mongoose.Schema(
     {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account', // Liên kết với mô hình Account
+      email: {
+        type: String,
         required: true,
+        minlength: 10,
+        maxlength: 50,
+      },
+      password: {
+        type: String,
+        required: true,
+        minlength: 6,
       },
       fullName: {
         type: String,
@@ -21,13 +27,14 @@ const User = mongoose.model(
       phoneNumber: {
         type: String,
       },
-      password: {
-        type: String,
-        default: "123456",
-      },
       refreshToken: {
         type: String,
         default: null,
+      },
+      role: {
+        type: String,
+        enum: ["Manager", "Staff"],
+        default: "user",
       },
       description: {
         type: String,
@@ -35,23 +42,10 @@ const User = mongoose.model(
       salary: {
         type: Number,
       },
-      isVerified: {
-        type: Boolean,
-        default: false,
-      },
-      role: {
+      status: {
         type: String,
-        enum: ["Manager", "Staff"],
-        default: "user",
-      },
-      isVerified: {
-        type: Boolean,
-        default: false,
-      },
-      role: {
-        type: String,
-        enum: ["Manager", "Staff"],
-        default: "user",
+        enum: ["Active", "Inactive"],
+        default: "Active",
       },
     },
     { timestamps: true }
