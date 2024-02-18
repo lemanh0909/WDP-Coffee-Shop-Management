@@ -18,5 +18,4 @@ warehouseRouter.delete('/delete', verifyAccessToken, WarehouseController.deleteW
 
 export default warehouseRouter;
 
-export default warehouseRouter;
 
