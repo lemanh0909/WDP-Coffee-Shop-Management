@@ -60,7 +60,7 @@ updateWarehouse: async (id, data) => {
                     userId: updatedWarehouse.userId, 
                     quantity: updatedWarehouse.quantity - currentQuantity, 
                     price: updatedWarehouse.price, 
-                    status: 'Imported   ', 
+                    status: 'Imported', 
                     description: `Quantity change for warehouse ${updatedWarehouse.name}`,
                     image: updatedWarehouse.image,
                     unit: updatedWarehouse.unit

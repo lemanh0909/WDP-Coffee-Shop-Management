@@ -1,7 +1,7 @@
 // ** Models
 
 import User from "../models/user.js";
-import Account from "../models/account.js";
+// import Account from "../models/account.js";
 import Shop from "../models/shop.js";
 
 
@@ -20,77 +20,37 @@ import { authConstant } from "../constant/index.js";
 // import { transporter } from "../config/nodemailer";
 
 export const authService = {
-    createUser: async ({ email, password, fullName, dob, phoneNumber, role, shopName, managerEmail }) => {
+  createUser: async ({ email, password, fullName, dob, phoneNumber, shopName }) => {
 
-    const existingAccount = await Account.findOne({ email });
+    
+    const existingAccount = await User.findOne({ email });
     if (existingAccount) throw new Error(authConstant.EMAIL_EXISTED);
-    const generateRandomCode = () => {
-      const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let code = "";
-      for (let i = 0; i < 6; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        code += characters.charAt(randomIndex);
-      }
-      return code;
-    };
-    const verificationCode = generateRandomCode();
-    const newAccount = new Account({
+
+    const newAccount = new User({
       email,
       password,
-      verificationCode,
-      isVerified: false,
+      fullName,
+      dob,
+      phoneNumber
     });
+
     const salt = bcrypt.genSaltSync();
     newAccount.password = bcrypt.hashSync(newAccount.password, salt);
 
-
-    // const userJson = user.toJSON();
-
-    // delete userJson.password;
-    // delete userJson.refreshToken;
-
-    var isVerified;
-    if (role == "Manager") {
-      isVerified = true;
-    } else {
-      isVerified = false;
-    }
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      console.error("Email already exists in User table.");
-    }
-
-
-    const newUser = new User({
-      _id: newAccount._id, // Mối quan hệ giữa User và Account thông qua userId
-      fullName,
-      dob,
-      phoneNumber,
-      description: "",
-      salary: 0,
-      isVerified,
-      role,
-    });
-
     await newAccount.save();
-    await newUser.save();
-    // console.log(newUser);
-    if (role == "Manager") {
+
+    // Kiểm tra nếu có tên cửa hàng, thêm thông tin cửa hàng
+    if (shopName) {
       const newShop = new Shop({
         shopName,
         managerId: newAccount._id,
       });
       await newShop.save();
-    }else{
-      const registerShopManager = await Account.findOne({ email: managerEmail });
-      const registerShop = await Shop.findOne({ managerId: registerShopManager._id });
-      if(!registerShop) throw new Error('Shop manager email not found');
-      registerShop.staffId.push(newAccount._id);
-      await registerShop.save();
     }
+
     return newAccount;
-  },
+},
+
   login: async ({ email, password }) => {
     const user = await User.findOne(
       { email },
