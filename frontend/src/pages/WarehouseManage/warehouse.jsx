@@ -6,21 +6,15 @@ import {
   Table,
   Form,
   Pagination,
-  Navbar,
-  Nav,
   Button,
   ListGroup,
   InputGroup,
   FormControl,
-  NavDropdown,
 } from "react-bootstrap";
 import "./warehouse.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-
-
-
+import CommonNavbar from "../Common/navbar.jsx";;
 
 const fakeData = [
   {
@@ -120,42 +114,19 @@ function Warehouse() {
 
   return (
     <>
-      <Navbar expand="lg" className="custom-navbar">
-      <Container>
-          <Navbar.Brand href="#home" className="custom-brand">
-            Warehouse
-          </Navbar.Brand>
-          <Nav className="mr-auto">
-            <Nav.Link href="#overview">Tổng quan</Nav.Link>
-            <Nav.Link href="#staff"><i class="fa-solid fa-users"></i> Nhân viên</Nav.Link>
-            <Nav.Link href="#"><i class="fa-solid fa-box-archive"></i></Nav.Link>
-            <NavDropdown title="Hàng hóa" id="basic-nav-dropdown"> 
-              <NavDropdown.Item href="#action/3.1">Sản phẩm 1</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Sản phẩm 2</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Sản phẩm 3</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Sản phẩm khác
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#store-list"><i class="fa-solid fa-store"></i> Danh sách cửa hàng</Nav.Link>
-            <Nav.Link href="#transactions"><i class="fa-solid fa-money-bill-transfer"></i> Giao dịch</Nav.Link>
-          </Nav>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        </Container>
-      </Navbar>
+      <CommonNavbar />
       <Row md={5} className="title">
-        <Col md={4}>  
+        <Col md={4}>
           <h2>Quản lý nhà kho</h2>
-        </Col><Col md ={4}/>
-        
+        </Col><Col md={4} />
+
         <Col md={4} className="button-container">
           <button type="button" className="btn btn-primary add-btn">
-          <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+            <i class="fa-solid fa-plus"></i> Thêm sản phẩm
           </button>
           <button type="button" className="btn btn-primary">
-          <i class="fa-solid fa-file-export"></i>
-                Xuất ra file
+            <i class="fa-solid fa-file-export"></i>
+            Xuất ra file
           </button>
         </Col>
 
@@ -170,7 +141,7 @@ function Warehouse() {
                   placeholder="MÃ HÀNG HÓA, TÊN"
                   aria-label="MÃ HÀNG HÓA, TÊN"
                 />
-                
+
                 <Button variant="outline-secondary" id="button-addon2">
                   Search
                 </Button>
@@ -285,13 +256,13 @@ function Warehouse() {
                       <td>{item["Ngày nhập"]}</td>
                       <td>{item["Tồn kho"]}</td>
                       <td>
-                      <button type="button" className="btn btn-primary edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" className="btn btn-primary edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
 
                         <button type="button" className="btn btn-danger">
-                        <i class="fa-solid fa-trash"></i>
+                          <i class="fa-solid fa-trash"></i>
                         </button>
                       </td>
-                     
+
                     </tr>
                   ))}
                 </tbody>

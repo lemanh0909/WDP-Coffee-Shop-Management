@@ -1,112 +1,41 @@
-import React, { useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Table,
-  Form,
-  Pagination,
-  Navbar,
-  Nav,
-  Button,
-  ListGroup,
-  InputGroup,
-  FormControl,
-  NavDropdown,
-} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Table, Pagination } from "react-bootstrap";
 import "./productmanage.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-
-
-
-
-const fakeData = [
-  {
-    id: 1,
-    name: "Sản phẩm 1",
-    "Giá nhập": "100,000 VND",
-    "Giá bán": "150,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-01-29",
-    "Tồn kho": 50,
-  },
-  {
-    id: 2,
-    name: "Sản phẩm 2",
-    "Giá nhập": "120,000 VND",
-    "Giá bán": "180,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-01-30",
-    "Tồn kho": 0,
-  },
-  {
-    id: 3,
-    name: "Sản phẩm 3",
-    "Giá nhập": "80,000 VND",
-    "Giá bán": "120,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-01-28",
-    "Tồn kho": 30,
-  },
-  {
-    id: 4,
-    name: "Sản phẩm 4",
-    "Giá nhập": "90,000 VND",
-    "Giá bán": "130,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-02-01",
-    "Tồn kho": 0,
-  },
-  {
-    id: 5,
-    name: "Sản phẩm 5",
-    "Giá nhập": "110,000 VND",
-    "Giá bán": "160,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-02",
-    "Tồn kho": 25,
-  },
-  {
-    id: 6,
-    name: "Sản phẩm 6",
-    "Giá nhập": "70,000 VND",
-    "Giá bán": "100,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-03",
-    "Tồn kho": 50,
-  },
-  {
-    id: 7,
-    name: "Sản phẩm 7",
-    "Giá nhập": "85,000 VND",
-    "Giá bán": "120,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-02-04",
-    "Tồn kho": 0,
-  },
-  {
-    id: 8,
-    name: "Sản phẩm 8",
-    "Giá nhập": "95,000 VND",
-    "Giá bán": "140,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-05",
-    "Tồn kho": 15,
-  },
-];
+import Sidebar from '../Common/sidebar.jsx'
+import axios from 'axios';
+import CommonNavbar from "../Common/navbar.jsx";
 
 function ProductManage() {
-  const itemsPerPage = 3;
-  const [getPaginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(fakeData, itemsPerPage);
+
+  const itemsPerPage = 7;
+  const [products, setProducts] = useState([]);
+  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const showDetails = (productId) => {
+    axios.get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
+      .then(response => {
+        setSelectedProduct(response.data.data); // Lưu thông tin chi tiết sản phẩm vào state khi API trả về
+      })
+      .catch(error => {
+        console.error('Error fetching product details:', error);
+      });
+  };
 
   useEffect(() => {
-    const checkboxes = document.querySelectorAll(
-      '.filter-section input[type="checkbox"]'
-    );
+    axios.get('http://localhost:5000/api/v1/product/getAllProducts')
+      .then(response => {
+        setProducts(response.data.data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  }, []);
 
+  useEffect(() => {
+    const checkboxes = document.querySelectorAll('.filter-section input[type="checkbox"]');
     checkboxes.forEach((checkbox) => {
       checkbox.addEventListener("click", function () {
         if (this.checked) {
@@ -120,136 +49,20 @@ function ProductManage() {
 
   return (
     <>
-      <Navbar expand="lg" className="custom-navbar">
-        <Container>
-          <Navbar.Brand href="#home" className="custom-brand">
-            Product Manage
-          </Navbar.Brand>
-          <Nav className="mr-auto">
-            <Nav.Link href="#overview">Tổng quan</Nav.Link>
-            <Nav.Link href="#staff"><i class="fa-solid fa-users"></i> Nhân viên</Nav.Link>
-            <Nav.Link href="#"><i class="fa-solid fa-box-archive"></i></Nav.Link>
-            <NavDropdown title="Hàng hóa" id="basic-nav-dropdown"> 
-              <NavDropdown.Item href="#action/3.1">Sản phẩm 1</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Sản phẩm 2</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Sản phẩm 3</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Sản phẩm khác
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#store-list">Danh sách cửa hàng</Nav.Link>
-            <Nav.Link href="#transactions"><i class="fa-solid fa-money-bill-transfer"></i> Giao dịch</Nav.Link>
-          </Nav>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        </Container>
-      </Navbar>
+      <CommonNavbar />
       <Row md={5} className="title">
-        <Col md={6}>  
+        <Col md={6}>
           <h2>Quản lý hàng hóa</h2>
         </Col>
-
-        
       </Row>
-
       <Container fluid>
         <Row>
-          <Col md={5} className="sidebar">
-            <div>
-              <InputGroup className="mb-7">
-                <FormControl
-                  placeholder="MÃ HÀNG HÓA, TÊN"
-                  aria-label="MÃ HÀNG HÓA, TÊN"
-                />
-                
-                <Button variant="outline-secondary" id="button-addon2">
-                  Search
-                </Button>
-              </InputGroup>
-              <InputGroup className="mb-5">
-                <FormControl
-                  placeholder="TÊN NHÀ CUNG CẤP"
-                  aria-label="MÃ HÀNG HÓA, TÊN"
-                />
-                <Button variant="outline-secondary" id="button-addon2">
-                  Search
-                </Button>
-              </InputGroup>
-
-              <div className="filter-section">
-                <h5 className="text-decoration-underline">
-                  Lọc theo loại hàng hóa
-                </h5>
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox1"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox2"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox3"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox4"
-                  className="mb-1"
-                />
-              </div>
-
-              <div className="filter-section mt-3">
-                <h5 className="text-decoration-underline">
-                  Lọc theo loại nhóm
-                </h5>
-                <ListGroup variant="flush">
-                  <ListGroup.Item action variant="light">
-                    TẤT CẢ
-                  </ListGroup.Item>
-                  <ListGroup.Item action variant="light">
-                    COFFEE BEAN
-                  </ListGroup.Item>
-                  <ListGroup.Item action variant="light">
-                    MILK
-                  </ListGroup.Item>
-                  <ListGroup.Item action variant="light">
-                    CAKE
-                  </ListGroup.Item>
-                  {/* Add more ListGroup.Items as needed */}
-                </ListGroup>
-              </div>
-
-              <div className="filter-section mt-3">
-                <h5 className="text-decoration-underline">Lọc theo tồn kho</h5>
-                <Form.Check
-                  label="CÒN HÀNG"
-                  name="group2"
-                  type="checkbox"
-                  id="checkbox5"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="HẾT HÀNG"
-                  name="group2"
-                  type="checkbox"
-                  id="checkbox6"
-                  className="mb-1"
-                />
-              </div>
-            </div>
-          </Col>
+          <Sidebar
+            handlePageChange={handlePageChange}
+            activePage={activePage}
+            totalPages={totalPages}
+            getPaginatedItems={paginatedItems}
+          />
           <Col xs={9}>
             <Row>
               <Table striped bordered hover>
@@ -259,24 +72,74 @@ function ProductManage() {
                     <th>Tên hàng hóa</th>
                     <th></th>
                     <th></th>
-                  
                   </tr>
                 </thead>
                 <tbody>
-                  {getPaginatedItems.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
-                      <td><a href="#home">Xem chi tiết</a></td>
-                      <td>
-                      <button type="button" className="btn btn-primary edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+                  {paginatedItems.map((item) => (
+                    <React.Fragment key={item._id}>
+                      <tr>
+                        <td>{item._id}</td>
+                        <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
+                        <td>
+                          <button onClick={() => showDetails(item._id)}>Xem chi tiết</button>
+                        </td>
+                        <td>
+                          <button type="button" className="btn btn-primary edit-btn"><i className="fa-solid fa-pen-to-square"></i></button>
+                          <button type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                        </td>
+                      </tr>
+                      {selectedProduct && selectedProduct._id === item._id && (
+                        <tr>
+                          <td colSpan="4">
+                            <table className="detail-table">
+                              <tbody>
+                                {selectedProduct.productVariant.map((variant, index) => (
+                                  <tr>
+                                    <td colSpan="4">
+                                      <table className="detail-table">
+                                        <tbody>
+                                          <tr>
+                                            <td className="field">Tên:</td>
+                                            <td>{variant.name}</td>
+                                          </tr>
+                                          <tr>
+                                            <td className="field">Mô tả:</td>
+                                            <td>{variant.description}</td>
+                                          </tr>
+                                          <tr>
+                                            <td className="field">Kích thước:</td>
+                                            <td>{variant.size}</td>
+                                          </tr>
+                                          <tr>
+                                            <td className="field">Giá:</td>
+                                            <td>{variant.price}</td>
+                                          </tr>
+                                          <tr>
+                                            <td className="field">Hình ảnh:</td>
+                                            <td><img src={variant.image} alt="Product" /></td>
+                                          </tr>
+                                          {/* <tr>
+                                          <td className="field">Công thức:</td>
+                                          <td>
+                                            <ul>
+                                              {selectedProduct.recipe && selectedProduct.recipe.map((ingredient, index) => (
+                                                <li key={index}>{ingredient.warehouse.name}: {ingredient.require}</li>
+                                              ))}
+                                            </ul>
+                                          </td>
+                                        </tr> */}
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      )}
 
-                        <button type="button" className="btn btn-danger">
-                        <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
-                     
-                    </tr>
+                    </React.Fragment>
                   ))}
                 </tbody>
               </Table>
@@ -284,7 +147,7 @@ function ProductManage() {
 
             <Row>
               <Col>
-                <Pagination>
+                <Pagination className="pagination">
                   <Pagination.Prev
                     onClick={() => handlePageChange(activePage - 1)}
                     disabled={activePage === 1}
