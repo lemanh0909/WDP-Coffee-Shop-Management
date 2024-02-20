@@ -1,6 +1,6 @@
 
 import Warehouse from "../models/warehouse.js"
-
+import Shop from '../models/shop.js'
 import ImportExportNote from '../models/exportimportNote';
 const LIMIT_WAREHOUSE = 10;
 
@@ -26,6 +26,15 @@ export const warehouseService = {
                 image,
                 unit
             });
+            const shop = await Shop.findOne({ managerId });
+            if (shop) {
+                // Thêm userId vào array trong shop
+                shop.warehouseId.push(newUser._id);
+                // Lưu lại thông tin shop
+                await shop.save();
+            } else {
+                throw new Error("Shop not found with managerId: " + managerId);
+            }
 
             resolve({
                 status: 'OK',
