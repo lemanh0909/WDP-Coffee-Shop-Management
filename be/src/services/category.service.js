@@ -1,5 +1,5 @@
 import Category from '../models/category';
-
+import Shop from '../models/shop';
 export const categoryService = {
   createCategory: async (data) => {
     return new Promise(async (resolve, reject) => {
@@ -16,7 +16,15 @@ export const categoryService = {
         }
 
         const createdCategory = await Category.create({ name, description, products });
-
+        const shop = await Shop.findOne({ managerId });
+        if (shop) {
+            // Thêm userId vào array trong shop
+            shop.categoryId.push(newUser._id);
+            // Lưu lại thông tin shop
+            await shop.save();
+        } else {
+            throw new Error("Shop not found with managerId: " + managerId);
+        }
         resolve({
           status: 'OK',
           message: 'Category created successfully',
