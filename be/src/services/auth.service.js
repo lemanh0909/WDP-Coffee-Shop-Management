@@ -1,7 +1,6 @@
 // ** Models
 
 import User from "../models/user.js";
-// import Account from "../models/account.js";
 import Shop from "../models/shop.js";
 
 
@@ -18,39 +17,52 @@ import { authConstant } from "../constant/index.js";
 
 
 // import { transporter } from "../config/nodemailer";
+import nodemailer from 'nodemailer'
+import { OAuth2Client } from 'google-auth-library'
 
 export const authService = {
   createUser: async ({ email, password, fullName, dob, phoneNumber, shopName }) => {
 
-    
-    const existingAccount = await User.findOne({ email });
-    if (existingAccount) throw new Error(authConstant.EMAIL_EXISTED);
-
-    const newAccount = new User({
+    const existingUser = await User.findOne({ email });
+    if (existingUser) throw new Error(authConstant.EMAIL_EXISTED);
+    // const generateRandomCode = () => {
+    //   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    //   let code = "";
+    //   for (let i = 0; i < 6; i++) {
+    //     const randomIndex = Math.floor(Math.random() * characters.length);
+    //     code += characters.charAt(randomIndex);
+    //   }
+    //   return code;
+    // };
+    // const verificationCode = generateRandomCode();
+    const newUser = new User({
       email,
       password,
       fullName,
       dob,
-      phoneNumber
+      phoneNumber,
+      role: "Manager",
+      description: "",
+      salary: 0,
     });
-
     const salt = bcrypt.genSaltSync();
-    newAccount.password = bcrypt.hashSync(newAccount.password, salt);
+    newUser.password = bcrypt.hashSync(newUser.password, salt);
 
-    await newAccount.save();
+    // const existingUser = await User.findOne({ email });
+    // if (existingUser) {
+    //   console.error("Email already exists in User table.");
+    // }
 
-    // Kiểm tra nếu có tên cửa hàng, thêm thông tin cửa hàng
-    if (shopName) {
-      const newShop = new Shop({
-        shopName,
-        managerId: newAccount._id,
-      });
-      await newShop.save();
-    }
 
-    return newAccount;
-},
 
+    await newUser.save();
+    const newShop = new Shop({
+      shopName,
+      managerId: newUser._id,
+    });
+    await newShop.save();
+    return newUser;
+  },
   login: async ({ email, password }) => {
     const user = await User.findOne(
       { email },
@@ -79,7 +91,7 @@ export const authService = {
       refreshToken,
     };
   },
-  
+
   refreshToken: async ({ payload, refreshToken }) => {
     const user = await User.findById(payload.id);
 
@@ -148,5 +160,55 @@ export const authService = {
 
     return true;
   },
-  
+  sendMail: async ({ email, subject, content }) => {
+    try {
+      if (!email || !subject || !content) throw new Error('Please provide email, subject and content!')
+      const GOOGLE_MAILER_CLIENT_ID = '172753793288-9fvl46g7iriljqklo30nffda845jam13.apps.googleusercontent.com'
+      const GOOGLE_MAILER_CLIENT_SECRET = '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'
+      const GOOGLE_MAILER_REFRESH_TOKEN = '1//04scuQLhf9HxvCgYIARAAGAQSNwF-L9IrgyuduUKS0yqvV8Ohu2ANf1NBQxh8Wc7-dhgPXEMYOp1OPwgB-o6dlQ_4lWqk3p9GKB8'
+      const ADMIN_EMAIL_ADDRESS = 'manhpro9900@gmail.com'
+      // Khởi tạo OAuth2Client với Client ID và Client Secret 
+      const myOAuth2Client = new OAuth2Client(
+        GOOGLE_MAILER_CLIENT_ID,
+        GOOGLE_MAILER_CLIENT_SECRET
+      )
+      // Set Refresh Token vào OAuth2Client Credentials
+      myOAuth2Client.setCredentials({
+        refresh_token: GOOGLE_MAILER_REFRESH_TOKEN
+      })
+      /**
+         * Lấy AccessToken từ RefreshToken (bởi vì Access Token cứ một khoảng thời gian ngắn sẽ bị hết hạn)
+         * Vì vậy mỗi lần sử dụng Access Token, chúng ta sẽ generate ra một thằng mới là chắc chắn nhất.
+         */
+      const myAccessTokenObject = await myOAuth2Client.getAccessToken()
+      // Access Token sẽ nằm trong property 'token' trong Object mà chúng ta vừa get được ở trên
+      const myAccessToken = myAccessTokenObject?.token
+      // Tạo một biến Transport từ Nodemailer với đầy đủ cấu hình, dùng để gọi hành động gửi mail
+      const transport = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          type: 'OAuth2',
+          user: ADMIN_EMAIL_ADDRESS,
+          clientId: GOOGLE_MAILER_CLIENT_ID,
+          clientSecret: GOOGLE_MAILER_CLIENT_SECRET,
+          refresh_token: GOOGLE_MAILER_REFRESH_TOKEN,
+          accessToken: myAccessToken
+        }
+      })
+      // mailOption là những thông tin gửi từ phía client lên thông qua API
+      const mailOptions = {
+        to: email, // Gửi đến ai?
+        subject: subject, // Tiêu đề email
+        html: `<h3>${content}</h3>` // Nội dung email
+      }
+      // Gọi hành động gửi email
+      await transport.sendMail(mailOptions)
+      // Không có lỗi gì thì trả về success
+      return 'Email sent successfully.'
+    } catch (error) {
+      // Có lỗi thì các bạn log ở đây cũng như gửi message lỗi về phía client
+      console.error(error)
+      return { error: error.message }
+    }
+  },
 };

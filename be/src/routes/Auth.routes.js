@@ -28,10 +28,10 @@ authRouter.post(
     .withMessage(authConstant.PASSWORD_REQUIRED)
     .isLength({ min: 6 })
     .withMessage(authConstant.PASSWORD_MIN_LENGTH),
-  // body("fullName")
-  //   .trim()
-  //   .notEmpty()
-  //   .withMessage(authConstant.FULLNAME_REQUIRED),
+  body("fullName")
+    .trim()
+    .notEmpty()
+    .withMessage(authConstant.FULLNAME_REQUIRED),
   // body("gender")
   //   .notEmpty()
   //   .withMessage(authConstant.GENDER_REQUIRED)
@@ -109,4 +109,8 @@ authRouter.get(
   AuthController.refreshToken
 );
 
+authRouter.post(
+  "/sendMail",
+  AuthController.sendMail
+);
 export default authRouter;

@@ -27,22 +27,12 @@ export const AuthController = {
         })
       );
     } catch (err) {
-      const errMessage = err.message;
-      if (errMessage.includes("E11000"))
-        res.status(200).json(
-          response.error({
-            code: 409,
-            message: err,
-            // message: authConstant.EMAIL_EXISTED,
-          })
-        );
-      else
-        res.status(200).json(
-          response.error({
-            code: 500,
-            message: httpConstant.SERVER_ERROR,
-          })
-        );
+      res.status(200).json(
+        response.error({
+          code: 500,
+          message: err.message,
+        })
+      );
     }
   },
   login: async (req, res) => {
@@ -166,8 +156,8 @@ export const AuthController = {
         errMessage === authConstant.OLD_PASSWORD_INVALID
           ? 401
           : errMessage === authConstant.FORBIDDEN
-          ? 403
-          : 500;
+            ? 403
+            : 500;
 
       res.status(200).json(
         response.error({
@@ -219,7 +209,7 @@ export const AuthController = {
 
       // Clear cookie
       res.cookie(token, "", { expires: new Date(0) });
-      
+
       res.status(200).json(
         response.success({
           isSuccess,
@@ -231,8 +221,8 @@ export const AuthController = {
         errMessage === userConstant.USER_NOT_EXIST
           ? 404
           : errMessage === authConstant.TOKEN_EXPIRED
-          ? 401
-          : 500;
+            ? 401
+            : 500;
 
       res.status(200).json(
         response.error({
@@ -240,6 +230,34 @@ export const AuthController = {
           message: errMessage,
         })
       );
+    }
+  },
+  sendMail: async (req, res) => {
+    const data = req.body;
+    try {
+      const user = await authService.sendMail(data);
+      res.status(200).json(
+        response.success({
+          data: { user },
+        })
+      );
+    } catch (err) {
+      const errMessage = err.message;
+      if (errMessage.includes("E11000"))
+        res.status(200).json(
+          response.error({
+            code: 409,
+            message: err,
+            // message: authConstant.EMAIL_EXISTED,
+          })
+        );
+      else
+        res.status(200).json(
+          response.error({
+            code: 500,
+            message: httpConstant.SERVER_ERROR,
+          })
+        );
     }
   },
 };

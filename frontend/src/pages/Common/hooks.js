@@ -3,13 +3,14 @@ import { useState } from 'react';
 export const usePagination = (items, itemsPerPage) => {
     const [activePage, setActivePage] = useState(1);
 
-    const totalPages = Math.ceil(items.length / itemsPerPage);
+    const totalPages = items ? Math.ceil(items.length / itemsPerPage) : 0; // Kiểm tra nếu items tồn tại
 
     const handlePageChange = (pageNumber) => {
         setActivePage(pageNumber);
     };
 
     const getPaginatedItems = () => {
+        if (!items) return [];
         const startIndex = (activePage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const currentItems = items.slice(startIndex, endIndex);
@@ -40,3 +41,4 @@ export const useEmployees = (initialEmployees) => {
 
     return [employees, handleToggleAdmin, handleToggleAllowLogin];
 };
+

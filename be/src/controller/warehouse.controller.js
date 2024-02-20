@@ -5,7 +5,7 @@ import { validation } from "../utils/validation.js";
 
 const LIMIT_WAREHOUSE = 10;
 
-export const WarehouseController = {
+export const warehouseController = {
   createWarehouse: async (req, res) => {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);

@@ -29,6 +29,6 @@ const Category = mongoose.model(
     )
   );
 
-  export default Category;
+export default Category;
 
 

@@ -1,0 +1,83 @@
+.sidebar {
+    background-color: #A8715C ;
+}
+
+.custom-navbar {
+    background-color: #A8715C;
+    color: #ecf0f1;
+}
+
+.custom-navbar .nav-link {
+    color: #ecf0f1;
+  }
+
+  .custom-brand {
+    color: #ecf0f1;
+  }
+.sidebar {
+    background-color: rgba(224, 224, 224, 1);
+    height: 100%;
+    bottom: 0;
+    width: 250px;
+    padding: 20px;
+    color: #ecf0f1;
+}
+
+.sidebar h5 {
+    color: rgba(51, 51, 51, 1);
+    text-decoration: underline;
+    margin-bottom: 10px;
+
+}
+
+.filter-section {
+    margin-top: 20px;
+}
+.filter-section {
+    margin-top: 20px;
+}
+.form-check {
+    color: rgba(51, 51, 51, 1);
+}
+.filter-section button:hover {
+    color: rgb(248, 245, 245);
+    background-color: #A8715C;
+}
+.filter-section button:onclick {
+    color: rgb(248, 245, 245);
+    background-color: #A8715C;
+}
+
+.filter-section h5 {
+    margin-bottom: 10px;
+}
+
+.checkbox-label {
+    font-weight: normal;
+    color: rgba(51, 51, 51, 1)
+}
+
+.checkbox-input {
+    margin-right: 5px;
+}
+
+.title {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+  
+  
+ 
+  .selected {
+    background-color: #FFFFFF;
+    color: #A8715C;
+  }
+.edit-btn{
+    margin: 10px;
+}
+.add-btn{
+    margin: 10px;
+}

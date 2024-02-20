@@ -1,8 +1,9 @@
 import React from 'react';
-import { useEmployees, usePagination } from './hooks';
+import { useEmployees, usePagination } from '../Common/hooks';
 import { Container, Form } from 'react-bootstrap';
 import { StyledTable, StyledPagination } from './managerStaffStyles';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CommonNavbar from '../Common/navbar';
 
 const EmployeeManagement = () => {
   const initialEmployees = [
@@ -74,23 +75,26 @@ const EmployeeManagement = () => {
   };
 
   return (
-    <Container className="mt-4">
-      <h1 className="text-center mb-4">Manager Staff</h1>
-      <StyledTable className="text-center align-middle table-hover">
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Admin rights</th>
-            <th>Allow login</th>
-          </tr>
-        </thead>
-        <tbody>{renderTableRows()}</tbody>
-      </StyledTable>
-      <StyledPagination size="sm">{renderPaginationItems()}</StyledPagination>
-    </Container>
+    <>
+      <CommonNavbar />
+      <Container className="mt-4">
+        <h1 className="text-center mb-4">Manager Staff</h1>
+        <StyledTable className="text-center align-middle table-hover">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Admin rights</th>
+              <th>Allow login</th>
+            </tr>
+          </thead>
+          <tbody>{renderTableRows()}</tbody>
+        </StyledTable>
+        <StyledPagination size="sm">{renderPaginationItems()}</StyledPagination>
+      </Container>
+    </>
   );
 };
 

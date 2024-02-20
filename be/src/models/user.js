@@ -6,10 +6,16 @@ const User = mongoose.model(
   "User",
   new mongoose.Schema(
     {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account', // Liên kết với mô hình Account
+      email: {
+        type: String,
         required: true,
+        minlength: 10,
+        maxlength: 50,
+      },
+      password: {
+        type: String,
+        required: true,
+        minlength: 6,
       },
       email: {
         type: String,
