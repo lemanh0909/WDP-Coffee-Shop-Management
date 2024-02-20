@@ -7,7 +7,7 @@ const LIMIT_WAREHOUSE = 10;
 export const warehouseService = {
  createWarehouse :async (data) => {
     return new Promise(async (resolve, reject) => {
-        const { name, quantity, image } = data;
+        const { name, quantity, image, unit } = data;
         try {
             const checkWarehouseExists = await Warehouse.findOne({
                 name: name
@@ -23,7 +23,8 @@ export const warehouseService = {
             const createdWarehouse = await Warehouse.create({
                 name,
                 quantity,
-                image
+                image,
+                unit
             });
 
             resolve({
@@ -61,9 +62,10 @@ updateWarehouse: async (id, data) => {
                     userId: updatedWarehouse.userId, 
                     quantity: updatedWarehouse.quantity - currentQuantity, 
                     price: updatedWarehouse.price, 
-                    status: 'Pending', 
+                    status: 'Imported', 
                     description: `Quantity change for warehouse ${updatedWarehouse.name}`,
                     image: updatedWarehouse.image,
+                    unit: updatedWarehouse.unit
                 });
 
                 // Save the new ImportExportNote
