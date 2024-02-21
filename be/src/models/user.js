@@ -17,6 +17,23 @@ const User = mongoose.model(
         required: true,
         minlength: 6,
       },
+      email: {
+        type: String,
+        required: true,
+        minlength: 10,
+        maxlength: 50,
+      },
+      password: {
+        type: String,
+        required: true,
+        minlength: 6,
+      },
+      verificationCode: {
+        type: String,
+      },
+      isVerified: {
+        type: Boolean
+      },
       fullName: {
         type: String,
         required: true,

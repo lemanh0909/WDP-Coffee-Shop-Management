@@ -89,7 +89,7 @@ export const userService = {
             }
         })
     },
-    getStaffList: async ({managerId}) => {
+    getStaffList: async (managerId) => {
         try {
             // Tìm cửa hàng với managerId tương ứng
             const shop = await Shop.findOne({ managerId });

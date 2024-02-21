@@ -1,13 +1,13 @@
 
 import Warehouse from "../models/warehouse.js"
-
+import Shop from '../models/shop.js'
 import ImportExportNote from '../models/exportimportNote';
 const LIMIT_WAREHOUSE = 10;
 
 export const warehouseService = {
  createWarehouse :async (data) => {
     return new Promise(async (resolve, reject) => {
-        const { name, quantity, image } = data;
+        const { name, quantity, image, unit } = data;
         try {
             const checkWarehouseExists = await Warehouse.findOne({
                 name: name
@@ -23,8 +23,18 @@ export const warehouseService = {
             const createdWarehouse = await Warehouse.create({
                 name,
                 quantity,
-                image
+                image,
+                unit
             });
+            const shop = await Shop.findOne({ managerId });
+            if (shop) {
+                // Thêm userId vào array trong shop
+                shop.warehouseId.push(newUser._id);
+                // Lưu lại thông tin shop
+                await shop.save();
+            } else {
+                throw new Error("Shop not found with managerId: " + managerId);
+            }
 
             resolve({
                 status: 'OK',
@@ -61,9 +71,10 @@ updateWarehouse: async (id, data) => {
                     userId: updatedWarehouse.userId, 
                     quantity: updatedWarehouse.quantity - currentQuantity, 
                     price: updatedWarehouse.price, 
-                    status: 'Pending', 
+                    status: 'Imported', 
                     description: `Quantity change for warehouse ${updatedWarehouse.name}`,
                     image: updatedWarehouse.image,
+                    unit: updatedWarehouse.unit
                 });
 
                 // Save the new ImportExportNote
