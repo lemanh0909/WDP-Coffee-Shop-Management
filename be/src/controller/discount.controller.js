@@ -17,7 +17,6 @@ export const discountController = {
             });
         }
     },
-
     getAllDiscounts: async (req, res) => {
         try {
             const allDiscounts = await discountService.getAllDiscounts();
@@ -32,7 +31,21 @@ export const discountController = {
             });
         }
     },
-
+    getAllDiscountsInShop: async (req, res) => {
+        try {
+            const shopId = req.params.shopId;
+            const discounts = await discountService.getAllDiscountsInShop(shopId);
+            res.status(200).json({
+                message: 'Success',
+                data: discounts,
+            });
+        } catch (error) {
+            console.error('Error:', error.message);
+            res.status(500).json({
+                error: error.message,
+            });
+        }
+    },
     getDiscountById: async (req, res) => {
         try {
             const discountId = req.params.discountId;
@@ -49,7 +62,6 @@ export const discountController = {
             });
         }
     },
-
     updateDiscount: async (req, res) => {
         try {
             const data = req.body;

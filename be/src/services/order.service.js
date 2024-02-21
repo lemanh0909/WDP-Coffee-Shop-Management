@@ -2,9 +2,10 @@ import Order from "../models/order.js";
 import Product from "../models/product.js";
 import ProductVariant from "../models/productVariant.js";
 import Warehouse from "../models/warehouse.js";
+import Shop from "../models/shop.js";
 
 export const orderService = {
-    createOrder: async ({ products, userId, paymentMethod, customerPay, refund }) => {
+    createOrder: async ({shopId, products, userId, paymentMethod, customerPay, refund }) => {
         try {
             // Lấy thông tin đầy đủ của sản phẩm từ database
             const populatedProducts = await Promise.all(products.map(async ({ productId, quantity }) => {
@@ -60,7 +61,15 @@ export const orderService = {
                 refund,
                 state: 'Pending', // Mặc định trạng thái là 'Pending'
             });
-
+            const shop = await Shop.findById(shopId);
+            if (shop) {
+                // Thêm userId vào array trong shop
+                shop.orderId.push(newOrder._id);
+                // Lưu lại thông tin shop
+                await shop.save();
+            } else {
+                throw new Error("Shop not found with shopId: " + managerId);
+            }
             // Lưu Order vào database
             await newOrder.save();
 
@@ -76,6 +85,15 @@ export const orderService = {
 
     getAllOrders: async () => {
         return await Order.find();
+    },
+    getAllOrdersInShop: async (shopId) => {
+        const shop = await Shop.findById(shopId);
+        if (shop) {
+            const orders = await Order.find({ _id: { $in: shop.orderId } });
+            return orders;
+        } else {
+            throw new Error("Shop not found with id: " + shopId);
+        }
     },
     changeOrderState: async ({orderId, state}) => {
         const order = await Order.findById(orderId);

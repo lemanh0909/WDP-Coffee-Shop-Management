@@ -39,10 +39,24 @@ export const orderController = {
             });
         }
     },
-
     getAllOrders: async (req, res) => {
         try {
             const orders = await orderService.getAllOrders();
+            res.status(200).json({
+                message: 'Success',
+                data: orders,
+            });
+        } catch (error) {
+            console.error('Error:', error.message);
+            res.status(500).json({
+                error: error.message,
+            });
+        }
+    },
+    getAllOrdersInShop: async (req, res) => {
+        try {
+            const shopId = req.params.shopId;
+            const orders = await orderService.getAllOrdersInShop(shopId);
             res.status(200).json({
                 message: 'Success',
                 data: orders,
