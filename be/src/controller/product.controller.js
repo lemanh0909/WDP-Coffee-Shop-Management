@@ -39,7 +39,28 @@ export const productController = {
             });
         }
     },
+    getProductByIdTotalVariant: async (req, res) => {
+        try {
+            const productId = req.params.productId;
+            const product = await productService.getProductByIdTotalVariant(productId);
 
+            if (!product) {
+                return res.status(404).json({
+                    message: 'Product not found',
+                });
+            }
+
+            res.status(200).json({
+                message: 'Success',
+                data: product,
+            });
+        } catch (error) {
+            console.error('Error:', error.message);
+            res.status(500).json({
+                error: error.message,
+            });
+        }
+    },
     getAllProducts: async (req, res) => {
         try {
             const products = await productService.getAllProducts();

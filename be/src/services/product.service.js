@@ -27,17 +27,39 @@ export const productService = {
     getProductById: async (productId) => {
         return await Product.findById(productId);
     },
-
+    getProductByIdTotalVariant: async (productId) => {
+        try {
+            // Tìm kiếm sản phẩm theo productId
+            const product = await Product.findById(productId);
+    
+            if (!product) {
+                throw new Error(`Product not found with id: ${productId}`);
+            }
+    
+            // Tính tổng số lượng productVariant
+            const totalVariants = product.productVariant.length;
+    
+            // Tạo một bản sao của product và thay thế trường productVariant bằng tổng số lượng
+            const productWithTotalVariants = {
+                ...product.toObject(),
+                productVariant: totalVariants
+            };
+    
+            return productWithTotalVariants;
+        } catch (error) {
+            console.error('Error in getProductByIdTotalVariant:', error);
+            throw error;
+        }
+    },    
     getAllProducts: async () => {
         return await Product.find();
     },
-    getAllProductsInShop: async (managerId) => {
-        const shop = await Shop.findOne({managerId});
+    getAllProductsInShop: async (shopId) => {
+        const shop = await Shop.findById(shopId);;
         if (shop) {
-            const categoryId = shop.categoryId;
-            const category = await Category.findById({ $in: categoryId });
-            console.log(shop);
-            const products = await Product.find({ $in: category.products});
+            const categoryIds = shop.categoryId.map(category => category.$oid);
+        
+            const products = await Product.find({ categoryId: { $in: categoryIds } });
             return products;
         } else {
             throw new Error("Shop not found with id: " + managerId);
