@@ -5,6 +5,9 @@ import Shop from "../models/shop.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 
+// ** Constants
+import { authConstant } from "../constant/index.js";
+
 export const userService = {
     getUserById: async ({ userId }) => {
         return await User.findOne({ _id: userId });
@@ -123,6 +126,8 @@ export const userService = {
     },
     createStaff: async ({ managerId, email, password, fullName, dob, phoneNumber, description, salary }) => {
         try {
+            const existingUser = await User.findOne({ email });
+            if (existingUser) throw new Error(authConstant.EMAIL_EXISTED);
             const newUser = new User({
                 email,
                 password,

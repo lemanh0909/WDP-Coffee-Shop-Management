@@ -5,6 +5,7 @@ import EmployeeManagement from './pages/ManagerStaff/managerStaff.jsx';
 import Warehouse from './pages/WarehouseManage/warehouse.jsx';
 import ProductManage from './pages/ProductManage/productmanage.jsx';
 import ProductDetail from './pages/productdetail/productdetail.jsx';
+import Order from './pages/Order/Order.jsx';
 function App() {
   return (
     <Router>
@@ -15,7 +16,7 @@ function App() {
           <Route path="/warehouse" element={<Warehouse />} />
           <Route path="/productmanage" element={< ProductManage />} />
           <Route path="/ProductDetail" element={< ProductDetail />} />
-
+          <Route path="/order" element={< Order />} />
         </Routes>
       </div>
     </Router>
