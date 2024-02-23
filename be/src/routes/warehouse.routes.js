@@ -2,7 +2,7 @@
 import express from "express";
 
 // ** Controllers
-import  {warehouseController}  from "../controller/warehouse.controller";
+import { warehouseController } from "../controller/warehouse.controller";
 
 
 // ** Validation
