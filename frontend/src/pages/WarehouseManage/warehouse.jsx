@@ -5,7 +5,6 @@ import {
   Col,
   Table,
   Pagination,
-
 } from "react-bootstrap";
 import "./warehouse.css";
 import { usePagination } from "../Common/hooks.js";
@@ -110,7 +109,30 @@ function Warehouse() {
 
   return (
     <>
-      <CommonNavbar />
+      <Navbar expand="lg" className="custom-navbar">
+        <Container>
+          <Navbar.Brand href="#home" className="custom-brand">
+            Warehouse
+          </Navbar.Brand>
+          <Nav className="mr-auto">
+            <Nav.Link href="#overview">Tổng quan</Nav.Link>
+            <Nav.Link href="#staff"><i class="fa-solid fa-users"></i> Nhân viên</Nav.Link>
+            <Nav.Link href="#"><i class="fa-solid fa-box-archive"></i></Nav.Link>
+            <NavDropdown title="Hàng hóa" id="basic-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Sản phẩm 1</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Sản phẩm 2</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Sản phẩm 3</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">
+                Sản phẩm khác
+              </NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="#store-list"><i class="fa-solid fa-store"></i> Danh sách cửa hàng</Nav.Link>
+            <Nav.Link href="#transactions"><i class="fa-solid fa-money-bill-transfer"></i> Giao dịch</Nav.Link>
+          </Nav>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        </Container>
+      </Navbar>
       <Row md={5} className="title">
         <Col md={4}>
           <h2>Quản lý nhà kho</h2>
@@ -130,12 +152,14 @@ function Warehouse() {
 
       <Container fluid>
         <Row>
+
           <Sidebar
             handlePageChange={handlePageChange}
             activePage={activePage}
             totalPages={totalPages}
             getPaginatedItems={paginatedItems}
           />
+
           <Col xs={9}>
             <Row>
               <Table striped bordered hover>
