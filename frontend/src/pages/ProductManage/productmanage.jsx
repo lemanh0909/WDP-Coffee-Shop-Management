@@ -1,23 +1,60 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Pagination } from "react-bootstrap";
+import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import "./productmanage.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Sidebar from '../Common/sidebar.jsx'
+import Sidebar from '../Common/sidebar.jsx';
 import axios from 'axios';
 import CommonNavbar from "../Common/navbar.jsx";
+import AddProductModal from "./addProduct.jsx";
+
+function ProductVariantDetails({ variant }) {
+  return (
+    <div className="detail-table">
+      <table>
+        <tbody>
+          <tr>
+            <td className="field">Tên:</td>
+            <td>{variant.name}</td>
+          </tr>
+          <tr>
+            <td className="field">Mô tả:</td>
+            <td>{variant.description}</td>
+          </tr>
+          <tr>
+            <td className="field">Kích thước:</td>
+            <td>{variant.size}</td>
+          </tr>
+          <tr>
+            <td className="field">Giá:</td>
+            <td>{variant.price}</td>
+          </tr>
+          <tr>
+            <td className="field">Hình ảnh:</td>
+            <td><img src={variant.image} alt="Product" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 function ProductManage() {
-
   const itemsPerPage = 7;
   const [products, setProducts] = useState([]);
-  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => setShowModal(true);
+
+  const handleCloseModal = () => setShowModal(false);
 
   const showDetails = (productId) => {
     axios.get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
       .then(response => {
-        setSelectedProduct(response.data.data); // Lưu thông tin chi tiết sản phẩm vào state khi API trả về
+        setSelectedProduct(response.data.data);
       })
       .catch(error => {
         console.error('Error fetching product details:', error);
@@ -34,28 +71,25 @@ function ProductManage() {
       });
   }, []);
 
-  useEffect(() => {
-    const checkboxes = document.querySelectorAll('.filter-section input[type="checkbox"]');
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener("click", function () {
-        if (this.checked) {
-          this.parentElement.classList.add("selected");
-        } else {
-          this.parentElement.classList.remove("selected");
-        }
-      });
-    });
-  }, []);
-
   return (
     <>
       <CommonNavbar />
-      <Row md={5} className="title">
-        <Col md={6}>
-          <h2>Quản lý hàng hóa</h2>
-        </Col>
-      </Row>
       <Container fluid>
+        <Row className="title">
+          <Col md={4}>
+            <h2>Quản lý sản phẩm</h2>
+          </Col>
+          <Col md={4} />
+          <Col md={4} className="button-container">
+            <Button variant="primary" className="add-btn" onClick={handleShowModal}>
+              <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+            </Button>
+            <Button variant="primary">
+              <i className="fa-solid fa-file-export"></i>
+              Biến thể
+            </Button>
+          </Col>
+        </Row>
         <Row>
           <Sidebar
             handlePageChange={handlePageChange}
@@ -81,70 +115,45 @@ function ProductManage() {
                         <td>{item._id}</td>
                         <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
                         <td>
-                          <button onClick={() => showDetails(item._id)}>Xem chi tiết</button>
+                          <Button onClick={() => showDetails(item._id)}>Xem chi tiết</Button>
                         </td>
                         <td>
-                          <button type="button" className="btn btn-primary edit-btn"><i className="fa-solid fa-pen-to-square"></i></button>
-                          <button type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                          <Button variant="primary" className="edit-btn"><i className="fa-solid fa-pen-to-square"></i></Button>
+                          <Button variant="danger"><i className="fa-solid fa-trash"></i></Button>
                         </td>
                       </tr>
                       {selectedProduct && selectedProduct._id === item._id && (
-                        <tr>
-                          <td colSpan="4">
-                            <table className="detail-table">
-                              <tbody>
-                                {selectedProduct.productVariant.map((variant, index) => (
-                                  <tr>
-                                    <td colSpan="4">
-                                      <table className="detail-table">
-                                        <tbody>
-                                          <tr>
-                                            <td className="field">Tên:</td>
-                                            <td>{variant.name}</td>
-                                          </tr>
-                                          <tr>
-                                            <td className="field">Mô tả:</td>
-                                            <td>{variant.description}</td>
-                                          </tr>
-                                          <tr>
-                                            <td className="field">Kích thước:</td>
-                                            <td>{variant.size}</td>
-                                          </tr>
-                                          <tr>
-                                            <td className="field">Giá:</td>
-                                            <td>{variant.price}</td>
-                                          </tr>
-                                          <tr>
-                                            <td className="field">Hình ảnh:</td>
-                                            <td><img src={variant.image} alt="Product" /></td>
-                                          </tr>
-                                          {/* <tr>
-                                          <td className="field">Công thức:</td>
-                                          <td>
-                                            <ul>
-                                              {selectedProduct.recipe && selectedProduct.recipe.map((ingredient, index) => (
-                                                <li key={index}>{ingredient.warehouse.name}: {ingredient.require}</li>
-                                              ))}
-                                            </ul>
-                                          </td>
-                                        </tr> */}
-                                        </tbody>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
+                        <React.Fragment>
+                          <tr>
+                            <td colSpan="4">
+                              <div className="variant-details-container">
+                                <p className="variant-count">Số lượng biến thể: {selectedProduct.productVariant.length}</p>
+                                <Row>
+                                  <Col xs={6}>
+                                    <ul className="variant-list">
+                                      {selectedProduct.productVariant.map((variant, index) => (
+                                        <li key={index}>
+                                          <Button onClick={() => setSelectedVariant(variant)}>Xem chi tiết biến thể {index + 1}</Button>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </Col>
+                                  <Col xs={6}>
+                                    {selectedVariant && (
+                                      <ProductVariantDetails variant={selectedVariant} />
+                                    )}
+                                  </Col>
+                                </Row>
+                              </div>
+                            </td>
+                          </tr>
+                        </React.Fragment>
                       )}
-
                     </React.Fragment>
                   ))}
                 </tbody>
               </Table>
             </Row>
-
             <Row>
               <Col>
                 <Pagination className="pagination">
@@ -171,6 +180,7 @@ function ProductManage() {
           </Col>
         </Row>
       </Container>
+      <AddProductModal show={showModal} handleClose={handleCloseModal} />
     </>
   );
 }
