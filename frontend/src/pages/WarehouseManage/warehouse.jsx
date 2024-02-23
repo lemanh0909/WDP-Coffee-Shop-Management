@@ -4,23 +4,13 @@ import {
   Row,
   Col,
   Table,
-  Form,
   Pagination,
-  Navbar,
-  Nav,
-  Button,
-  ListGroup,
-  InputGroup,
-  FormControl,
-  NavDropdown,
 } from "react-bootstrap";
 import "./warehouse.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-
-
-
+import CommonNavbar from "../Common/navbar.jsx";
+import Sidebar from "../Common/sidebar.jsx";
 
 const fakeData = [
   {
@@ -99,8 +89,7 @@ const fakeData = [
 
 function Warehouse() {
   const itemsPerPage = 3;
-  const [getPaginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(fakeData, itemsPerPage);
+  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(fakeData, itemsPerPage);
 
   useEffect(() => {
     const checkboxes = document.querySelectorAll(
@@ -163,105 +152,14 @@ function Warehouse() {
 
       <Container fluid>
         <Row>
-          <Col md={2} className="sidebar">
-            <div>
-              <InputGroup className="mb-7">
-                <FormControl
-                  placeholder="MÃ HÀNG HÓA, TÊN"
-                  aria-label="MÃ HÀNG HÓA, TÊN"
-                />
 
-                <Button variant="outline-secondary" id="button-addon2">
-                  Search
-                </Button>
-              </InputGroup>
-              <InputGroup className="mb-5">
-                <FormControl
-                  placeholder="TÊN NHÀ CUNG CẤP"
-                  aria-label="MÃ HÀNG HÓA, TÊN"
-                />
-                <Button variant="outline-secondary" id="button-addon2">
-                  Search
-                </Button>
-              </InputGroup>
+          <Sidebar
+            handlePageChange={handlePageChange}
+            activePage={activePage}
+            totalPages={totalPages}
+            getPaginatedItems={paginatedItems}
+          />
 
-              <div className="filter-section">
-                <h5 className="text-decoration-underline">
-                  Lọc theo loại hàng hóa
-                </h5>
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox1"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox2"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox3"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="COFFEE BEAN"
-                  name="group1"
-                  type="checkbox"
-                  id="checkbox4"
-                  className="mb-1"
-                />
-              </div>
-
-              <div className="filter-section mt-3">
-                <h5 className="text-decoration-underline">
-                  Lọc theo loại nhóm
-                </h5>
-                <ListGroup variant="flush">
-                  <ListGroup.Item action variant="light">
-                    TẤT CẢ
-                  </ListGroup.Item>
-                  <ListGroup.Item action variant="light">
-                    COFFEE BEAN
-                  </ListGroup.Item>
-                  <ListGroup.Item action variant="light">
-                    MILK TEA
-                  </ListGroup.Item>
-                  <ListGroup.Item action variant="light">
-                    COFFEE
-                  </ListGroup.Item>
-                  <ListGroup.Item action variant="light">
-                    CAKE
-                  </ListGroup.Item>
-                  {/* Add more ListGroup.Items as needed */}
-                </ListGroup>
-              </div>
-
-              <div className="filter-section mt-3">
-                <h5 className="text-decoration-underline">Lọc theo tồn kho</h5>
-                <Form.Check
-                  label="CÒN HÀNG"
-                  name="group2"
-                  type="checkbox"
-                  id="checkbox5"
-                  className="mb-1"
-                />
-                <Form.Check
-                  label="HẾT HÀNG"
-                  name="group2"
-                  type="checkbox"
-                  id="checkbox6"
-                  className="mb-1"
-                />
-              </div>
-            </div>
-          </Col>
           <Col xs={9}>
             <Row>
               <Table striped bordered hover>
@@ -278,7 +176,7 @@ function Warehouse() {
                   </tr>
                 </thead>
                 <tbody>
-                  {getPaginatedItems.map((item) => (
+                  {paginatedItems.map((item) => (
                     <tr key={item.id}>
                       <td>{item.id}</td>
                       <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>

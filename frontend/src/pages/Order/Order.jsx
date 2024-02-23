@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Container, Button } from 'react-bootstrap';
-import { StyledTable, StyledPagination } from './managerOrderStyles';
+// import { StyledTable, StyledPagination } from './managerOrderStyles';
 import CommonNavbar from '../Common/navbar';
 
 const Order = () => {
@@ -88,13 +88,13 @@ const Order = () => {
                 <p>Price: {productVariant.price}</p>
                 <Button
                   variant="primary"
-                  // onClick={() => handleProductVariantSelect(productVariant._id)}
+                // onClick={() => handleProductVariantSelect(productVariant._id)}
                 >
                   Select
                 </Button>
                 <Button
                   variant="danger"
-                  // onClick={() => handleProductVariantCancel(productVariant._id)}
+                // onClick={() => handleProductVariantCancel(productVariant._id)}
                 >
                   Cancel
                 </Button>

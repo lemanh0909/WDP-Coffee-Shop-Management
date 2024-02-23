@@ -8,11 +8,13 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
-    const [gender, setGender] = useState('1');
     const [emailError, setEmailError] = useState('');
+    const [dob, setDoB] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [shopName, setShopName] = useState('');
     const [currentForm, setCurrentForm] = useState('login');
     const [registerSuccess, setRegisterSuccess] = useState(false);
-
+    const [phoneNumberError, setphoneNumberError] = useState('');
 
     const validateEmail = (email) => {
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
@@ -47,17 +49,29 @@ function Login() {
     const handleRegisterClick = (e) => {
         e.preventDefault();
 
+        if (phoneNumber.length < 10 || phoneNumber.length > 11) {
+            setphoneNumberError('Phone number is invalid');
+            return;
+        } else {
+            setphoneNumberError('')
+        }
+
         if (!validateEmail(email)) {
             setEmailError('Invalid email address');
             return;
+        } else {
+            setEmailError('')
         }
 
         const data = {
             fullName: fullName,
             email: email,
             password: password,
-            gender: gender
+            dob: dob,
+            phoneNumber: phoneNumber,
+            shopName: shopName
         };
+
         axios.post('http://localhost:5000/api/v1/auth/register', data)
             .then(response => {
                 if (response.data.isSuccess === true) {
@@ -65,13 +79,16 @@ function Login() {
                     setRegisterSuccess(true);
                 } else {
                     console.log('Register failed', response);
+                    if (response.data.message === "Email is already exist") {
+                        setEmailError('Email already exists');
+                    }
                 }
             })
-
             .catch(error => {
                 console.error('Registration error:', error);
             });
     };
+
 
     const userFormsClassName = currentForm === 'login' ? 'bounceRight' : 'bounceLeft';
 
@@ -141,11 +158,14 @@ function Login() {
                                         <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
                                     </div>
                                     <div className="forms_field">
-                                        <label htmlFor="gender">Gender</label>
-                                        <select id="gender" className="forms_field-input" required onChange={(e) => setGender(e.target.value)}>
-                                            <option value="1">Male</option>
-                                            <option value="0">Female</option>
-                                        </select>
+                                        <input type="date" id="dob" placeholder="DD/MM/YYYY" className="forms_field-input" required onChange={(e) => setDoB(e.target.value)} value={dob} />
+                                    </div>
+                                    <div className="forms_field">
+                                        <input type="text" id="phoneNumber" placeholder="Phone Number" className="forms_field-input" required onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
+                                        {phoneNumberError && <p className="error-message">{phoneNumberError}</p>}
+                                    </div>
+                                    <div className="forms_field">
+                                        <input type="text" id="shopName" placeholder="Shop Name" className="forms_field-input" required onChange={(e) => setShopName(e.target.value)} value={shopName} />
                                     </div>
                                 </fieldset>
                                 <div className="forms_buttons">
