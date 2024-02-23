@@ -4,7 +4,7 @@ export const categoryService = {
   createCategory: async (data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { name, description, products } = data;
+        const {managerId, name, description, products } = data;
 
         const checkCategoryExists = await Category.findOne({ name });
 
@@ -19,7 +19,7 @@ export const categoryService = {
         const shop = await Shop.findOne({ managerId });
         if (shop) {
             // Thêm userId vào array trong shop
-            shop.categoryId.push(newUser._id);
+            shop.categoryId.push(createdCategory._id);
             // Lưu lại thông tin shop
             await shop.save();
         } else {

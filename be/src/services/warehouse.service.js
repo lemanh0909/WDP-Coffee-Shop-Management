@@ -7,7 +7,7 @@ const LIMIT_WAREHOUSE = 10;
 export const warehouseService = {
  createWarehouse :async (data) => {
     return new Promise(async (resolve, reject) => {
-        const { name, quantity, image, unit } = data;
+        const {managerId, name, quantity, image, unit } = data;
         try {
             const checkWarehouseExists = await Warehouse.findOne({
                 name: name
@@ -29,7 +29,7 @@ export const warehouseService = {
             const shop = await Shop.findOne({ managerId });
             if (shop) {
                 // Thêm userId vào array trong shop
-                shop.warehouseId.push(newUser._id);
+                shop.warehouseId.push(createdWarehouse._id);
                 // Lưu lại thông tin shop
                 await shop.save();
             } else {
