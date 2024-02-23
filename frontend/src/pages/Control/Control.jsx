@@ -3,23 +3,29 @@ import {
   Container,
   Row,
   Col,
-  Table,
+  Card,
   Form,
   Pagination,
+  Navbar,
+  Nav,
   Button,
   ListGroup,
   InputGroup,
   FormControl,
+  NavDropdown,
 } from "react-bootstrap";
-import "./warehouse.css";
+import "./Control.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import CommonNavbar from "../Common/navbar.jsx";;
+
+
+
+
 
 const fakeData = [
   {
     id: 1,
-    name: "Sản phẩm 1",
+    name: "COFFEE BEAN",
     "Giá nhập": "100,000 VND",
     "Giá bán": "150,000 VND",
     "Trạng thái": "In Stock",
@@ -28,7 +34,7 @@ const fakeData = [
   },
   {
     id: 2,
-    name: "Sản phẩm 2",
+    name: "MILKTEA",
     "Giá nhập": "120,000 VND",
     "Giá bán": "180,000 VND",
     "Trạng thái": "Out of Stock",
@@ -37,58 +43,17 @@ const fakeData = [
   },
   {
     id: 3,
-    name: "Sản phẩm 3",
-    "Giá nhập": "80,000 VND",
-    "Giá bán": "120,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-01-28",
-    "Tồn kho": 30,
-  },
-  {
-    id: 4,
-    name: "Sản phẩm 4",
-    "Giá nhập": "90,000 VND",
-    "Giá bán": "130,000 VND",
+    name: "CAKE",
+    "Giá nhập": "120,000 VND",
+    "Giá bán": "180,000 VND",
     "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-02-01",
+    "Ngày nhập": "2024-01-30",
     "Tồn kho": 0,
-  },
-  {
-    id: 5,
-    name: "Sản phẩm 5",
-    "Giá nhập": "110,000 VND",
-    "Giá bán": "160,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-02",
-    "Tồn kho": 25,
-  },
-  {
-    id: 6,
-    name: "Sản phẩm 6",
-    "Giá nhập": "70,000 VND",
-    "Giá bán": "100,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-03",
-    "Tồn kho": 50,
-  },
-  {
-    id: 7,
-    name: "Sản phẩm 7",
-    "Giá nhập": "85,000 VND",
-    "Giá bán": "120,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-02-04",
-    "Tồn kho": 0,
-  },
-  {
-    id: 8,
-    name: "Sản phẩm 8",
-    "Giá nhập": "95,000 VND",
-    "Giá bán": "140,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-05",
-    "Tồn kho": 15,
-  },
+  }
+
+
+
+
 ];
 
 function Warehouse() {
@@ -114,21 +79,38 @@ function Warehouse() {
 
   return (
     <>
-      <CommonNavbar />
+      <Navbar expand="lg" className="custom-navbar">
+        <Container>
+          <Navbar.Brand href="#home" className="custom-brand">
+            Control
+          </Navbar.Brand>
+          <Nav className="mr-auto">
+            <Nav.Link href="#overview">Tổng quan</Nav.Link>
+            <Nav.Link href="#staff"><i class="fa-solid fa-users"></i> Nhân viên</Nav.Link>
+            <Nav.Link href="#"><i class="fa-solid fa-box-archive"></i></Nav.Link>
+            <NavDropdown title="Hàng hóa" id="basic-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Sản phẩm 1</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Sản phẩm 2</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Sản phẩm 3</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">
+                Sản phẩm khác
+              </NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="#store-list"><i class="fa-solid fa-store"></i> Danh sách cửa hàng</Nav.Link>
+            <Nav.Link href="#transactions"><i class="fa-solid fa-money-bill-transfer"></i> Giao dịch</Nav.Link>
+          </Nav>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        </Container>
+      </Navbar>
       <Row md={5} className="title">
         <Col md={4}>
-          <h2>Quản lý nhà kho</h2>
+          <br></br>
+          <h2>Control Display</h2>
+          <br></br>
         </Col><Col md={4} />
 
-        <Col md={4} className="button-container">
-          <button type="button" className="btn btn-primary add-btn">
-            <i class="fa-solid fa-plus"></i> Thêm sản phẩm
-          </button>
-          <button type="button" className="btn btn-primary">
-            <i class="fa-solid fa-file-export"></i>
-            Xuất ra file
-          </button>
-        </Col>
+
 
       </Row>
 
@@ -202,7 +184,10 @@ function Warehouse() {
                     COFFEE BEAN
                   </ListGroup.Item>
                   <ListGroup.Item action variant="light">
-                    MILK
+                    MILK TEA
+                  </ListGroup.Item>
+                  <ListGroup.Item action variant="light">
+                    COFFEE
                   </ListGroup.Item>
                   <ListGroup.Item action variant="light">
                     CAKE
@@ -230,66 +215,38 @@ function Warehouse() {
               </div>
             </div>
           </Col>
-          <Col xs={9}>
-            <Row>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Mã hàng hóa</th>
-                    <th>Tên hàng hóa</th>
-                    <th>Giá nhập</th>
-                    <th>Giá bán</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày nhập</th>
-                    <th>Tồn kho</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {getPaginatedItems.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
-                      <td>{item["Giá nhập"]}</td>
-                      <td>{item["Giá bán"]}</td>
-                      <td>{item["Trạng thái"]}</td>
-                      <td>{item["Ngày nhập"]}</td>
-                      <td>{item["Tồn kho"]}</td>
-                      <td>
-                        <button type="button" className="btn btn-primary edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
+          <Col xs={8}>
+            <Row className="justify-content-center align-items-center">
+              <Container fluid >
+                <Row className="justify-content-center align-items-center">
+                  <div class="col-md-6 d-flex flex-column justify-content-between">
+                    <Row className="justify-content-center">
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Bán Hàng</button>
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Thanh Toán Tại Quầy</button>
+                    </Row>
+                    <Row className="justify-content-center">
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Kho</button>
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Báo Cáo</button>
+                    </Row>
+                  </div>
+                  <div class="col-md-6 d-flex flex-column justify-content-between">
+                    <Row className="justify-content-center">
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Quản Lý Nhân Viên</button>
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Cài Đặt</button>
+                    </Row>
+                    <Row className="justify-content-center">
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Thu Chi</button>
+                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Hướng Dẫn</button>
+                    </Row>
+                  </div>
+                </Row>
+              </Container>
 
-                        <button type="button" className="btn btn-danger">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
-
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
             </Row>
 
             <Row>
               <Col>
-                <Pagination>
-                  <Pagination.Prev
-                    onClick={() => handlePageChange(activePage - 1)}
-                    disabled={activePage === 1}
-                  />
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <Pagination.Item
-                      key={i + 1}
-                      active={i + 1 === activePage}
-                      onClick={() => handlePageChange(i + 1)}
-                    >
-                      {i + 1}
-                    </Pagination.Item>
-                  ))}
-                  <Pagination.Next
-                    onClick={() => handlePageChange(activePage + 1)}
-                    disabled={activePage === totalPages}
-                  />
-                </Pagination>
+
               </Col>
             </Row>
           </Col>
