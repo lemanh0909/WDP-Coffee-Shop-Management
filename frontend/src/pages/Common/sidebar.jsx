@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Form, InputGroup, FormControl, Button, ListGroup } from 'react-bootstrap';
 
-function Sidebar({ handlePageChange, activePage, totalPages, getPaginatedItems }) {
+function Sidebar() {
     return (
         <Col md={5} className="sidebar">
             <div>
