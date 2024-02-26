@@ -116,29 +116,28 @@ updateWarehouse: async (id, data) => {
         }
     });
 },
- getAllWarehouses :async (page = 1, limit = LIMIT_WAREHOUSE, search) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            var skipNumber = (page - 1) * limit;
-            const searchQuery = search ? { name: { $regex: search, $options: 'i' } } : null;
+ getAllWarehouses : async (page = 1, limit = LIMIT_WAREHOUSE, search) => {
+    try {
+        const skipNumber = (page - 1) * limit;
+        const searchQuery = search ? { name: { $regex: search, $options: 'i' } } : {};
 
-            const totalWarehouses = await Warehouse.count(searchQuery);
-            const allWarehouses = await Warehouse.find(searchQuery)
-                .skip(skipNumber)
-                .limit(limit);
+        const totalWarehouses = await Warehouse.countDocuments(searchQuery);
+        const allWarehouses = await Warehouse.find(searchQuery)
+            .skip(skipNumber)
+            .limit(limit);
 
-            resolve({
-                status: 'OK',
-                data: allWarehouses,
-                totalWarehouses,
-                currentPage: parseInt(page),
-                limit: parseInt(limit)
-            });
-        } catch (err) {
-            reject(err);
-        }
-    });
+        return {
+            status: 'OK',
+            data: allWarehouses,
+            totalWarehouses,
+            currentPage: parseInt(page),
+            limit: parseInt(limit)
+        };
+    } catch (err) {
+        throw new Error(`Error in getAllWarehouses: ${err.message}`);
+    }
 },
+
 
  deleteWarehouse :async (warehouseId) => {
     return new Promise(async (resolve, reject) => {
