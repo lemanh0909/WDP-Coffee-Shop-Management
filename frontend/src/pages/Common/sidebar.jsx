@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import control from "../images/control.png";
 
+
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchQuery1, setSearchQuery1] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

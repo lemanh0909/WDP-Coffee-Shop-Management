@@ -1,136 +1,48 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   Container,
   Row,
   Col,
-  Card,
-  Form,
-  Pagination,
-  Navbar,
-  Nav,
-  Button,
-  ListGroup,
-  InputGroup,
-  FormControl,
-  NavDropdown,
-  Image,
+  Button
+
 } from "react-bootstrap";
 import "./Control.css";
-import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CommonNavbar from "../Common/navbar.jsx";
+import Sidebar from "../Common/sidebar.jsx";
 
 
-
-
-
-const fakeData = [
-  {
-    id: 1,
-    name: "COFFEE BEAN",
-    "Giá nhập": "100,000 VND",
-    "Giá bán": "150,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-01-29",
-    "Tồn kho": 50,
-  },
-  {
-    id: 2,
-    name: "MILKTEA",
-    "Giá nhập": "120,000 VND",
-    "Giá bán": "180,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-01-30",
-    "Tồn kho": 0,
-  },
-  {
-    id: 3,
-    name: "CAKE",
-    "Giá nhập": "120,000 VND",
-    "Giá bán": "180,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-01-30",
-    "Tồn kho": 0,
-  }
-
-
-
-
-];
-
-function Warehouse() {
-  const itemsPerPage = 3;
-  const [getPaginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(fakeData, itemsPerPage);
-
-  useEffect(() => {
-    const checkboxes = document.querySelectorAll(
-      '.filter-section input[type="checkbox"]'
-    );
-
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener("click", function () {
-        if (this.checked) {
-          this.parentElement.classList.add("selected");
-        } else {
-          this.parentElement.classList.remove("selected");
-        }
-      });
-    });
-  }, []);
-
+function Control() {
   return (
     <>
-      <CommonNavbar/>
-      
-      <Row md={5} className="title">
-        <Col md={4}>
-          <br></br>
-          <h2>Control Display</h2>
-          <br></br>
-        </Col><Col md={4} />
-
-
-
-      </Row>
-
+      <CommonNavbar />
       <Container fluid>
-        <Row>
-          
-          <Col xs={12}>
-            <Row className="justify-content-center align-items-center">
-              <Container fluid >
-                <Row className="justify-content-center align-items-center">
-                  <div class="col-md-6 d-flex flex-column justify-content-between">
-                    <Row className=" justify-end col-md-8">
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Bán Hàng</button>
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Thanh Toán Tại Quầy</button>
-                    </Row>
-                    <Row className="justify-content-center col-md-4">
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Kho</button>
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Báo Cáo</button>
-                    </Row>
-                  </div>
-                  <div class="col-md-6 d-flex flex-column justify-content-between">
-                    <Row className="justify-content-center col-md-4">
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Quản Lý Nhân Viên</button>
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Cài Đặt</button>
-                    </Row>
-                    <Row className="justify-content-center col-md-4 ">
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Thu Chi</button>
-                      <button type="button" class="btn btn-outline-primary btn-lg mb-2">Hướng Dẫn</button>
-                    </Row>
-                  </div>
-                </Row>
-              </Container>
+        <Row className="title justify-content-center">
+          <Col md={8} className="text-center">
+            <h2>Control Display</h2>
+          </Col>
+        </Row>
 
+        <Row>
+          <Col md={2} className="d-flex flex-column align-items-center">
+            <Sidebar />
+          </Col>
+          <Col md={10}>
+            <Row className="justify-content-center">
+              <Col md={6} className="d-flex flex-column align-items-center">
+                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Bán Hàng</Button>
+                <Link to="/warehouse" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Kho</Link>
+                <Link to="/employee-management" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Quản Lý Nhân Viên</Link>
+                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thu Chi</Button>
+              </Col>
+              <Col md={6} className="d-flex flex-column align-items-center">
+                <Link to="#" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thanh Toán Tại Quầy</Link>
+                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Báo Cáo</Button>
+                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Cài Đặt</Button>
+                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Hướng Dẫn</Button>
+              </Col>
             </Row>
-            <div class="grid grid-cols-6 gap-4">
-  <div class="col-start-2 col-span-4 ...">1</div>
-  <div class="col-start-1 col-end-3 ...">2</div>
-  <div class="col-end-7 col-span-2 ...">3</div>
-  <div class="col-start-1 col-end-7 ...">4</div>
-</div>
           </Col>
         </Row>
       </Container>
@@ -138,4 +50,4 @@ function Warehouse() {
   );
 }
 
-export default Warehouse;
+export default Control;
