@@ -97,7 +97,7 @@
   border-color: #8B4513;
   background-color: #8B4513;
   margin: 5px; 
-  border-radius: 20px; 
+  border-radius: 10px; 
   padding: 10px 20px; 
   font-size: 16px; 
   transition: all 0.3s ease; 
@@ -109,7 +109,4 @@
   /* color: #fff; */
 }
 
-.container {
-  margin-top: 50px; 
-}
 

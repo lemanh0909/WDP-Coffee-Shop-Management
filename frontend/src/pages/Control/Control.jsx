@@ -18,6 +18,7 @@ import {
 import "./Control.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
+import CommonNavbar from "../Common/navbar.jsx";
 
 
 
@@ -80,32 +81,8 @@ function Warehouse() {
 
   return (
     <>
-      <Navbar expand="lg" className="custom-navbar ">
-        <Container style={{margin : 0}}>
-          <Navbar.Brand href="#home" className="custom-brand">
-          <Navbar.Brand href="#home" >
-            <Image src="./images/logo.png" style={{height : "50px",width : "50px",objectFit : "cover"}}  />
-          </Navbar.Brand>
-          </Navbar.Brand>
-          <Nav className="mr-auto">
-            <Nav.Link href="#overview">Tổng quan</Nav.Link>
-            <Nav.Link href="#staff"><i class="fa-solid fa-users"></i> Nhân viên</Nav.Link>
-            <Nav.Link href="#"><i class="fa-solid fa-box-archive"></i></Nav.Link>
-            <NavDropdown title="Hàng hóa" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Sản phẩm 1</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">Sản phẩm 2</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Sản phẩm 3</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Sản phẩm khác
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#store-list"><i class="fa-solid fa-store"></i> Danh sách cửa hàng</Nav.Link>
-            <Nav.Link href="#transactions"><i class="fa-solid fa-money-bill-transfer"></i> Giao dịch</Nav.Link>
-          </Nav>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        </Container>
-      </Navbar>
+      <CommonNavbar/>
+      
       <Row md={5} className="title">
         <Col md={4}>
           <br></br>
@@ -125,21 +102,21 @@ function Warehouse() {
               <Container fluid >
                 <Row className="justify-content-center align-items-center">
                   <div class="col-md-6 d-flex flex-column justify-content-between">
-                    <Row className="justify-content-center">
+                    <Row className=" justify-end col-md-8">
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Bán Hàng</button>
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Thanh Toán Tại Quầy</button>
                     </Row>
-                    <Row className="justify-content-center">
+                    <Row className="justify-content-center col-md-4">
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Kho</button>
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Báo Cáo</button>
                     </Row>
                   </div>
                   <div class="col-md-6 d-flex flex-column justify-content-between">
-                    <Row className="justify-content-center">
+                    <Row className="justify-content-center col-md-4">
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Quản Lý Nhân Viên</button>
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Cài Đặt</button>
                     </Row>
-                    <Row className="justify-content-center">
+                    <Row className="justify-content-center col-md-4 ">
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Thu Chi</button>
                       <button type="button" class="btn btn-outline-primary btn-lg mb-2">Hướng Dẫn</button>
                     </Row>
@@ -148,12 +125,12 @@ function Warehouse() {
               </Container>
 
             </Row>
-
-            <Row>
-              <Col>
-
-              </Col>
-            </Row>
+            <div class="grid grid-cols-6 gap-4">
+  <div class="col-start-2 col-span-4 ...">1</div>
+  <div class="col-start-1 col-end-3 ...">2</div>
+  <div class="col-end-7 col-span-2 ...">3</div>
+  <div class="col-start-1 col-end-7 ...">4</div>
+</div>
           </Col>
         </Row>
       </Container>
