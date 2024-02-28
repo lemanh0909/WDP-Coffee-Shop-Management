@@ -29,10 +29,10 @@ const Sidebar = () => {
   return (
     <div className="flex ">
       <div
-        className={` ${
-          open ? "w-72" : "w-16 "
-        } bg-amber-700 h-screen p-2  pt-8 relative duration-300 text-white`}
-      >
+  className={` ${
+    open ? "w-72" : "w-16 "
+  } bg-amber-700 h-screen p-2  pt-8 relative duration-300 text-white`}
+>
         <i class="fa-solid fa-filter pt-8"></i>
         <img
           src={control}
@@ -47,7 +47,8 @@ const Sidebar = () => {
           } w-72`}
         >
           <div>
-            <h5 className="text-decoration-underline mb-2">Lọc hàng hóa</h5>
+          <h5 className=" mb-2">LỌC HÀNG HOÁ</h5>
+
           </div>
 
           <div className="flex flex-col items-center mt-5">
@@ -59,7 +60,7 @@ const Sidebar = () => {
                   name="searchQuery"
                   value={searchQuery}
                   onChange={handleChange}
-                  className="w-70  placeholder-white border border-white text-white rounded-md py-2 px-4 mr-2 focus:outline-none focus:border-amber-950"
+                  className="w-70 placeholder-white border border-white text-white rounded-md py-2 px-4 mr-2 focus:outline-none focus:border-amber-950"
                 />
               </form>
               <form className="flex items-center mt-2">
@@ -90,7 +91,7 @@ const Sidebar = () => {
             <label
               className={`inline-flex items-center  ${
                 selectedFilter === "coffeeBean"
-                  ? "bg-indigo-50 text-indigo-900 ring-indigo-200 w-60 rounded"
+                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
                   : ""
               }`}
               onClick={() => handleFilterChange("coffeeBean")}
@@ -106,7 +107,7 @@ const Sidebar = () => {
             <label
               className={`inline-flex items-center  ${
                 selectedFilter === "milk"
-                  ? "bg-indigo-50 text-indigo-900 ring-indigo-200 w-60 rounded"
+                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
                   : ""
               }`}
               onClick={() => handleFilterChange("milk")}
@@ -119,7 +120,7 @@ const Sidebar = () => {
             <label
               className={`inline-flex items-center  ${
                 selectedFilter === "cake"
-                  ? "bg-indigo-50 text-indigo-900 ring-indigo-200 w-60 rounded"
+                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
                   : ""
               }`}
               onClick={() => handleFilterChange("cake")}
@@ -183,7 +184,7 @@ const Sidebar = () => {
             <label
               className={`inline-flex items-center  ${
                 selectedFilter === "Còn Hàng"
-                  ? "bg-indigo-50 text-indigo-900 ring-indigo-200 w-60 rounded"
+                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
                   : ""
               }`}
               onClick={() => handleFilterChange("Còn Hàng")}
@@ -199,7 +200,7 @@ const Sidebar = () => {
             <label
               className={`inline-flex items-center  ${
                 selectedFilter === "Hết Hàng"
-                  ? "bg-indigo-50 text-indigo-900 ring-indigo-200 w-60 rounded"
+                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
                   : ""
               }`}
               onClick={() => handleFilterChange("Hết Hàng")}
