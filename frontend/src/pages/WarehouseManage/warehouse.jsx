@@ -1,15 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Container,
   Row,
   Col,
   Table,
-  Form,
   Pagination,
-  Button,
-  ListGroup,
-  InputGroup,
-  FormControl,
 } from "react-bootstrap";
 import "./warehouse.css";
 import { usePagination } from "../Common/hooks.js";
@@ -17,85 +13,26 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSlider from "../Common/sidebar.jsx";
 
-const fakeData = [
-  {
-    id: 1,
-    name: "Sản phẩm 1",
-    "Giá nhập": "100,000 VND",
-    "Giá bán": "150,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-01-29",
-    "Tồn kho": 50,
-  },
-  {
-    id: 2,
-    name: "Sản phẩm 2",
-    "Giá nhập": "120,000 VND",
-    "Giá bán": "180,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-01-30",
-    "Tồn kho": 0,
-  },
-  {
-    id: 3,
-    name: "Sản phẩm 3",
-    "Giá nhập": "80,000 VND",
-    "Giá bán": "120,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-01-28",
-    "Tồn kho": 30,
-  },
-  {
-    id: 4,
-    name: "Sản phẩm 4",
-    "Giá nhập": "90,000 VND",
-    "Giá bán": "130,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-02-01",
-    "Tồn kho": 0,
-  },
-  {
-    id: 5,
-    name: "Sản phẩm 5",
-    "Giá nhập": "110,000 VND",
-    "Giá bán": "160,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-02",
-    "Tồn kho": 25,
-  },
-  {
-    id: 6,
-    name: "Sản phẩm 6",
-    "Giá nhập": "70,000 VND",
-    "Giá bán": "100,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-03",
-    "Tồn kho": 50,
-  },
-  {
-    id: 7,
-    name: "Sản phẩm 7",
-    "Giá nhập": "85,000 VND",
-    "Giá bán": "120,000 VND",
-    "Trạng thái": "Out of Stock",
-    "Ngày nhập": "2024-02-04",
-    "Tồn kho": 0,
-  },
-  {
-    id: 8,
-    name: "Sản phẩm 8",
-    "Giá nhập": "95,000 VND",
-    "Giá bán": "140,000 VND",
-    "Trạng thái": "In Stock",
-    "Ngày nhập": "2024-02-05",
-    "Tồn kho": 15,
-  },
-];
-
 function Warehouse() {
+  const [items, setItems] = useState([]);
+  const [error, setError] = useState(null);
   const itemsPerPage = 3;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(fakeData, itemsPerPage);
+    usePagination(items, itemsPerPage);
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/v1/warehouse/getAll")
+      .then(response => {
+        if (response.data.isSuccess) {
+          setItems(response.data.data.data);
+        } else {
+          setError("Error: " + response.data.message);
+        }
+      })
+      .catch(error => {
+        setError("Error: " + error.message);
+      });
+  }, []);
 
   useEffect(() => {
     const checkboxes = document.querySelectorAll(
@@ -112,6 +49,10 @@ function Warehouse() {
       });
     });
   }, []);
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <>
@@ -131,49 +72,44 @@ function Warehouse() {
             Xuất ra file
           </button>
         </Col>
-
       </Row>
       <div className="flex">
   <CommonSlider/>
   <Container className="ml-72">
         <Row>   
           <Col>
+
             <Row>
               <Table striped bordered hover>
                 <thead>
                   <tr>
                     <th>Mã hàng hóa</th>
                     <th>Tên hàng hóa</th>
-                    <th>Giá nhập</th>
-                    <th>Giá bán</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày nhập</th>
-                    <th>Tồn kho</th>
-                    <th></th>
+                    <th>Số lượng</th>
+                    <th>Ảnh</th>
+                    <th>Cập nhật</th>
+                    <th>Thao tác</th>
                   </tr>
                 </thead>
                 <tbody>
                   {getPaginatedItems.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
+                    <tr key={item._id}>
+                      <td>{item._id}</td>
                       <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
-                      <td>{item["Giá nhập"]}</td>
-                      <td>{item["Giá bán"]}</td>
-                      <td>{item["Trạng thái"]}</td>
-                      <td>{item["Ngày nhập"]}</td>
-                      <td>{item["Tồn kho"]}</td>
+                      <td>{item.quantity}</td>
                       <td>
-                        <button type="button" className="btn btn-primary edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-
-                        <button type="button" className="btn btn-danger">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <img src={item.image} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
                       </td>
-
+                      <td>{item.updatedAt}</td>
+                      <td>
+                        <button type="button" className="btn btn-primary edit-btn"><i className="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
+
             </Row>
 
             <Row>

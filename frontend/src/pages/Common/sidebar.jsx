@@ -7,6 +7,7 @@ const Sidebar = () => {
   const [searchQuery1, setSearchQuery1] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "searchQuery") {

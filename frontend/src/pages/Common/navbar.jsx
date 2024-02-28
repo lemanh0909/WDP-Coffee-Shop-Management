@@ -1,7 +1,9 @@
+
 import React, { useState } from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import "./navbar.css";
 import logoImage from "../images/logo.png";
+
 const CommonNavbar = () => {
 
     const [showDropdown, setShowDropdown] = useState(false);
