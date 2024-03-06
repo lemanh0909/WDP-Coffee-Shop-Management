@@ -1,5 +1,6 @@
 import ProductVariant from "../models/productVariant";
 import Product from "../models/product";
+import Shop from "../models/shop.js";
 
 export const ProductVariantService = {
 
@@ -79,7 +80,38 @@ export const ProductVariantService = {
             throw error;
         }
     },
+    getAllProductVariantsInShop: async (shopId) => {
+        try {
+            // Lấy tất cả các ProductVariant từ database
+            const shop = await Shop.findById(shopId);;
+            if (shop) {
+                const categoryIds = shop.categoryId.map(category => category.$oid);
 
+                const products = await Product.find({ categoryId: { $in: categoryIds } });
+                
+
+                    const productVariant = products.map(variant =>
+                        variant.productVariant
+                    );
+                    const variantIds = []
+                   for (const product of productVariant) {
+                    for (const variant of product){
+                        variantIds.push(variant._id);
+                    }
+                   }
+                // // Bước 2: Lấy tất cả các ProductVariant dựa trên danh sách IDs
+                const productVariants = await ProductVariant.find({ _id: { $in: variantIds } });
+
+
+                return productVariants;
+            } else {
+                throw new Error("Shop not found with id: " + managerId);
+            }
+        } catch (error) {
+            console.error("Error getting all product variants:", error);
+            throw error;
+        }
+    },
     getProductVariantById: async (productVariantId) => {
         try {
             // Lấy một ProductVariant dựa trên ID từ database

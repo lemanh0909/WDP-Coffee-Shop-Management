@@ -77,8 +77,8 @@ export const productController = {
     },
     getAllProductsInShop: async (req, res) => {
         try {
-            const managerId = req.params.managerId;
-            const products = await productService.getAllProductsInShop(managerId);
+            const shopId = req.params.shopId;
+            const products = await productService.getAllProductsInShop(shopId);
             res.status(200).json({
                 message: 'Success',
                 data: products,

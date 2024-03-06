@@ -38,6 +38,26 @@ export const productVariantController = {
             });
         }
     },
+    getAllProductVariantsInShop: async (req, res) => {
+        // const error = validation.validationRequest(req, res);
+        // if (error) return res.status(200).json(error);
+
+        try {
+            const shopId = req.params.shopId;
+            const allProductVariants = await ProductVariantService.getAllProductVariantsInShop(shopId);
+
+            res.status(200).json({
+                success: true,
+                data: { allProductVariants: allProductVariants },
+            });
+        } catch (error) {
+            console.error("Error creating product variant:", error);
+            res.status(500).json({
+                success: false,
+                error: { error: error.message },
+            });
+        }
+    },
     getProductVariantById: async (req, res) => {
         // const error = validation.validationRequest(req, res);
         // if (error) return res.status(200).json(error);

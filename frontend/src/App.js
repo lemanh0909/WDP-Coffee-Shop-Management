@@ -5,7 +5,7 @@ import EmployeeManagement from './pages/ManagerStaff/managerStaff.jsx';
 import Warehouse from './pages/WarehouseManage/warehouse.jsx';
 import ProductManage from './pages/ProductManage/productmanage.jsx';
 import ProductDetail from './pages/productdetail/productdetail.jsx';
-import Order from './pages/Order/Order.jsx';
+import Order from './pages/OrderCopy/Order.jsx';
 import Category from './pages/Category/Category.jsx';
 import Control from './pages/Control/Control.jsx';
 function App() {
