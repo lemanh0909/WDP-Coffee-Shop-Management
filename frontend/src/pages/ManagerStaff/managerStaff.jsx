@@ -78,7 +78,7 @@ const EmployeeManagement = () => {
     <>
       <CommonNavbar />
       <Container className="mt-4">
-        <h1 className="text-center mb-4">Manager Staff</h1>
+        <h1 className="text-center mb-4 text-white">Manager Staff</h1>
         <StyledTable className="text-center align-middle table-hover">
           <thead>
             <tr>

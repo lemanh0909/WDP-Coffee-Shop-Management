@@ -11,7 +11,7 @@ import "./warehouse.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CommonNavbar from "../Common/navbar.jsx";
-import Sidebar from "../Common/sidebar.jsx";
+import CommonSlider from "../Common/sidebar.jsx";
 
 function Warehouse() {
   const [items, setItems] = useState([]);
@@ -57,6 +57,7 @@ function Warehouse() {
   return (
     <>
       <CommonNavbar />
+      
       <Row md={5} className="title">
         <Col md={4}>
           <h2>Quản lý nhà kho</h2>
@@ -72,11 +73,12 @@ function Warehouse() {
           </button>
         </Col>
       </Row>
+      <div className="flex">
+  <CommonSlider/>
+  <Container className="ml-72">
+        <Row>   
+          <Col>
 
-      <Container fluid>
-        <Row>
-          <Sidebar />
-          <Col xs={9}>
             <Row>
               <Table striped bordered hover>
                 <thead>
@@ -136,6 +138,7 @@ function Warehouse() {
           </Col>
         </Row>
       </Container>
+      </div>
     </>
   );
 }

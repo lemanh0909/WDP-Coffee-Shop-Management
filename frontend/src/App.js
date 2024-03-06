@@ -8,6 +8,7 @@ import ProductDetail from './pages/productdetail/productdetail.jsx';
 import Order from './pages/OrderCopy/Order.jsx';
 import Category from './pages/Category/Category.jsx';
 import Control from './pages/Control/Control.jsx';
+import Sidebar from './pages/Common/sidebar.jsx';
 function App() {
   return (
     <Router>
@@ -21,6 +22,8 @@ function App() {
           <Route path="/order" element={< Order />} />
           <Route path="/control" element={< Control/>} />
          <Route path="/category" element={< Category/>} />
+         <Route path="/Sidebar" element={< Sidebar/>} />
+
         </Routes>
       </div>
     </Router>

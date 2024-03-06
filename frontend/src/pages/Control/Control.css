@@ -1,4 +1,6 @@
-.sidebar {
+
+.custom-brand {
+  font-size: 24px; /* tăng kích thước font chữ */
   background-color: #A8715C;
   border-radius: 2px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -48,11 +50,13 @@
 .filter-section button:hover {
   color: rgb(248, 245, 245);
   background-color: #A8715C;
+  /* background-color: #fff; */
 }
 
 .filter-section button:onclick {
   color: rgb(248, 245, 245);
   background-color: #A8715C;
+  /* background-color: #fff; */
 }
 
 .filter-section h5 {
@@ -70,8 +74,10 @@
 
 
 .btn-outline-primary {
+
   color: #8B4513;
   border-color: #8B4513;
+
 }
 
 .btn-outline-primary:hover {
@@ -81,7 +87,8 @@
 }
 
 .selected {
-  background-color: #FFFFFF;
+  /* background-color: #FFFFFF; */
+  background-color: #A8715C;
   color: #A8715C;
 }
 
