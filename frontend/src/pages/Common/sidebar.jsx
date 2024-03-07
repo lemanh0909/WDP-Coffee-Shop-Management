@@ -30,12 +30,12 @@ const Sidebar = () => {
   return (
     <div className="flex ">
       <div
-  className={` ${
-    open ? "w-72" : "w-16 "
-  } bg-amber-700 h-screen p-2  pt-8 relative duration-300 text-white`}
->
+        className={` ${open ? "w-72" : "w-16 "
+          } bg-amber-700 p-2  pt-8 relative duration-300 text-white`}
+      >
         <i class="fa-solid fa-filter pt-8"></i>
         <img
+          alt="#"
           src={control}
           className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple
                border-2 rounded-full  ${!open && "rotate-180"}`}
@@ -43,12 +43,11 @@ const Sidebar = () => {
         />
 
         <div
-          className={`whitespace-pre duration-500 ${
-            !open && "opacity-0 translate-x-28 overflow-hidden"
-          } w-72`}
+          className={`whitespace-pre duration-500 ${!open && "opacity-0 translate-x-28 overflow-hidden"
+            } w-72`}
         >
           <div>
-          <h5 className=" mb-2">LỌC HÀNG HOÁ</h5>
+            <h5 className=" mb-2">LỌC HÀNG HOÁ</h5>
 
           </div>
 
@@ -90,11 +89,10 @@ const Sidebar = () => {
               Lọc theo loại hàng hóa
             </h5>
             <label
-              className={`inline-flex items-center  ${
-                selectedFilter === "coffeeBean"
-                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
-                  : ""
-              }`}
+              className={`inline-flex items-center  ${selectedFilter === "coffeeBean"
+                ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
+                : ""
+                }`}
               onClick={() => handleFilterChange("coffeeBean")}
             >
               <input type="radio" checked={selectedFilter === "coffeeBean"} />
@@ -106,11 +104,10 @@ const Sidebar = () => {
               </p>
             </label>
             <label
-              className={`inline-flex items-center  ${
-                selectedFilter === "milk"
-                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
-                  : ""
-              }`}
+              className={`inline-flex items-center  ${selectedFilter === "milk"
+                ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
+                : ""
+                }`}
               onClick={() => handleFilterChange("milk")}
             >
               <input type="radio" checked={selectedFilter === "milk"} />
@@ -119,11 +116,10 @@ const Sidebar = () => {
               </p>
             </label>
             <label
-              className={`inline-flex items-center  ${
-                selectedFilter === "cake"
-                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
-                  : ""
-              }`}
+              className={`inline-flex items-center  ${selectedFilter === "cake"
+                ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
+                : ""
+                }`}
               onClick={() => handleFilterChange("cake")}
             >
               <input type="radio" checked={selectedFilter === "cake"} />
@@ -136,42 +132,38 @@ const Sidebar = () => {
             <h5 className="text-decoration-underline">Lọc theo loại nhóm</h5>
             <ul className="list-none p-0">
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${
-                  selectedFilter === "all"
-                    ? "bg-gray-200 text-amber-700"
-                    : "hover:bg-slate-300 hover:text-amber-700"
-                }`}
+                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "all"
+                  ? "bg-gray-200 text-amber-700"
+                  : "hover:bg-slate-300 hover:text-amber-700"
+                  }`}
                 onClick={() => handleFilterChange("all")}
               >
                 TẤT CẢ
               </li>
 
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${
-                  selectedFilter === "coffeeBeann"
-                    ? "bg-gray-200 text-amber-700"
-                    : "hover:bg-slate-300 hover:text-amber-700"
-                }`}
+                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "coffeeBeann"
+                  ? "bg-gray-200 text-amber-700"
+                  : "hover:bg-slate-300 hover:text-amber-700"
+                  }`}
                 onClick={() => handleFilterChange("coffeeBeann")}
               >
                 COFFEE BEAN
               </li>
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${
-                  selectedFilter === "milkk"
-                    ? "bg-gray-200 text-amber-700"
-                    : "hover:bg-slate-300 hover:text-amber-700"
-                }`}
+                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "milkk"
+                  ? "bg-gray-200 text-amber-700"
+                  : "hover:bg-slate-300 hover:text-amber-700"
+                  }`}
                 onClick={() => handleFilterChange("milkk")}
               >
                 MILK
               </li>
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${
-                  selectedFilter === "cakee"
-                    ? "bg-gray-200 text-amber-700"
-                    : "hover:bg-slate-300 hover:text-amber-700"
-                }`}
+                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "cakee"
+                  ? "bg-gray-200 text-amber-700"
+                  : "hover:bg-slate-300 hover:text-amber-700"
+                  }`}
                 onClick={() => handleFilterChange("cakee")}
               >
                 CAKE
@@ -183,11 +175,10 @@ const Sidebar = () => {
               Lọc theo loại tồn kho
             </h5>
             <label
-              className={`inline-flex items-center  ${
-                selectedFilter === "Còn Hàng"
-                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
-                  : ""
-              }`}
+              className={`inline-flex items-center  ${selectedFilter === "Còn Hàng"
+                ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
+                : ""
+                }`}
               onClick={() => handleFilterChange("Còn Hàng")}
             >
               <input type="radio" checked={selectedFilter === "Còn Hàng"} />
@@ -199,11 +190,10 @@ const Sidebar = () => {
               </p>
             </label>
             <label
-              className={`inline-flex items-center  ${
-                selectedFilter === "Hết Hàng"
-                  ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
-                  : ""
-              }`}
+              className={`inline-flex items-center  ${selectedFilter === "Hết Hàng"
+                ? "bg-indigo-50 text-amber-700 ring-indigo-200 w-60 rounded"
+                : ""
+                }`}
               onClick={() => handleFilterChange("Hết Hàng")}
             >
               <input type="radio" checked={selectedFilter === "Hết Hàng"} />
