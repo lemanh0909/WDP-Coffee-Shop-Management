@@ -1,7 +1,7 @@
 
 import Warehouse from "../models/warehouse.js"
 import Shop from '../models/shop.js'
-import ImportExportNote from '../models/exportimportNote';
+import ImportExportNote from '../models/exportimportNote.js';
 const LIMIT_WAREHOUSE = 10;
 
 export const warehouseService = {
