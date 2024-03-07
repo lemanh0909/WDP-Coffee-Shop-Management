@@ -7,6 +7,7 @@ import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSlider from "../Common/sidebar.jsx";
 import AddProductModal from "./addProduct.jsx";
+import UpdateProductModal from "./updateProduct.jsx";
 
 function ProductManage() {
   const itemsPerPage = 7;
@@ -16,12 +17,41 @@ function ProductManage() {
     usePagination(products, itemsPerPage);
   const [showModal, setShowModal] = useState(false);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
-
   const handleShowModal = () => setShowModal(true);
+
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [productIdToUpdate, setProductIdToUpdate] = useState(null);
+
+  const handleShowUpdateModal = (productId) => {
+    setProductIdToUpdate(productId);
+    setShowUpdateModal(true);
+  };
+
+  const handleAddSuccess = () => {
+    fetchProducts();
+  };
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
+    setProductIdToUpdate(null);
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setShowDetailsTable(false);
+  };
+
+  const handleDelete = (productId) => {
+    axios
+      .delete("http://localhost:5000/api/v1/product/delete", {
+        data: { productId: productId },
+      })
+      .then((response) => {
+        console.log("Product deleted successfully");
+        fetchProducts();
+      })
+      .catch((error) => {
+        console.error("Error deleting product:", error);
+      });
   };
 
   const fetchProducts = () => {
@@ -112,10 +142,10 @@ function ProductManage() {
                             </Button>
                           </td>
                           <td>
-                            <Button variant="primary" className="edit-btn">
+                            <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
                               <i className="fa-solid fa-pen-to-square"></i> Update
                             </Button>
-                            <Button variant="danger">
+                            <Button variant="danger" onClick={() => handleDelete(item._id)}>
                               <i className="fa-solid fa-trash"></i> Delete
                             </Button>
                           </td>
@@ -181,7 +211,14 @@ function ProductManage() {
           </Row>
         </Container>
       </div>
-      <AddProductModal show={showModal} handleClose={handleCloseModal} />
+      <AddProductModal show={showModal} handleClose={handleCloseModal} onAddSuccess={handleAddSuccess} />
+
+      <UpdateProductModal
+        show={showUpdateModal}
+        handleClose={handleCloseUpdateModal}
+        productId={productIdToUpdate}
+        onUpdate={fetchProducts}
+      />
     </>
   );
 }
