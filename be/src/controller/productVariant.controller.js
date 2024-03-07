@@ -1,4 +1,4 @@
-import { ProductVariantService } from "../services/productVariant.service";
+import { ProductVariantService } from "../services/productVariant.service.js";
 
 export const productVariantController = {
     createProductVariant: async (req, res) => {

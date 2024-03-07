@@ -1,5 +1,5 @@
-import Category from '../models/category';
-import Shop from '../models/shop';
+import Category from '../models/category.js';
+import Shop from '../models/shop.js';
 export const categoryService = {
   createCategory: async (data) => {
     return new Promise(async (resolve, reject) => {
