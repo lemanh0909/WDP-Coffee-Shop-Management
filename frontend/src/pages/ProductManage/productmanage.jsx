@@ -93,9 +93,9 @@ function ProductManage() {
           totalPages={totalPages}
           getPaginatedItems={paginatedItems}
         />
-        <Container className="ml-72">
+        <Container className="ml-72 ">
           <Row className="title">
-            <Col md={4}>
+            <Col md={4} className="text-white">
               <h2>Quản lý sản phẩm</h2>
             </Col>
             <Col md={4} />
