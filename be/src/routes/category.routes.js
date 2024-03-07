@@ -2,10 +2,10 @@
 import express from "express";
 
 // ** Controllers
-import { CategoryController } from "../controller/category.controller";
+import { CategoryController } from "../controller/category.controller.js";
 
 // ** Middleware
-import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt";
+import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt.js";
 
 const categoryRouter = express.Router();
 

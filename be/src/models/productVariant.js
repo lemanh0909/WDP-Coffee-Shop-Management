@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Warehouse from "./warehouse";
+import Warehouse from "./warehouse.js";
 
 const IngredientSchema = new mongoose.Schema({
     warehouse: {

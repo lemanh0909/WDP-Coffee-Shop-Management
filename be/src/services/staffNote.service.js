@@ -1,5 +1,5 @@
-import StaffNote from '../models/staffNote';
-import Shop from '../models/shop';
+import StaffNote from '../models/staffNote.js';
+import Shop from '../models/shop.js';
 export const staffNoteService = {
   createStaffNote: async (data) => {
     try {
