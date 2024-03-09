@@ -8,8 +8,11 @@
     transition: color 0.3s ease; /* Hiệu ứng chuyển đổi màu */
 }
 .custom-brand {
+    color: #ecf0f1;
+    box-shadow: none !important;
     padding:0;
 }
+
 .navbar-logo {
     width: 50%;
     height: 100%;

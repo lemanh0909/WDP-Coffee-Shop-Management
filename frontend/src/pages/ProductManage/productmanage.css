@@ -71,11 +71,11 @@
     justify-content: left;
     align-items: center;
     font-weight: bold;
+    margin-bottom: 0px;
 }
 
 .title h2 {
     margin-right: auto;
-    /* Đẩy thẻ h2 về bên trái */
 }
 
 
@@ -97,8 +97,8 @@
     justify-content: center;
     margin-top: 20px;
     position: fixed;
-    bottom: -20px;
-    left: 0;
+    bottom: -10px;
+    left: 17%;
     right: 0;
     align-items: center;
 }
@@ -128,4 +128,10 @@
     background-color: #da640a; 
     border-color: #b45309;
   }
+  /* Scroll khi click vào product thứ 7 */
+  .container-scroll {
+    max-height: 650px; 
+    overflow-y: auto;
+  }
+
   

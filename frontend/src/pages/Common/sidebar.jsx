@@ -28,7 +28,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex ">
+    <div className="flex h-screen ">
       <div
         className={` ${open ? "w-72" : "w-16 "
           } bg-amber-700 p-2  pt-8 relative duration-300 text-white`}
@@ -46,12 +46,9 @@ const Sidebar = () => {
           className={`whitespace-pre duration-500 ${!open && "opacity-0 translate-x-28 overflow-hidden"
             } w-72`}
         >
-          <div>
-            <h5 className=" mb-2">LỌC HÀNG HOÁ</h5>
+   
 
-          </div>
-
-          <div className="flex flex-col items-center mt-5">
+          <div className="flex flex-col items-center">
             <div className="relative">
               <form className="flex items-center">
                 <input
@@ -63,7 +60,7 @@ const Sidebar = () => {
                   className="w-70 placeholder-white border border-white text-white rounded-md py-2 px-4 mr-2 focus:outline-none focus:border-amber-950"
                 />
               </form>
-              <form className="flex items-center mt-2">
+              <form className="flex items-center">
                 <input
                   type="text"
                   placeholder="TÊN NHÀ CUNG CẤP"
@@ -84,7 +81,7 @@ const Sidebar = () => {
             </div>
           </div>
 
-          <div className="filter-section w-50px flex flex-col mt-10">
+          <div className="filter-section w-50px flex flex-col">
             <h5 className="text-decoration-underline mb-2">
               Lọc theo loại hàng hóa
             </h5>
@@ -171,7 +168,7 @@ const Sidebar = () => {
             </ul>
           </div>
           <div className="filter-section w-50px flex flex-col">
-            <h5 className="text-decoration-underline mb-2">
+            <h5 className="text-decoration-underline ">
               Lọc theo loại tồn kho
             </h5>
             <label

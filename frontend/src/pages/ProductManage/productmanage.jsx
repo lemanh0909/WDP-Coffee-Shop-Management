@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
+import { Container, Row, Col, Table, Pagination, Button, Modal } from "react-bootstrap";
 import "./productmanage.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,6 +18,9 @@ function ProductManage() {
   const [showModal, setShowModal] = useState(false);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
   const handleShowModal = () => setShowModal(true);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false); 
+  const [productIdToDelete, setProductIdToDelete] = useState(null); 
+
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productIdToUpdate, setProductIdToUpdate] = useState(null);
@@ -40,19 +43,30 @@ function ProductManage() {
     setShowDetailsTable(false);
   };
 
-  const handleDelete = (productId) => {
+  const handleShowConfirmationModal = (productId) => {
+    setShowConfirmationModal(true);
+    setProductIdToDelete(productId);
+  };
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+    setProductIdToDelete(null);
+  };
+
+  const handleDelete = () => {
     axios
       .delete("http://localhost:5000/api/v1/product/delete", {
-        data: { productId: productId },
+        data: { productId: productIdToDelete },
       })
       .then((response) => {
         console.log("Product deleted successfully");
         fetchProducts();
+        setShowConfirmationModal(false); // Close confirmation modal after deletion
       })
       .catch((error) => {
         console.error("Error deleting product:", error);
       });
   };
+
 
   const fetchProducts = () => {
     axios
@@ -95,9 +109,9 @@ function ProductManage() {
           totalPages={totalPages}
           getPaginatedItems={paginatedItems}
         />
-        <Container className="ml-72">
-          <Row className="title">
-            <Col md={4}>
+        <Container className="ml-72 ">
+          <Row className="title mb-0">
+            <Col md={4} className="text-white "  >
               <h2>Quản lý sản phẩm</h2>
             </Col>
             <Col md={4} />
@@ -145,9 +159,10 @@ function ProductManage() {
                             <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
                               <i className="fa-solid fa-pen-to-square"></i> Update
                             </Button>
-                            <Button variant="danger" onClick={() => handleDelete(item._id)}>
-                              <i className="fa-solid fa-trash"></i> Delete
-                            </Button>
+                            <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
+  <i className="fa-solid fa-trash"></i> Delete
+</Button>
+
                           </td>
                         </tr>
                         {showDetailsTable && selectedProduct &&
@@ -219,6 +234,20 @@ function ProductManage() {
         productId={productIdToUpdate}
         onUpdate={fetchProducts}
       />
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xoá sản phẩm này không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+            Hủy
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Xoá
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
