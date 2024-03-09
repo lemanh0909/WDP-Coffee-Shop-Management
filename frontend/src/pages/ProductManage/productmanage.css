@@ -76,7 +76,6 @@
 
 .title h2 {
     margin-right: auto;
-    /* Đẩy thẻ h2 về bên trái */
 }
 
 
@@ -98,7 +97,7 @@
     justify-content: center;
     margin-top: 20px;
     position: fixed;
-    bottom: -30px;
+    bottom: -10px;
     left: 17%;
     right: 0;
     align-items: center;

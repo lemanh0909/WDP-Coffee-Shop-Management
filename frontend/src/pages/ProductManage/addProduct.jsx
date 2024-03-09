@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 
-function AddProductModal({ show, handleClose, handleAddProduct }) {
+function AddProductModal({ show, handleClose, onAddSuccess }) {
     const [category, setCategory] = useState("drink");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -19,7 +19,7 @@ function AddProductModal({ show, handleClose, handleAddProduct }) {
         axios.post('http://localhost:5000/api/v1/product/create', data)
             .then(response => {
                 console.log('Product added successfully:', response.data);
-                handleAddProduct(response.data);
+                onAddSuccess();
             })
             .catch(error => {
                 console.error('Error adding product:', error);
@@ -27,6 +27,7 @@ function AddProductModal({ show, handleClose, handleAddProduct }) {
 
         handleClose();
     };
+
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

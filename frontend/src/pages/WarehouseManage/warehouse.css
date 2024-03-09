@@ -60,15 +60,26 @@
 .checkbox-input {
     margin-right: 5px;
 }
-
+.title h2 {
+    margin-right: auto;
+    /* Đẩy thẻ h2 về bên trái */
+}
 .title {
     display: flex;
     justify-content: left;
     align-items: center;
     font-weight: bold;
+}
+  
+.btn-color {
+    background-color: #b45309; 
+    border-color: #b45309;
+    margin-right: 10px;
   }
-  
-  
+  .btn-color:hover {
+    background-color: #da640a; 
+    border-color: #b45309;
+  }
   
  
   .selected {

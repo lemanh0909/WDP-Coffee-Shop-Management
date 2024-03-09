@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Table,
-  Pagination,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, Table, Pagination, Button, Modal } from "react-bootstrap";
 import "./productmanage.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,65 +7,68 @@ import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSlider from "../Common/sidebar.jsx";
 import AddProductModal from "./addProduct.jsx";
-
-function ProductVariantDetails({ variant }) {
-  return (
-    <div className="detail-table">
-      <table>
-        <tbody>
-          <tr>
-            <td className="field">Tên:</td>
-            <td>{variant.name}</td>
-          </tr>
-          <tr>
-            <td className="field">Mô tả:</td>
-            <td>{variant.description}</td>
-          </tr>
-          <tr>
-            <td className="field">Kích thước:</td>
-            <td>{variant.size}</td>
-          </tr>
-          <tr>
-            <td className="field">Giá:</td>
-            <td>{variant.price}</td>
-          </tr>
-          <tr>
-            <td className="field">Hình ảnh:</td>
-            <td>
-              <img src={variant.image} alt="Product" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-}
+import UpdateProductModal from "./updateProduct.jsx";
 
 function ProductManage() {
   const itemsPerPage = 7;
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedVariant, setSelectedVariant] = useState(null);
   const [paginatedItems, activePage, totalPages, handlePageChange] =
     usePagination(products, itemsPerPage);
   const [showModal, setShowModal] = useState(false);
-
+  const [showDetailsTable, setShowDetailsTable] = useState(false);
   const handleShowModal = () => setShowModal(true);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false); 
+  const [productIdToDelete, setProductIdToDelete] = useState(null); 
 
-  const handleCloseModal = () => setShowModal(false);
 
-  const showDetails = (productId) => {
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [productIdToUpdate, setProductIdToUpdate] = useState(null);
+
+  const handleShowUpdateModal = (productId) => {
+    setProductIdToUpdate(productId);
+    setShowUpdateModal(true);
+  };
+
+  const handleAddSuccess = () => {
+    fetchProducts();
+  };
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
+    setProductIdToUpdate(null);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setShowDetailsTable(false);
+  };
+
+  const handleShowConfirmationModal = (productId) => {
+    setShowConfirmationModal(true);
+    setProductIdToDelete(productId);
+  };
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+    setProductIdToDelete(null);
+  };
+
+  const handleDelete = () => {
     axios
-      .get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
+      .delete("http://localhost:5000/api/v1/product/delete", {
+        data: { productId: productIdToDelete },
+      })
       .then((response) => {
-        setSelectedProduct(response.data.data);
+        console.log("Product deleted successfully");
+        fetchProducts();
+        setShowConfirmationModal(false); // Close confirmation modal after deletion
       })
       .catch((error) => {
-        console.error("Error fetching product details:", error);
+        console.error("Error deleting product:", error);
       });
   };
 
-  useEffect(() => {
+
+  const fetchProducts = () => {
     axios
       .get("http://localhost:5000/api/v1/product/getAllProducts")
       .then((response) => {
@@ -81,6 +77,26 @@ function ProductManage() {
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
+  };
+
+  const showDetails = (productId) => {
+    if (selectedProduct && selectedProduct._id === productId) {
+      setShowDetailsTable(!showDetailsTable);
+    } else {
+      axios
+        .get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
+        .then((response) => {
+          setSelectedProduct(response.data.data);
+          setShowDetailsTable(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching product details:", error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   return (
@@ -94,8 +110,8 @@ function ProductManage() {
           getPaginatedItems={paginatedItems}
         />
         <Container className="ml-72 ">
-          <Row className="title">
-            <Col md={4} className="text-white">
+          <Row className="title mb-0">
+            <Col md={4} className="text-white "  >
               <h2>Quản lý sản phẩm</h2>
             </Col>
             <Col md={4} />
@@ -115,13 +131,14 @@ function ProductManage() {
             </Col>
           </Row>
           <Row>
-            <Col xs={9}>
+            <Col xs={12}>
               <Row>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
                       <th>Mã hàng hóa</th>
                       <th>Tên hàng hóa</th>
+                      <th>Category</th>
                       <th></th>
                       <th></th>
                     </tr>
@@ -131,60 +148,47 @@ function ProductManage() {
                       <React.Fragment key={item._id}>
                         <tr>
                           <td>{item._id}</td>
-                          <td style={{ color: "#BB2649", fontWeight: "bold" }}>
-                            {item.name}
-                          </td>
+                          <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
+                          <td></td>
                           <td>
                             <Button onClick={() => showDetails(item._id)}>
                               Xem chi tiết
                             </Button>
                           </td>
                           <td>
-                            <Button variant="primary" className="edit-btn">
-                              <i className="fa-solid fa-pen-to-square"></i>
+                            <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
+                              <i className="fa-solid fa-pen-to-square"></i> Update
                             </Button>
-                            <Button variant="danger">
-                              <i className="fa-solid fa-trash"></i>
-                            </Button>
+                            <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
+  <i className="fa-solid fa-trash"></i> Delete
+</Button>
+
                           </td>
                         </tr>
-                        {selectedProduct &&
+                        {showDetailsTable && selectedProduct &&
                           selectedProduct._id === item._id && (
                             <React.Fragment>
                               <tr>
-                                <td colSpan="4">
-                                  <div className="variant-details-container">
-                                    <p className="variant-count">
-                                      Số lượng biến thể:{" "}
-                                      {selectedProduct.productVariant.length}
-                                    </p>
-                                    <Row>
-                                      <Col xs={6}>
-                                        <ul className="variant-list">
-                                          {selectedProduct.productVariant.map(
-                                            (variant, index) => (
-                                              <li key={index}>
-                                                <Button
-                                                  onClick={() =>
-                                                    setSelectedVariant(variant)
-                                                  }
-                                                >
-                                                  Xem chi tiết biến thể{" "}
-                                                  {index + 1}
-                                                </Button>
-                                              </li>
-                                            )
-                                          )}
-                                        </ul>
-                                      </Col>
-                                      <Col xs={6}>
-                                        {selectedVariant && (
-                                          <ProductVariantDetails
-                                            variant={selectedVariant}
-                                          />
-                                        )}
-                                      </Col>
-                                    </Row>
+                                <td colSpan="12">
+                                  <div className="details-table-container">
+                                    <Table bordered>
+                                      <tbody>
+                                        <tr>
+                                          <td className="field">Tên:</td>
+                                          <td>{selectedProduct.name}</td>
+                                        </tr>
+                                        <tr>
+                                          <td className="field">Mô tả:</td>
+                                          <td>{selectedProduct.description}</td>
+                                        </tr>
+                                        <tr>
+                                          <td className="field">Hình ảnh:</td>
+                                          <td>
+                                            <img src={selectedProduct.image} alt="Product" />
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </Table>
                                   </div>
                                 </td>
                               </tr>
@@ -222,7 +226,28 @@ function ProductManage() {
           </Row>
         </Container>
       </div>
-      <AddProductModal show={showModal} handleClose={handleCloseModal} />
+      <AddProductModal show={showModal} handleClose={handleCloseModal} onAddSuccess={handleAddSuccess} />
+
+      <UpdateProductModal
+        show={showUpdateModal}
+        handleClose={handleCloseUpdateModal}
+        productId={productIdToUpdate}
+        onUpdate={fetchProducts}
+      />
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xoá sản phẩm này không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+            Hủy
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Xoá
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
