@@ -28,8 +28,8 @@ const Receipt = mongoose.model(
       },
       status: {
         type: String,
-        enum: ["Imported", "Exported"], 
-        default: "Imported", 
+        enum: ["Income", "Expense"], 
+        default: "Income", 
       },
       description: {
         type: String,
