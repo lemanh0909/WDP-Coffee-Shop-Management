@@ -18,13 +18,39 @@ function ProductManage() {
   const [showModal, setShowModal] = useState(false);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
   const handleShowModal = () => setShowModal(true);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false); 
-  const [productIdToDelete, setProductIdToDelete] = useState(null); 
-
-
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productIdToUpdate, setProductIdToUpdate] = useState(null);
 
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: '' });
+
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+
+    setSortConfig({ key, direction });
+  };
+
+  const sortedProducts = () => {
+    if (!sortConfig.key) {
+      return products;
+    }
+
+    const sorted = [...products].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'ascending' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    });
+
+    return sorted;
+  };
   const handleShowUpdateModal = (productId) => {
     setProductIdToUpdate(productId);
     setShowUpdateModal(true);
@@ -60,7 +86,7 @@ function ProductManage() {
       .then((response) => {
         console.log("Product deleted successfully");
         fetchProducts();
-        setShowConfirmationModal(false); // Close confirmation modal after deletion
+        setShowConfirmationModal(false);
       })
       .catch((error) => {
         console.error("Error deleting product:", error);
@@ -136,15 +162,21 @@ function ProductManage() {
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Mã hàng hóa</th>
-                      <th>Tên hàng hóa</th>
+                      <th onClick={() => handleSort('_id')}>
+                        Mã hàng hóa{' '}
+                        {sortConfig.key === '_id' && (sortConfig.direction === 'ascending' ? '⬆️' : '⬇️')}
+                      </th>
+                      <th onClick={() => handleSort('name')}>
+                        Tên hàng hóa{' '}
+                        {sortConfig.key === 'name' && (sortConfig.direction === 'ascending' ? '⬆️' : '⬇️')}
+                      </th>
                       <th>Category</th>
                       <th></th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedItems.map((item) => (
+                    {sortedProducts().map((item) => (
                       <React.Fragment key={item._id}>
                         <tr>
                           <td>{item._id}</td>
@@ -160,9 +192,8 @@ function ProductManage() {
                               <i className="fa-solid fa-pen-to-square"></i> Update
                             </Button>
                             <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
-  <i className="fa-solid fa-trash"></i> Delete
-</Button>
-
+                              <i className="fa-solid fa-trash"></i> Delete
+                            </Button>
                           </td>
                         </tr>
                         {showDetailsTable && selectedProduct &&

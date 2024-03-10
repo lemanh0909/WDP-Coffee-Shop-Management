@@ -9,7 +9,6 @@ import {
 import "./Control.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CommonNavbar from "../Common/navbar.jsx";
-import Sidebar from "../Common/sidebar.jsx";
 
 function Control() {
   return (
@@ -23,10 +22,7 @@ function Control() {
         </Row>
 
         <Row>
-          <Col md={2} className="d-flex flex-column align-items-center">
-            <Sidebar />
-          </Col>
-          <Col md={10}>
+          <Col md={12}>
             <Row className="justify-content-center">
               <Col md={6} className="d-flex flex-column align-items-center">
                 <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Bán Hàng</Button>
