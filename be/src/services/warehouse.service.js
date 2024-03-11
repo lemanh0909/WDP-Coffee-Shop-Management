@@ -160,7 +160,17 @@ updateWarehouse: async (id, data) => {
             reject(err);
         }
     });
-}
+},
+
+    getAllWarehousesInShop: async (shopId) => {
+        const shop = await Shop.findById(shopId);
+        if (shop) {
+            const warehouse = await Warehouse.find({ _id: { $in: shop.warehouseId } });
+            return warehouse;
+        } else {
+            throw new Error("Shop not found with id: " + shopId);
+        }
+    }
 }
 
 

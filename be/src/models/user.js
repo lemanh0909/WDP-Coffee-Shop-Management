@@ -50,7 +50,7 @@ const User = mongoose.model(
       },
       role: {
         type: String,
-        enum: ["Manager", "Staff"],
+        enum: ["Manager", "Staff", "Admin"],
         default: "user",
       },
       description: {
