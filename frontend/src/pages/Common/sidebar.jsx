@@ -33,7 +33,7 @@ const Sidebar = () => {
         className={` ${open ? "w-72" : "w-16 "
           } bg-amber-700 p-2  pt-8 relative duration-300 text-white`}
       >
-        <i class="fa-solid fa-filter pt-8"></i>
+        <i className="fa-solid fa-filter pt-8"></i>
         <img
           alt="#"
           src={control}
@@ -82,7 +82,7 @@ const Sidebar = () => {
           </div>
 
           <div className="filter-section w-50px flex flex-col">
-            <h5 className="text-decoration-underline mb-2">
+            <h5 className="text-decoration-underline ">
               Lọc theo loại hàng hóa
             </h5>
             <label
@@ -94,7 +94,7 @@ const Sidebar = () => {
             >
               <input type="radio" checked={selectedFilter === "coffeeBean"} />
               <p
-                className="ml-5"
+                className="ml-5 mb-0 "
                 onClick={() => handleFilterChange("coffeeBean")}
               >
                 Coffee Bean
@@ -108,7 +108,7 @@ const Sidebar = () => {
               onClick={() => handleFilterChange("milk")}
             >
               <input type="radio" checked={selectedFilter === "milk"} />
-              <p className="ml-5" onClick={() => handleFilterChange("milk")}>
+              <p className="ml-5 mb-0" onClick={() => handleFilterChange("milk")}>
                 Milk
               </p>
             </label>
@@ -120,17 +120,17 @@ const Sidebar = () => {
               onClick={() => handleFilterChange("cake")}
             >
               <input type="radio" checked={selectedFilter === "cake"} />
-              <p className="ml-5" onClick={() => handleFilterChange("cake")}>
+              <p className="ml-5 mb-0" onClick={() => handleFilterChange("cake")}>
                 Cake
               </p>
             </label>
           </div>
           <div className="filter-section ">
-            <h5 className="text-decoration-underline">Lọc theo loại nhóm</h5>
+            <h5 className="text-decoration-underline 30">Lọc theo loại nhóm</h5>
             <ul className="list-none p-0">
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "all"
-                  ? "bg-gray-200 text-amber-700"
+                className={` w-60 cursor-pointer rounded ${selectedFilter === "all"
+                  ? "bg-gray-200 text-amber-700 text-bold"
                   : "hover:bg-slate-300 hover:text-amber-700"
                   }`}
                 onClick={() => handleFilterChange("all")}
@@ -139,7 +139,7 @@ const Sidebar = () => {
               </li>
 
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "coffeeBeann"
+                className={`w-60 cursor-pointer rounded ${selectedFilter === "coffeeBeann"
                   ? "bg-gray-200 text-amber-700"
                   : "hover:bg-slate-300 hover:text-amber-700"
                   }`}
@@ -148,7 +148,7 @@ const Sidebar = () => {
                 COFFEE BEAN
               </li>
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "milkk"
+                className={` w-60 cursor-pointer rounded ${selectedFilter === "milkk"
                   ? "bg-gray-200 text-amber-700"
                   : "hover:bg-slate-300 hover:text-amber-700"
                   }`}
@@ -157,7 +157,7 @@ const Sidebar = () => {
                 MILK
               </li>
               <li
-                className={`pl-8 w-60 cursor-pointer rounded ${selectedFilter === "cakee"
+                className={` w-60 cursor-pointer rounded ${selectedFilter === "cakee"
                   ? "bg-gray-200 text-amber-700"
                   : "hover:bg-slate-300 hover:text-amber-700"
                   }`}
