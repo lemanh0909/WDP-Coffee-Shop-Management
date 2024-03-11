@@ -32,10 +32,22 @@ function Login() {
             email: email,
             password: password
         };
+
         axios.post('http://localhost:5000/api/v1/auth/login', data)
             .then(response => {
                 if (response.data.isSuccess === true) {
                     console.log('Login successful', response);
+
+                    const userData = {
+                        userID: response.data.data.user._id,
+                        email: response.data.data.user.email,
+                        fullName: response.data.data.user.fullName,
+                        role: response.data.data.user.role,
+                        accessToken: response.data.data.accessToken,
+                        refreshToken: response.data.data.refreshToken,
+                    };
+                    localStorage.setItem('userData', JSON.stringify(userData));
+
                     navigate("/employee-management");
                 } else {
                     console.log('Login failed', response);
@@ -45,6 +57,7 @@ function Login() {
                 console.error('Login error:', error);
             });
     };
+
 
     const handleRegisterClick = (e) => {
         e.preventDefault();

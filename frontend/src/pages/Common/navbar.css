@@ -1,16 +1,17 @@
 .custom-navbar .mr-auto {
     margin-right: 0;
-    margin-left: auto; /* Lệch về bên trái */
+    margin-left: auto;
 }
 
 .custom-navbar .nav-link:hover {
-    color: #3E3232 ; /* Màu nâu đậm */
-    transition: color 0.3s ease; /* Hiệu ứng chuyển đổi màu */
+    color: #3E3232;
+    transition: color 0.3s ease;
 }
+
 .custom-brand {
     color: #ecf0f1;
     box-shadow: none !important;
-    padding:0;
+    padding: 0;
 }
 
 .navbar-logo {
@@ -18,11 +19,21 @@
     height: 100%;
     object-fit: cover;
 }
-.custom-navbar{
-    margin:0;
-    padding:0;
-}
-.nav-dropdown-item:hover {
-    background-color: #da640a; /* Màu nền khi hover */
-  }
 
+.custom-navbar {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-dropdown-item:hover {
+    background-color: #da640a;
+}
+
+.ml-auto .nav-link {
+    color: #fff;
+    cursor: pointer;
+}
+
+.ml-auto .nav-link:hover {
+    text-decoration: underline;
+}

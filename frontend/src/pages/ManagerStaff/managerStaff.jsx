@@ -1,77 +1,70 @@
-import React from 'react';
-import { useEmployees, usePagination } from '../Common/hooks';
-import { Container, Form } from 'react-bootstrap';
-import { StyledTable, StyledPagination } from './managerStaffStyles';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import CommonNavbar from '../Common/navbar';
+// EmployeeManagement.jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Container, Spinner, Alert } from 'react-bootstrap';
+import CommonNavbar from '../Common/navbar.jsx';
+import EmployeeTable from './staffTable.jsx';
+import PaginationBar from './paginationBar';
+import { usePagination } from '../Common/hooks.js';
 
-const EmployeeManagement = () => {
-  const initialEmployees = [
-    { id: 1, login: 'admin', name: 'Admin1', email: 'admin@example.com', phone: '1900633680', isAdmin: true, allowLogin: true },
-    { id: 2, login: 'user1', name: 'Nguyen Van A1', email: 'user1@example.com', phone: '1900633681', isAdmin: false, allowLogin: true },
-    { id: 3, login: 'user2', name: 'Tran Thi B2', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 4, login: 'user4', name: 'Tran Thi B3', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 5, login: 'user5', name: 'Tran Thi B4', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 6, login: 'user6', name: 'Tran Thi B5', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 7, login: 'user7', name: 'Tran Thi B6', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 8, login: 'user8', name: 'Tran Thi B7', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 9, login: 'user9', name: 'Tran Thi B7', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 10, login: 'user10', name: 'Tran Thi B9', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-    { id: 11, login: 'user11', name: 'Tran Thi B10', email: 'user2@example.com', phone: '1900633682', isAdmin: false, allowLogin: false },
-  ];
+function EmployeeManagement() {
+  const [employeeData, setEmployeeData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [employees, handleToggleAdmin, handleToggleAllowLogin] = useEmployees(
-    initialEmployees
-  );
+  const itemsPerPage = 5;
+  const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(employeeData, itemsPerPage);
 
-  const [currentItems, activePage, totalPages, handlePageChange] = usePagination(
-    employees,
-    5
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userDataString = localStorage.getItem('userData');
 
-  const renderTableRows = () => {
-    return currentItems.map((employee) => (
-      <tr key={employee.id}>
-        <td>{employee.login}</td>
-        <td>{employee.name}</td>
-        <td>{employee.email}</td>
-        <td>{employee.phone}</td>
-        <td>
-          <Form.Check
-            type="switch"
-            id={`admin-switch-${employee.id}`}
-            label=""
-            checked={employee.isAdmin}
-            onChange={() => handleToggleAdmin(employee.id)}
-          />
-        </td>
-        <td>
-          <Form.Check
-            type="switch"
-            id={`allow-login-switch-${employee.id}`}
-            label=""
-            checked={employee.allowLogin}
-            onChange={() => handleToggleAllowLogin(employee.id)}
-          />
-        </td>
-      </tr>
-    ));
-  };
+        if (!userDataString) {
+          throw new Error('User data not found in localStorage.');
+        }
 
-  const renderPaginationItems = () => {
-    const items = [];
-    for (let number = 1; number <= totalPages; number++) {
-      items.push(
-        <StyledPagination.Item
-          key={number}
-          active={number === activePage}
-          onClick={() => handlePageChange(number)}
-        >
-          {number}
-        </StyledPagination.Item>
-      );
+        const userData = JSON.parse(userDataString);
+
+        const response = await axios.get(`http://localhost:5000/api/v1/user/${userData.userID}/getStaffList`);
+        setEmployeeData(response.data);
+      } catch (error) {
+        console.error('Error fetching employee data:', error);
+        setError('An error occurred while fetching employee data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const toggleStatus = async (employeeId, currentStatus) => {
+    try {
+      const userDataString = localStorage.getItem('userData');
+
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+
+      const userData = JSON.parse(userDataString);
+      await axios.put('http://localhost:5000/api/v1/user/staffAuthorization', {
+        managerId: userData.userID,
+        staffId: employeeId,
+        status: currentStatus === 'Active' ? 'Inactive' : 'Active',
+      });
+
+      const updatedEmployeeData = employeeData.map(employee => {
+        if (employee._id === employeeId) {
+          return { ...employee, status: currentStatus === 'Active' ? 'Inactive' : 'Active' };
+        }
+        return employee;
+      });
+
+      setEmployeeData(updatedEmployeeData);
+    } catch (error) {
+      console.error('Error updating employee status:', error);
     }
-    return items;
   };
 
   return (
@@ -79,24 +72,30 @@ const EmployeeManagement = () => {
       <CommonNavbar />
       <Container className="mt-4">
         <h1 className="text-center mb-4 text-white">Manager Staff</h1>
-        <StyledTable className="text-center align-middle table-hover">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Admin rights</th>
-              <th>Allow login</th>
-            </tr>
-          </thead>
-          <tbody>{renderTableRows()}</tbody>
-        </StyledTable>
-        <StyledPagination size="sm">{renderPaginationItems()}</StyledPagination>
+
+        {loading && <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>}
+
+        {error && <Alert variant="danger">{error}</Alert>}
+
+        {!loading && !error && (
+          <>
+            <EmployeeTable
+              employeeData={getPaginatedItems}
+              toggleStatus={toggleStatus}
+            />
+
+            <PaginationBar
+              activePage={activePage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+            />
+          </>
+        )}
       </Container>
     </>
   );
-};
+}
 
 export default EmployeeManagement;
-
