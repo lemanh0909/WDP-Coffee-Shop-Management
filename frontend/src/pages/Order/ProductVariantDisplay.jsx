@@ -1,26 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
 
 const ProductVariantDisplay = ({
   productVariant,
-  handleSearch,
-  searchTerm,
   handleSelect,
   handleCancel,
 }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Lọc danh sách sản phẩm dựa trên giá trị tìm kiếm
+  const filteredProductVariant = productVariant.filter(pv =>
+    pv.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
   return (
     <Card className="w-1/2">
-      <div>
-        <h3>Products</h3>
+      <div className='mx-4'>
+        <h3 className='mt-4'>Products</h3>
+        <div className="mb-3">
         <Form.Control
           type="text"
           placeholder="Search by name"
           onChange={handleSearch}
           value={searchTerm}
-          className="mb-3"
         />
-        <div className='flex flex-wrap justify-around'>
-          {productVariant.map(pv => (
+        </div>
+
+        <div className='flex flex-wrap justify-between'>
+          {filteredProductVariant.map(pv => (
             <Card key={pv._id} className="w-48 mb-4 flex flex-col">
               <div className="flex-grow mt-2">
                 <p>Name: {pv.name}</p>
