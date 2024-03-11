@@ -77,28 +77,15 @@ const verifyRoleToken = (role = []) => {
 
 const verifyAdminOrHigherToken = verifyRoleToken([1]);
 
-const verifyModeratorOrHigherToken = verifyRoleToken([1, 2]);
+const verifyManagerOrHigherToken = verifyRoleToken([ 2]);
 
-const verifyLoggedIn = async (req, res, next) => {
-  try {
-    let token = req.header("Authorization");
+const verifyStaffOrHigherToken = verifyRoleToken([ 3]);
 
-    if (token.startsWith("Bearer "))
-      token = token.slice(7, token.length).trimLeft();
-
-    const payload = jwt.verify(token, process.env.JWT_ACCESS_KEY);
-
-    req.user = payload;
-    next();
-  } catch (err) {
-    next();
-  }
-};
 
 export {
   verifyAccessToken,
   verifyRefreshToken,
-  verifyLoggedIn,
   verifyAdminOrHigherToken,
-  verifyModeratorOrHigherToken,
+  verifyManagerOrHigherToken,
+  verifyStaffOrHigherToken
 };
