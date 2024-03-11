@@ -123,5 +123,20 @@ export const productController = {
                 error: error.message,
             });
         }
-    }
+    },
+    getAllProductsWithCategoryInShop: async (req, res) => {
+        try {
+            const shopId = req.params.shopId;
+            const products = await productService.getAllProductsWithCategoryInShop(shopId);
+            res.status(200).json({
+                message: 'Success',
+                data: products,
+            });
+        } catch (error) {
+            console.error('Error:', error.message);
+            res.status(500).json({
+                error: error.message,
+            });
+        }
+    },
 };
