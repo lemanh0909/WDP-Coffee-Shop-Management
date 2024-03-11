@@ -57,87 +57,96 @@ function Warehouse() {
   return (
     <>
       <CommonNavbar />
-      
-      <Row md={5} className="title">
-        <Col md={4}>
+      <div className="flex">
+      <CommonSlider
+          handlePageChange={handlePageChange}
+          activePage={activePage}
+          totalPages={totalPages}
+          // getPaginatedItems={paginatedItems}
+        />
+        <Container className="ml-72">
+      <Row className="title mb-0">
+
+        <Col md={4} className="text-white" >
           <h2>Quản lý nhà kho</h2>
-        </Col><Col md={4} />
+        </Col>
+        <Col md={4} />
 
         <Col md={4} className="button-container">
-          <button type="button" className="btn btn-primary add-btn">
-            <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+          <button type="button" className="btn btn-primary btn-color">
+            <i className="fa-solid fa-plus"></i> Thêm sản phẩm
           </button>
-          <button type="button" className="btn btn-primary">
-            <i class="fa-solid fa-file-export"></i>
+          <button type="button" className="btn btn-primary btn-color">
+            <i className="fa-solid fa-file-export"></i>
             Xuất ra file
           </button>
         </Col>
       </Row>
-      <div className="flex">
-  <CommonSlider/>
-  <Container className="ml-72">
-        <Row>   
-          <Col>
+      
+       
+        
+          <Row>   
+            <Col>
 
-            <Row>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Mã hàng hóa</th>
-                    <th>Tên hàng hóa</th>
-                    <th>Số lượng</th>
-                    <th>Ảnh</th>
-                    <th>Cập nhật</th>
-                    <th>Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {getPaginatedItems.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item._id}</td>
-                      <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
-                      <td>{item.quantity}</td>
-                      <td>
-                        <img src={item.image} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
-                      </td>
-                      <td>{item.updatedAt}</td>
-                      <td>
-                        <button type="button" className="btn btn-primary edit-btn"><i className="fa-solid fa-pen-to-square"></i></button>
-                        <button type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
-                      </td>
+              <Row>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Mã hàng hóa</th>
+                      <th>Tên hàng hóa</th>
+                      <th>Số lượng</th>
+                      <th>Ảnh</th>
+                      <th>Cập nhật</th>
+                      <th>Thao tác</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {getPaginatedItems.map((item) => (
+                      <tr key={item._id}>
+                        <td>{item._id}</td>
+                        <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
+                        <td>{item.quantity}</td>
+                        <td>
+                          <img src={item.image} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                        </td>
+                        <td>{item.updatedAt}</td>
+                        <td>
+                          <button type="button" className="btn btn-primary edit-btn"><i className="fa-solid fa-pen-to-square"></i></button>
+                          <button type="button" className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
 
-            </Row>
+              </Row>
 
-            <Row>
-              <Col>
-                <Pagination>
-                  <Pagination.Prev
-                    onClick={() => handlePageChange(activePage - 1)}
-                    disabled={activePage === 1}
-                  />
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <Pagination.Item
-                      key={i + 1}
-                      active={i + 1 === activePage}
-                      onClick={() => handlePageChange(i + 1)}
-                    >
-                      {i + 1}
-                    </Pagination.Item>
-                  ))}
-                  <Pagination.Next
-                    onClick={() => handlePageChange(activePage + 1)}
-                    disabled={activePage === totalPages}
-                  />
-                </Pagination>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+              <Row>
+                <Col>
+                  <Pagination>
+                    <Pagination.Prev
+                      onClick={() => handlePageChange(activePage - 1)}
+                      disabled={activePage === 1}
+                    />
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <Pagination.Item
+                        key={i + 1}
+                        active={i + 1 === activePage}
+                        onClick={() => handlePageChange(i + 1)}
+                      >
+                        {i + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      onClick={() => handlePageChange(activePage + 1)}
+                      disabled={activePage === totalPages}
+                    />
+                  </Pagination>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </>
   );

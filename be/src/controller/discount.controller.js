@@ -1,4 +1,4 @@
-import { discountService } from "../services/discount.service";
+import { discountService } from "../services/discount.service.js";
 
 export const discountController = {
     createDiscount: async (req, res) => {

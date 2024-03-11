@@ -1,5 +1,5 @@
-import ProductVariant from "../models/productVariant";
-import Product from "../models/product";
+import ProductVariant from "../models/productVariant.js";
+import Product from "../models/product.js";
 import Shop from "../models/shop.js";
 
 export const ProductVariantService = {

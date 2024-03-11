@@ -1,4 +1,4 @@
-import Receipt from '../models/receipt';
+import Receipt from '../models/receipt.js';
 
 export const receiptService = {
   createReceipt: async (data) => {

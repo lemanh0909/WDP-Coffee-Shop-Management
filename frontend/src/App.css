@@ -1,10 +1,10 @@
-
 .App {
   text-align: center;
-  height: 100%;
+  min-height: 100vh; 
   /* background-color: rgb(248, 245, 245); */
-  background-image: url("./pages/images/coffee_background_1.jpg");
+  background-image: url("./pages/images/coffee_background_2.jpg");
   background-size: cover;
+  background-position: right 20px top; /* Dịch chuyển sang phải 20px */
 }
 
 .App-logo {

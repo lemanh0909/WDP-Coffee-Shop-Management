@@ -2,10 +2,10 @@
 import express from "express";
 
 // ** Controllers
-import { receiptController } from "../controller/receipt.controller";
+import { receiptController } from "../controller/receipt.controller.js";
 
 // ** Middleware
-import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt";
+import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt.js";
 
 const receiptRouter = express.Router();
 

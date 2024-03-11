@@ -1,6 +1,6 @@
-
 .custom-brand {
-  font-size: 24px; /* tăng kích thước font chữ */
+  font-size: 24px;
+  /* tăng kích thước font chữ */
   background-color: #A8715C;
   border-radius: 2px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -75,8 +75,8 @@
 
 .btn-outline-primary {
 
-  color: #8B4513;
-  border-color: #8B4513;
+  color: white;
+  border-color: #e4cfc0;
 
 }
 
@@ -106,12 +106,12 @@
   align-items: center;
   font-weight: bold;
   margin-bottom: 20px;
-
+  color: white;
 }
 
 .btn-outline-primary {
-  color: #8B4513;
-  border-color: #8B4513;
+  color: white;
+  border-color: #e4cfc0;
   margin: 5px;
   border-radius: 20px;
   padding: 10px 20px;

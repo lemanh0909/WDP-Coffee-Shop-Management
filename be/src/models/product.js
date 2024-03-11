@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import ProductVariant from "./productVariant";
+import ProductVariant from "./productVariant.js";
 
 const Product = mongoose.model(
     'Product',

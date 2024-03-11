@@ -18,11 +18,10 @@ function App() {
           <Route path="/employee-management" element={<EmployeeManagement />} />
           <Route path="/warehouse" element={<Warehouse />} />
           <Route path="/productmanage" element={< ProductManage />} />
-          <Route path="/ProductDetail" element={< ProductDetail />} />
           <Route path="/order" element={< Order />} />
-          <Route path="/control" element={< Control/>} />
-         <Route path="/category" element={< Category/>} />
-         <Route path="/Sidebar" element={< Sidebar/>} />
+          <Route path="/control" element={< Control />} />
+          <Route path="/category" element={< Category />} />
+          <Route path="/Sidebar" element={< Sidebar />} />
 
         </Routes>
       </div>

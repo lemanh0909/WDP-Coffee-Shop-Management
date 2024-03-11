@@ -10,7 +10,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import CommonNavbar from "../Common/navbar.jsx"
 import Sidebar from "../Common/sidebar.jsx"
 
-
 function Warehouse() {
 
     useEffect(() => {
