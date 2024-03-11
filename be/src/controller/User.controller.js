@@ -82,4 +82,16 @@ export const UserController = {
             })
         }
     },
+    managerAuthorization : async (req, res) => {
+        const data = req.body;
+        try {
+            const response = await userService.managerAuthorization(data);
+            return res.status(200).json(response)
+        } catch (error) {
+            return res.status(404).json({
+                status: 'ERR',
+                message: error.message
+            })
+        }
+    },
 };

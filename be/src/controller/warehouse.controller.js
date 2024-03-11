@@ -128,4 +128,19 @@ export const warehouseController = {
       );
     }
   },
+  getAllWarehousesInShop: async (req, res) => {
+    try {
+        const shopId = req.params.shopId;
+        const warehouse = await warehouseService.getAllWarehousesInShop(shopId);
+        res.status(200).json({
+            message: 'Success',
+            data: warehouse,
+        });
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({
+            error: error.message,
+        });
+    }
+},
 };

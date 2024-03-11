@@ -109,8 +109,16 @@ export const userService = {
             throw error;
         }
     },
-    staffAuthorization: async ({ staffId, status }) => {
+    staffAuthorization: async ({ managerId, staffId, status }) => {
         try {
+            const shop = await Shop.findOne({ managerId: { $in: managerId } });
+            if (!shop) throw new Error('Shop not found for the given Manager Id');
+            // Kiểm tra xem staffId có trong mảng staffIds của shop hay không
+            const isInShop = shop.staffId.includes(staffId);
+
+            if (!isInShop) {
+                throw new Error('Staff not found in the your shop');
+            }
             const staff = await User.findById(staffId);
             if (!staff) throw new Error('Staff not found for the given Staff Id');
             staff.status = status;
@@ -156,6 +164,22 @@ export const userService = {
             return newUser;
         } catch (error) {
             console.error('Error in staffAuthorization:', error);
+            throw error;
+        }
+    },
+    managerAuthorization: async ({ managerId, status }) => {
+        try {
+            const manager = await User.findById(managerId);
+            if (!manager) throw new Error('Manager not found for the given manager Id');
+            if(manager.role !== 'Manager') throw new Error('This user is not a manager');
+            manager.status = status;
+            // Lưu cập nhật vào cơ sở dữ liệu
+            await manager.save();
+
+            // Trả về staff sau khi cập nhật
+            return manager;
+        } catch (error) {
+            console.error('Error in managerAuthorization:', error);
             throw error;
         }
     },

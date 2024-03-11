@@ -7,6 +7,7 @@ import Shop from "../models/shop.js";
 export const orderService = {
     createOrder: async ({shopId, products, userId, paymentMethod, customerPay, refund }) => {
         try {
+            
             // Lấy thông tin đầy đủ của sản phẩm từ database
             const populatedProducts = await Promise.all(products.map(async ({ productId, quantity }) => {
                 const product = await ProductVariant.findById(productId);
@@ -27,15 +28,16 @@ export const orderService = {
                 // const recipeList = await Warehouse.findByProductId(product._id) 
                 const recipeList = productVariant.recipe;
                 const recipeList1 = recipeList.map((recipe) =>{
+                    const requireQuantity = recipe.require * product.quantity
                     return {
                     warehouseId: recipe.warehouse._id,
                     name: recipe.warehouse.name,
-                    require: recipe.require,
+                    require: requireQuantity,
                 };
                 })
                 return recipeList1;
             }))
-
+            
             for (const warehouseItem of listWarehouseItems) {
                 for (const warehouseItem2 of warehouseItem) {
                     const warehouse = await Warehouse.findById(warehouseItem2.warehouseId);
@@ -68,7 +70,7 @@ export const orderService = {
                 // Lưu lại thông tin shop
                 await shop.save();
             } else {
-                throw new Error("Shop not found with shopId: " + managerId);
+                throw new Error("Shop not found with shopId: " + shopId);
             }
             // Lưu Order vào database
             await newOrder.save();
