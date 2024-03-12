@@ -80,7 +80,27 @@ export const authService = {
     user.refreshToken = refreshToken;
     await user.save();
 
-    const userJson = user.toJSON();
+    let userJson;
+
+    if(user.role === "Admin") userJson = user.toJSON();
+
+    if(user.role === "Manager"){
+      const shop = await Shop.findOne({ managerId: user._id });
+      if (shop) {
+        // Nếu user là Manager và được liên kết với một shop, thêm shopId vào user
+        userJson = { ...user.toJSON(), shopId: shop._id };
+      }
+    }
+
+    if (user.role === "Staff") {
+      const shop = await Shop.findOne({ staffId: user._id });
+    
+      if (shop) {
+        // Nếu user là staff và được liên kết với một shop, thêm shopId vào user
+        userJson = { ...user.toJSON(), shopId: shop._id };
+      }
+    }
+    
 
     delete userJson.password;
     delete userJson.refreshToken;

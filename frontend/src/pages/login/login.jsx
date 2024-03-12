@@ -39,6 +39,7 @@ function Login() {
                     console.log('Login successful', response);
 
                     const userData = {
+                        shopId: response.data.data.user.shopId,
                         userID: response.data.data.user._id,
                         email: response.data.data.user.email,
                         fullName: response.data.data.user.fullName,
