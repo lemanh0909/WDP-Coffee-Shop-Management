@@ -16,51 +16,37 @@ export const seedUser = () => {
     email: faker.internet.email(),
     password: bcrypt.hashSync("123456", salt),
     dob: faker.date.birthdate(),
-
     phoneNumber: faker.phoneNumber.number(),
-
-    role: {
-      id: 1,
-      name: "Admin",
-    },
+    role: "Admin", // Adjusted role to string value
     isDelete: false,
   });
 
-  // Seed 3 moderator
+  // Seed 3 moderators
+  for (let i = 0; i < 3; i++) {
+    users.push({
+      fullName: faker.person.fullName(),
+      email: faker.internet.email(),
+      password: bcrypt.hashSync("123456", salt),
+      dob: faker.date.birthdate(),
+      phoneNumber: faker.phoneNumber.number(),
+      role: "Manager", // Adjusted role to string value
+      isDelete: false,
+    });
+  }
 
-  users.push({
-    fullName: faker.person.fullName(),
-    email: faker.internet.email(),
-    password: bcrypt.hashSync("123456", salt),
-    dob: faker.date.birthdate(),
-
-    phoneNumber: faker.phoneNumber.number(),
-
-    role: {
-      id: 2,
-      name: "Manager",
-    },
-    isDelete: false,
-  });
-
-
-  // Seed 15 member
-
-  users.push({
-    fullName: faker.person.fullName(),
-    email: faker.internet.email(),
-    password: bcrypt.hashSync("123456", salt),
-    dob: faker.date.birthdate(),
-
-    phoneNumber: faker.phoneNumber.number(),
-
-    role: {
-      id: 3,
-      name: "Staff",
-    },
-    isDelete: false,
-  });
-
+  // Seed 15 members
+  for (let i = 0; i < 15; i++) {
+    users.push({
+      fullName: faker.person.fullName(),
+      email: faker.internet.email(),
+      password: bcrypt.hashSync("123456", salt),
+      dob: faker.date.birthdate(),
+      phoneNumber: faker.phoneNumber.number(),
+      role: "Staff", // Adjusted role to string value
+      isDelete: false,
+    });
+  }
 
   return User.insertMany(users);
 };
+
