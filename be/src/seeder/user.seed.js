@@ -9,7 +9,6 @@ import User from "../models/user.js"
 export const seedUser = () => {
   const salt = bcrypt.genSaltSync();
   const users = [];
-
   // Seed 1 admin
   users.push({
     fullName: faker.person.fullName(),
@@ -20,7 +19,6 @@ export const seedUser = () => {
     role: "Admin", 
     isDelete: false,
   });
-
   // Seed 2 manager
   for (let i = 0; i < 6; i++) {
     users.push({
