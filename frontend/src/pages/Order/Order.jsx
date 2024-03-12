@@ -121,7 +121,7 @@ const Order = () => {
           matchingWarehouseItem.quantity = matchingWarehouseItem.quantity - item.require * product.quantity;
           if (matchingWarehouseItem.quantity < 0) {
             console.log(matchingWarehouseItem.name, 'not enough:');
-            setOrderMessage(`Không đủ nguyên liệu để tạo ${product.name}.`)
+            setOrderMessage(`Không đủ nguyên liệu để tạo ${product.quantity} ${product.name}.`)
             return;
           }
         }
