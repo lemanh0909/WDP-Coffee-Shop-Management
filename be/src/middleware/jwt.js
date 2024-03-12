@@ -27,7 +27,6 @@ const verifyAccessToken = async (req, res, next) => {
 const verifyRefreshToken = async (req, res, next) => {
   try {
     let token = req.header("Authorization");
-
     if (!token)
       return res
         .status(401)

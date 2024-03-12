@@ -21,8 +21,8 @@ export const seedUser = () => {
     isDelete: false,
   });
 
-  // Seed 3 moderators
-  for (let i = 0; i < 3; i++) {
+  // Seed 2 manager
+  for (let i = 0; i < 6; i++) {
     users.push({
       fullName: faker.person.fullName(),
       email: faker.internet.email(),
@@ -34,7 +34,7 @@ export const seedUser = () => {
     });
   }
 
-  // Seed 15 members
+  // Seed 3 staff
   for (let i = 0; i < 15; i++) {
     users.push({
       fullName: faker.person.fullName(),
