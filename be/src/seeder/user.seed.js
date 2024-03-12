@@ -17,7 +17,7 @@ export const seedUser = () => {
     password: bcrypt.hashSync("123456", salt),
     dob: faker.date.birthdate(),
     phoneNumber: faker.phoneNumber.number(),
-    role: "Admin", // Adjusted role to string value
+    role: "Admin", 
     isDelete: false,
   });
 
@@ -29,7 +29,7 @@ export const seedUser = () => {
       password: bcrypt.hashSync("123456", salt),
       dob: faker.date.birthdate(),
       phoneNumber: faker.phoneNumber.number(),
-      role: "Manager", // Adjusted role to string value
+      role: "Manager", 
       isDelete: false,
     });
   }
@@ -42,7 +42,7 @@ export const seedUser = () => {
       password: bcrypt.hashSync("123456", salt),
       dob: faker.date.birthdate(),
       phoneNumber: faker.phoneNumber.number(),
-      role: "Staff", // Adjusted role to string value
+      role: "Staff", 
       isDelete: false,
     });
   }
