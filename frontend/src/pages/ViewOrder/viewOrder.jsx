@@ -166,19 +166,7 @@ function ViewOrder() {
       </Row>
 
       <Container fluid>
-        <Row md={5} className="title">
-          <Col md={8}>
-            <h2>Danh sách đơn hàng</h2>
-          </Col>
-          <Col md={4} className="button-container">
-            <Button variant="primary" className="add-btn">
-              <i className="fa-solid fa-plus"></i> Thêm danh mục
-            </Button>
-            <Button variant="primary">
-              <i className="fa-solid fa-file-export"></i> Xuất ra file
-            </Button>
-          </Col>
-        </Row>
+        
 
         <Row className="justify-content-md-center align-items-center" style={{ minHeight: '100vh' }}>
           <Sidebar />
