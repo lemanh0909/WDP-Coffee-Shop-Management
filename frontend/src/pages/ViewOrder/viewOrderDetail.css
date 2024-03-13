@@ -135,3 +135,81 @@
   .btn-zoom:hover {
     transform: scale(1.1);
   }
+  .order-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .order-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .order-info .info-row {
+    display: flex;
+    justify-content: start;
+    padding: 5px 0;
+  }
+  
+  .order-info .label {
+    min-width: 150px;
+    font-weight: bold;
+  }
+  
+  .order-items {
+    margin-bottom: 20px;
+  }
+  
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .items-table th,
+  .items-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .items-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .order-summary {
+    border-top: 2px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+  }
+  
+  .summary-row {
+    display: flex;
+    justify-content: end;
+    padding: 5px 0;
+  }
+  
+  .summary-row .label {
+    min-width: 150px;
+    font-weight: bold;
+  }
+  
+  .summary-row .value {
+    min-width: 100px;
+    text-align: right;
+  }
+  
+  .order-actions {
+    text-align: right;
+    margin-top: 20px;
+  }
+  
+  .action-button {
+    margin-left: 10px;
+   
+  }

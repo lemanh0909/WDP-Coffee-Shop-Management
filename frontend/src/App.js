@@ -26,7 +26,7 @@ function App() {
           <Route path="/Sidebar" element={< Sidebar />} />
           <Route path="/Thuchi" element={< Thuchi />} />
           <Route path="/view-order" element={<ViewOrder/>}/>
-          <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail/>}/>
+          <Route path="/view-order/detail" element={<ViewOrderDetail/>}/>
 
         </Routes>
       </div>
