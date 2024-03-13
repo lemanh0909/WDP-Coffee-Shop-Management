@@ -9,6 +9,8 @@ import Category from './pages/Category/Category.jsx';
 import Control from './pages/Control/Control.jsx';
 import Sidebar from './pages/Common/sidebar.jsx';
 import Thuchi from './pages/PhieuThuChi/PhieuThuChi.jsx';
+import ViewOrder from './pages/ViewOrder/viewOrder.jsx';
+import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
 function App() {
   return (
     <Router>
@@ -23,6 +25,8 @@ function App() {
           <Route path="/category" element={< Category />} />
           <Route path="/Sidebar" element={< Sidebar />} />
           <Route path="/Thuchi" element={< Thuchi />} />
+          <Route path="/view-order" element={<ViewOrder/>}/>
+          <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail/>}/>
 
         </Routes>
       </div>
