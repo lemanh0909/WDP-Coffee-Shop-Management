@@ -28,7 +28,7 @@ function Control() {
                 <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Bán Hàng</Button>
                 <Link to="/warehouse" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Kho</Link>
                 <Link to="/employee-management" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Quản Lý Nhân Viên</Link>
-                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thu Chi</Button>
+                <Link to="/Thuchi" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thu Chi</Link>
               </Col>
               <Col md={6} className="d-flex flex-column align-items-center">
                 <Link to="#" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thanh Toán Tại Quầy</Link>
