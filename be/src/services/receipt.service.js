@@ -29,7 +29,7 @@ export const receiptService = {
         }
         resolve({
           status: 'OK',
-          message: 'receipt created successfully',
+          message: 'Receipt created successfully',
           data: createdReceipt,
         });
       } catch (err) {
