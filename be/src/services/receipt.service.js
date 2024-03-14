@@ -25,12 +25,12 @@ export const receiptService = {
             // Lưu lại thông tin shop
             await shop.save();
         } else {
-            throw new Error("Shop not found with receiptId: " + receiptId);
+            throw new Error("Shop not found with managerID: " + managerId);
         }
         resolve({
           status: 'OK',
-          message: 'Category created successfully',
-          data: createdCategory,
+          message: 'receipt created successfully',
+          data: createdReceipt,
         });
       } catch (err) {
         reject(err);
