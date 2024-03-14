@@ -6,14 +6,7 @@ const Receipt = mongoose.model(
   "Receipt",
   new mongoose.Schema(
     {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-      },
-      userId: {
-        type: String, 
-        required: true,
-      },
+    
       name: {
         type: String,
         required: true,

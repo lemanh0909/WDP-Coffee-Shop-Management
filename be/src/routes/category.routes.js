@@ -16,6 +16,7 @@ const categoryRouter = express.Router();
 // categoryRouter.delete('/delete', verifyAdminOrHigherToken, CategoryController.deleteCategory);
 categoryRouter.get('/getAll', CategoryController.getAllCategories);
 categoryRouter.get('/:id/getDetail', CategoryController.getCategoryDetail);
+categoryRouter.get('/:shopId/getAllCategoriesInShop', CategoryController.getAllCategoriesInShop);
 categoryRouter.put('/update', CategoryController.updateCategory);
 categoryRouter.post('/create', CategoryController.createCategory);
 categoryRouter.delete('/delete', CategoryController.deleteCategory);

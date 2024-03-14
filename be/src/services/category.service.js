@@ -100,6 +100,16 @@ export const categoryService = {
     });
   },
 
+  getAllCategoriesInShop: async (shopId) => {
+    const shop = await Shop.findById(shopId);
+    if (shop) {
+        const categories = await Category.find({ _id: { $in: shop.categoryId } });
+        return categories;
+    } else {
+        throw new Error("Shop not found with id: " + shopId);
+    }
+},
+
   deleteCategory: async (categoryId) => {
     return new Promise(async (resolve, reject) => {
       try {
