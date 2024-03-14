@@ -98,12 +98,12 @@ export const CategoryController = {
   },
 
   getAllCategoriesInShop: async (req, res) => {
-<<<<<<< HEAD
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
 
     try {
       const managerId = req.params.managerId;
+      console.log(managerId);
       const result = await categoryService.getAllCategoriesInShop(managerId);
 
       res.status(200).json(
@@ -120,22 +120,6 @@ export const CategoryController = {
       );
     }
   },
-=======
-    try {
-        const shopId = req.params.shopId;
-        const categories = await categoryService.getAllCategoriesInShop(shopId);
-        res.status(200).json({
-            message: 'Success',
-            data: categories,
-        });
-    } catch (error) {
-        console.error('Error:', error.message);
-        res.status(500).json({
-            error: error.message,
-        });
-    }
-},
->>>>>>> 1b2986056825d589e96c8716449bdff42565021d
 
   deleteCategory: async (req, res) => {
     const error = validation.validationRequest(req, res);
