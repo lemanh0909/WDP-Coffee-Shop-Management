@@ -82,6 +82,16 @@ export const staffNoteService = {
     }
   },
 
+  getAllStaffNotesInShop: async (shopId) => {
+    const shop = await Shop.findById(shopId);
+    if (shop) {
+        const staffnotes = await StaffNote.find({ _id: { $in: shop.staffNoteId } });
+        return staffnotes;
+    } else {
+        throw new Error("Shop not found with id: " + shopId);
+    }
+},
+
   deleteStaffNote: async (staffNoteId) => {
     try {
       const deletedStaffNote = await StaffNote.findByIdAndDelete(staffNoteId);

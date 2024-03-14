@@ -49,4 +49,20 @@ export const receiptController = {
     }
   },
 
+  getAllReceiptsInShop: async (req, res) => {
+    try {
+        const shopId = req.params.shopId;
+        const receipts = await receiptService.getAllReceiptsInShop(shopId);
+        res.status(200).json({
+            message: 'Success',
+            data: receipts,
+        });
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({
+            error: error.message,
+        });
+    }
+},
+
 };

@@ -16,6 +16,7 @@ const receiptRouter = express.Router();
 // categoryRouter.delete('/delete', verifyAdminOrHigherToken, CategoryController.deleteCategory);
 receiptRouter.get('/getAll', receiptController.getAllReceipt);
 receiptRouter.post('/create', receiptController.createReceipt);
+receiptRouter.get('/:shopId/getAllReceiptsInShop', receiptController.getAllReceiptsInShop);
 
 
 export default receiptRouter;

@@ -97,6 +97,22 @@ export const staffNoteController = {
     }
   },
 
+  getAllStaffNotesInShop: async (req, res) => {
+    try {
+        const shopId = req.params.shopId;
+        const staffnotes = await staffNoteService.getAllStaffNotesInShop(shopId);
+        res.status(200).json({
+            message: 'Success',
+            data: staffnotes,
+        });
+    } catch (error) {
+        console.error('Error:', error.message);
+        res.status(500).json({
+            error: error.message,
+        });
+    }
+},
+
   deleteStaffNote: async (req, res) => {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
