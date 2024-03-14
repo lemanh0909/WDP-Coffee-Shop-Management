@@ -35,14 +35,8 @@ function App() {
           <Route path="/exportimportnote" element={< ExportImportNOte />} />
 
           <Route path="/view-order" element={<ViewOrder/>}/>
-<<<<<<< HEAD
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail/>}/>
           <Route path="/upImg" element={<UploadImage/>}/>
-=======
-          <Route path="/view-order/detail" element={<ViewOrderDetail/>}/>
-
-
->>>>>>> 1b2986056825d589e96c8716449bdff42565021d
         </Routes>
       </div>
     </Router>
