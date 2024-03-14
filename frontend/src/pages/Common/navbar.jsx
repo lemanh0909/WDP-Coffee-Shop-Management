@@ -31,10 +31,17 @@ const CommonNavbar = () => {
                         <i className="fa-solid fa-box-archive"></i> Hàng Hóa
                     </Nav.Link>
 
+
+                    <Nav.Link href="#store-list">
+                    <i className="fa-solid fa-store"></i>
+                        Danh sách cửa hàng
+                        </Nav.Link>
+
                     <Nav.Link href="/order">
                         <i class="fa-solid fa-store"></i>
                         Order
                     </Nav.Link>
+
                     <Nav.Link href="#transactions">
                         <i className="fa-solid fa-money-bill-transfer"></i> Giao dịch
                     </Nav.Link>
