@@ -32,7 +32,7 @@ function Control() {
               </Col>
               <Col md={6} className="d-flex flex-column align-items-center">
                 <Link to="#" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thanh Toán Tại Quầy</Link>
-                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Báo Cáo</Button>
+                <Link to="/productmanage" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Quản lý product</Link>
                 <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Cài Đặt</Button>
                 <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Hướng Dẫn</Button>
               </Col>

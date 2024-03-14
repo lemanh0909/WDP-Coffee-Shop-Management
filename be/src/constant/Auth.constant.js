@@ -17,5 +17,6 @@ export const authConstant = {
   PROVIDER_REQUIRED: "Provider is required",
   OLD_PASSWORD_REQUIRED: "Old password is required",
   OLD_PASSWORD_INVALID: "Old password is invalid",
-  TOKEN_EXPIRED: "Token expired"
+  TOKEN_EXPIRED: "Token expired",
+  ACCOUT_INACTIVE:"Your account is  disabled"
 };

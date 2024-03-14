@@ -100,6 +100,7 @@ export const categoryService = {
     });
   },
 
+<<<<<<< HEAD
   getAllCategoriesInShop: async (managerId) => {
     try {
       // Tìm kiếm cửa hàng dựa trên managerId
@@ -125,6 +126,17 @@ export const categoryService = {
     }
   },
   
+=======
+  getAllCategoriesInShop: async (shopId) => {
+    const shop = await Shop.findById(shopId);
+    if (shop) {
+        const categories = await Category.find({ _id: { $in: shop.categoryId } });
+        return categories;
+    } else {
+        throw new Error("Shop not found with id: " + shopId);
+    }
+},
+>>>>>>> 1b2986056825d589e96c8716449bdff42565021d
 
   deleteCategory: async (categoryId) => {
     return new Promise(async (resolve, reject) => {

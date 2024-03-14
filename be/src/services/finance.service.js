@@ -1,19 +1,19 @@
-import Order from "../models/order.js";
-import Receipt from "../models/receipt.js";
-import StaffNote from "../models/staffNote.js";
-import User from "../models/user.js";
+import Shop from "../models/shop";
 
 export const financeService = {
   async calculateMonthlyFinance(year, month) {
     try {
-      
+      // Lấy danh sách các đơn hàng trong tháng
+      const shop = await Shop.findOne({});
       const orders = await Order.find({
+        _id: { $in: shop.orderId },
         createdAt: { $gte: new Date(year, month - 1, 1), $lt: new Date(year, month, 1) }
       });
       const orderTotal = orders.reduce((total, order) => total + order.totalPrice, 0);
 
-      
+      // Lấy danh sách các biên lai thu chi trong tháng
       const receipts = await Receipt.find({
+        _id: { $in: shop.receiptId },
         date: { $gte: new Date(year, month - 1, 1), $lt: new Date(year, month, 1) }
       });
       const receiptTotal = receipts.reduce((total, receipt) => {
@@ -26,8 +26,9 @@ export const financeService = {
         }
       }, 0);
 
-    
+      // Lấy danh sách các ghi chú nhân viên trong tháng
       const staffNotes = await StaffNote.find({
+        _id: { $in: shop.staffNoteId },
         createdAt: { $gte: new Date(year, month - 1, 1), $lt: new Date(year, month, 1) }
       });
       const staffNoteTotal = staffNotes.reduce((total, staffNote) => {
@@ -40,13 +41,13 @@ export const financeService = {
         }
       }, 0);
 
-    
+      // Lấy danh sách các nhân viên hoạt động
       const users = await User.find({ status: "Active" });
       const salaryTotal = users.reduce((total, user) => total - (user.salary || 0), 0);
 
+      // Tính toán tổng tài chính của cửa hàng trong tháng
+      const total = orderTotal + receiptTotal + staffNoteTotal + salaryTotal;
 
-     
-      const total = orderTotal + receiptTotal + staffNoteTotal+ salaryTotal;
       return {
         status: "OK",
         message: "Monthly finance calculated successfully",

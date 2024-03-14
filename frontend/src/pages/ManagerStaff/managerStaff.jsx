@@ -1,43 +1,52 @@
-// EmployeeManagement.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Spinner, Alert } from 'react-bootstrap';
+import { Container, Spinner, Alert, Button, Row, Col } from 'react-bootstrap';
 import CommonNavbar from '../Common/navbar.jsx';
 import EmployeeTable from './staffTable.jsx';
 import PaginationBar from './paginationBar';
 import { usePagination } from '../Common/hooks.js';
+import CreateStaffModal from './createStaff.jsx';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function EmployeeManagement() {
   const [employeeData, setEmployeeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const itemsPerPage = 5;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(employeeData, itemsPerPage);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userDataString = localStorage.getItem('userData');
-
-        if (!userDataString) {
-          throw new Error('User data not found in localStorage.');
-        }
-
-        const userData = JSON.parse(userDataString);
-
-        const response = await axios.get(`http://localhost:5000/api/v1/user/${userData.userID}/getStaffList`);
-        setEmployeeData(response.data);
-      } catch (error) {
-        console.error('Error fetching employee data:', error);
-        setError('An error occurred while fetching employee data.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const userDataString = localStorage.getItem('userData');
+
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+
+      const userData = JSON.parse(userDataString);
+
+      const response = await axios.get(`http://localhost:5000/api/v1/user/${userData.userID}/getStaffList`);
+      setEmployeeData(response.data);
+    } catch (error) {
+      console.error('Error fetching employee data:', error);
+      setError('An error occurred while fetching employee data.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddWarehouse = () => {
+    setShowAddModal(false);
+    toast.success('Thêm nhân viên thành công!');
+    fetchData();
+  };
 
   const toggleStatus = async (employeeId, currentStatus) => {
     try {
@@ -62,6 +71,7 @@ function EmployeeManagement() {
       });
 
       setEmployeeData(updatedEmployeeData);
+      toast.success('Update thành công!');
     } catch (error) {
       console.error('Error updating employee status:', error);
     }
@@ -71,7 +81,17 @@ function EmployeeManagement() {
     <>
       <CommonNavbar />
       <Container className="mt-4">
-        <h1 className="text-center mb-4 text-white">Manager Staff</h1>
+        <ToastContainer position='top-right' />
+        <Row className="justify-content-between align-items-center mb-4">
+          <Col xs={6}>
+            <h1 className="text-center mb-0 text-white">Manager Staff</h1>
+          </Col>
+          <Col xs={6} className="text-right">
+            <Button variant="primary" className="add-btn btn-color" onClick={() => setShowAddModal(true)}>
+              <i className="fa-solid fa-plus"></i> Create account
+            </Button>
+          </Col>
+        </Row>
 
         {loading && <Spinner animation="border" role="status">
           <span className="sr-only">Loading...</span>
@@ -90,6 +110,13 @@ function EmployeeManagement() {
               activePage={activePage}
               totalPages={totalPages}
               handlePageChange={handlePageChange}
+            />
+
+            <CreateStaffModal
+              userId={JSON.parse(localStorage.getItem('userData'))?.userID}
+              show={showAddModal}
+              onHide={() => setShowAddModal(false)}
+              handleAddWarehouse={handleAddWarehouse}
             />
           </>
         )}

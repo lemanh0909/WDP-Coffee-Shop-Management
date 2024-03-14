@@ -7,7 +7,6 @@ const Sidebar = () => {
   const [searchQuery1, setSearchQuery1] = useState("");
   const [selectedFilter, setSelectedFilter] = useState(null);
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "searchQuery") {
@@ -30,8 +29,8 @@ const Sidebar = () => {
   return (
     <div className="flex h-screen ">
       <div
-        className={` ${open ? "w-72" : "w-16 "
-          } bg-amber-700 p-2  pt-8 relative duration-300 text-white`}
+        className={` ${open ? "w-72" : "w-16 "}
+          bg-amber-700 p-2  pt-8 relative duration-300 text-white`}
       >
         <i className="fa-solid fa-filter pt-8"></i>
         <img
@@ -46,8 +45,6 @@ const Sidebar = () => {
           className={`whitespace-pre duration-500 ${!open && "opacity-0 translate-x-28 overflow-hidden"
             } w-72`}
         >
-   
-
           <div className="flex flex-col items-center">
             <div className="relative">
               <form className="flex items-center">
@@ -92,7 +89,7 @@ const Sidebar = () => {
                 }`}
               onClick={() => handleFilterChange("coffeeBean")}
             >
-              <input type="radio" checked={selectedFilter === "coffeeBean"} />
+              <input type="radio" checked={selectedFilter === "coffeeBean"} onChange={() => handleFilterChange("coffeeBean")} />
               <p
                 className="ml-5 mb-0 "
                 onClick={() => handleFilterChange("coffeeBean")}
@@ -107,7 +104,7 @@ const Sidebar = () => {
                 }`}
               onClick={() => handleFilterChange("milk")}
             >
-              <input type="radio" checked={selectedFilter === "milk"} />
+              <input type="radio" checked={selectedFilter === "milk"} onChange={() => handleFilterChange("milk")} />
               <p className="ml-5 mb-0" onClick={() => handleFilterChange("milk")}>
                 Milk
               </p>
@@ -119,7 +116,7 @@ const Sidebar = () => {
                 }`}
               onClick={() => handleFilterChange("cake")}
             >
-              <input type="radio" checked={selectedFilter === "cake"} />
+              <input type="radio" checked={selectedFilter === "cake"} onChange={() => handleFilterChange("cake")} />
               <p className="ml-5 mb-0" onClick={() => handleFilterChange("cake")}>
                 Cake
               </p>
@@ -178,7 +175,7 @@ const Sidebar = () => {
                 }`}
               onClick={() => handleFilterChange("Còn Hàng")}
             >
-              <input type="radio" checked={selectedFilter === "Còn Hàng"} />
+              <input type="radio" checked={selectedFilter === "Còn Hàng"} onChange={() => handleFilterChange("Còn Hàng")} />
               <p
                 className="ml-5"
                 onClick={() => handleFilterChange("Còn Hàng")}
@@ -193,7 +190,7 @@ const Sidebar = () => {
                 }`}
               onClick={() => handleFilterChange("Hết Hàng")}
             >
-              <input type="radio" checked={selectedFilter === "Hết Hàng"} />
+              <input type="radio" checked={selectedFilter === "Hết Hàng"} onChange={() => handleFilterChange("Hết Hàng")} />
               <p
                 className="ml-5"
                 onClick={() => handleFilterChange("Hết Hàng")}

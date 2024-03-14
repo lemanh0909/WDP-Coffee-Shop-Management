@@ -2,12 +2,12 @@
 import express from "express";
 
 // ** Controllers
-import { financeController } from "../controller/finance.controller";
+import { financeController } from "../controller/finance.controller.js";
 
 
 // ** Validation
 
-import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt";
+import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt.js";
 const financeRouter = express.Router();
 
 // warehouseRouter.get('/getAll', verifyAdminOrHigherToken, warehouseController.getAllWarehouses)
