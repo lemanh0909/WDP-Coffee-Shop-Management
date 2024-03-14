@@ -6,8 +6,6 @@ import {
   Table,
   Pagination,
   Button,
-  Modal,
-  Form,
 } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
@@ -24,7 +22,7 @@ function ExportImportNote() {
   const [paginatedItems, activePage, totalPages, handlePageChange] =
     usePagination(products, itemsPerPage);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false); 
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
@@ -186,11 +184,11 @@ function ExportImportNote() {
         </Container>
       </div>
       <AddModal
-  show={showAddModal}
-  handleClose={handleCloseAddModal}
-  onAddSuccess={handleAddSuccess}
-  setProducts={setProducts} // Pass setProducts here
-/>
+        show={showAddModal}
+        handleClose={handleCloseAddModal}
+        onAddSuccess={handleAddSuccess}
+        setProducts={setProducts} // Pass setProducts here
+      />
 
     </>
   );
