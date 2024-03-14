@@ -97,6 +97,30 @@ export const CategoryController = {
     }
   },
 
+  getAllCategoriesInShop: async (req, res) => {
+    const error = validation.validationRequest(req, res);
+    if (error) return res.status(200).json(error);
+
+    try {
+      const managerId = req.params.managerId;
+      console.log(managerId);
+      const result = await categoryService.getAllCategoriesInShop(managerId);
+
+      res.status(200).json(
+        response.success({
+          data: result,
+        })
+      );
+    } catch (err) {
+      res.status(200).json(
+        response.error({
+          code: 500,
+          message: err.message,
+        })
+      );
+    }
+  },
+
   deleteCategory: async (req, res) => {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);

@@ -2,31 +2,57 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 
-function AddProductModal({ show, handleClose, onAddSuccess }) {
-    const [category, setCategory] = useState("drink");
+function AddProductModal({ categories, show, handleClose, onAddSuccess }) {
+    const [category, setCategory] = useState("");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [image, setImage] = useState("");
+    const [images, setImages] = useState([]);
 
-    const handleSave = () => {
-        const data = {
-            categoryId: category === 'drink' ? '65d26f018160ec32ae0fd9fd' : '65d2761c245e8784a561d6c8',
-            name: name,
-            description: description,
-            image: image
-        };
 
-        axios.post('http://localhost:5000/api/v1/product/create', data)
-            .then(response => {
-                console.log('Product added successfully:', response.data);
-                onAddSuccess();
-            })
-            .catch(error => {
-                console.error('Error adding product:', error);
-            });
-
+    const handleSave = async () => {
+        try {
+            if(name ==="" || !name){
+                return console.log("Name cannot be empty!");
+            }
+            const productUrls = [];
+            for (let i = 0; i < images.length; i++) {
+                const formData = new FormData();
+                formData.append("file", images[i]);
+                formData.append("upload_preset", "c1xbmqbk");
+                const response = await axios.post("https://api.cloudinary.com/v1_1/dvusaqmma/image/upload", formData);
+                productUrls.push(response.data.url);
+            }
+    
+            // Xây dựng dữ liệu sản phẩm
+            const productData = {
+                categoryId: category,
+                name: name,
+                description: description,
+                image: productUrls, // Sử dụng mảng các URL ảnh tải lên từ Cloudinary
+            };
+            // Gọi API tạo sản phẩm
+            const updateProductResponse = await axios.post("http://localhost:5000/api/v1/product/create", productData);
+    
+            // Xử lý kết quả từ việc tạo sản phẩm
+            console.log("Created product:", updateProductResponse.data);
+            setName(null);
+            setDescription(null);
+            setImages([]);            
+            onAddSuccess();
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    
         handleClose();
     };
+    
+
+
+    const handleRemoveImage = (indexToRemove) => {
+        setImages(images.filter((_, index) => index !== indexToRemove));
+    };
+
+
 
     return (
         <Modal show={show} onHide={handleClose}>
@@ -42,8 +68,11 @@ function AddProductModal({ show, handleClose, onAddSuccess }) {
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                         >
-                            <option value="drink">Drink</option>
-                            <option value="food">Food</option>
+                            {categories?.map((category) => (
+                                <option key={category._id} value={category._id}>
+                                    {category.name}
+                                </option>
+                            ))}
                         </Form.Control>
                     </Form.Group>
                     <Form.Group controlId="name">
@@ -63,12 +92,25 @@ function AddProductModal({ show, handleClose, onAddSuccess }) {
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </Form.Group>
-                    <Form.Group controlId="image">
-                        <Form.Label>Image</Form.Label>
+                    <Form.Group controlId="images">
+                        <Form.Label>Images</Form.Label>
+                        <div className="flex flex-wrap">
+                            {images.map((image, index) => (
+                                <div key={index} className="relative mr-2 mb-2 w-24 h-24 overflow-hidden">
+                                    <img className="w-100 h-100 object-cover" src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} />
+                                    <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-white bg-opacity-70 flex items-center justify-center cursor-pointer" onClick={() => handleRemoveImage(index)}>
+                                        <i className="fas fa-times text-red-500"></i>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                         <Form.Control
-                            type="text"
-                            value={image}
-                            onChange={(e) => setImage(e.target.value)}
+                            type="file"
+                            multiple
+                            onChange={(e) => {
+                                const selectedFiles = Array.from(e.target.files);
+                                setImages([...images, ...selectedFiles]); // Thêm các tập tin được chọn vào mảng images
+                            }}
                         />
                     </Form.Group>
                 </Form>

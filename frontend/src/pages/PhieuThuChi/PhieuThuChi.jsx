@@ -6,7 +6,6 @@ import {
   Table,
   Pagination,
   Button,
-  Modal,
 } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
@@ -86,10 +85,10 @@ function PhieuThuChi() {
             <Col md={4} className="button-container">
               <div className="d-flex gap-3">
                 <Button variant="primary" onClick={handleShowAddPhieuThuModal}>
-                  <i class="fa-regular fa-square-plus"></i> Thêm phiếu thu
+                  <i className="far fa-plus-square"></i> Thêm phiếu thu
                 </Button>
                 <Button variant="danger" onClick={handleShowAddPhieuChiModal}>
-                  <i class="fa-regular fa-square-plus"></i> Thêm phiếu chi
+                  <i className="far fa-plus-square"></i> Thêm phiếu chi
                 </Button>
               </div>
             </Col>
@@ -178,6 +177,24 @@ function PhieuThuChi() {
                       disabled={activePage === totalPages}
                     />
                   </Pagination>
+                  {/*{paginatedItems
+    .slice(
+      (activePage - 1) * itemsPerPage,
+      activePage * itemsPerPage
+    )
+    .map((item, index) => (
+      <tr key={index}>
+        <td>{item.machungtu}</td>
+        <td style={{ color: "#BB2649", fontWeight: "bold" }}>
+          {item.nguoinop}
+        </td>
+        <td>{item.hangmucthuchi}</td>
+        <td>{item.lido}</td>
+        <td>{item.date}</td>
+        <td>{item.giatri}</td>
+        <td>{item.hinhthuc}</td>
+      </tr>
+    ))}*/}
                 </Col>
               </Row>
             </Col>

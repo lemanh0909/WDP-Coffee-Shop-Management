@@ -10,7 +10,7 @@ const Product = mongoose.model(
                 required: true,
             },
             description: { type: String },
-            image: { type: String},
+            image: [{ type: String}],
             productVariant: [ProductVariant.schema]
         },
         {timestamps: true}

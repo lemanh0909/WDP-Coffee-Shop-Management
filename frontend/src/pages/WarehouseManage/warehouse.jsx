@@ -7,6 +7,8 @@ import CommonNavbar from "../Common/navbar.jsx";
 import CommonSlider from "../Common/sidebar.jsx";
 import AddWarehouseModal from "./addWarehouse.jsx";
 import UpdateWarehouseModal from "./updateWarehouse.jsx";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Warehouse() {
   const [items, setItems] = useState([]);
@@ -46,12 +48,14 @@ function Warehouse() {
   };
 
   const handleAddWarehouse = () => {
+    toast.success('Thêm kho thành công!');
     fetchData();
   };
 
   const handleUpdateSuccess = () => {
     fetchData();
     setShowUpdateModal(false);
+    toast.success('Cập nhật kho thành công!');
   };
   useEffect(() => {
     addCheckboxEventListeners();
@@ -84,6 +88,7 @@ function Warehouse() {
           totalPages={totalPages}
         />
         <Container className="ml-72">
+          <ToastContainer position='top-right' />
           <Row className="title mb-0">
             <Col md={4} className="text-white" >
               <h2>Quản lý nhà kho</h2>
@@ -115,35 +120,42 @@ function Warehouse() {
                     </tr>
                   </thead>
                   <tbody>
-                    {getPaginatedItems.map((item) => (
-                      <tr key={item._id}>
-                        <td>{item._id}</td>
-                        <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
-                        <td>{item.unit}</td>
-                        <td>{item.quantity}</td>
-                        <td>{item.createdAt}</td>
-                        <td>
-                          <img
-                            src={item.image}
-                            alt={`Ảnh của ${item.name}`}
-                            style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                          />
-                        </td>
-                        <td>
-                          <Button
-                            variant="primary"
-                            className="edit-btn"
-                            onClick={() => handleUpdateWarehouse(item._id)}
-                          >
-                            <i className="fa-solid fa-pen-to-square"></i>Update
-                          </Button>
-                          <button type="button" className="btn btn-danger">
-                            <i className="fa-solid fa-trash"></i>Delete
-                          </button>
-                        </td>
+                    {getPaginatedItems.length === 0 ? (
+                      <tr>
+                        <td colSpan="7" className="text-center">No data to present!</td>
                       </tr>
-                    ))}
+                    ) : (
+                      getPaginatedItems.map((item) => (
+                        <tr key={item._id}>
+                          <td>{item._id}</td>
+                          <td style={{ color: '#BB2649', fontWeight: 'bold' }}>{item.name}</td>
+                          <td>{item.unit}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.createdAt}</td>
+                          <td>
+                            <img
+                              src={item.image}
+                              alt={`Ảnh của ${item.name}`}
+                              style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                            />
+                          </td>
+                          <td>
+                            <Button
+                              variant="primary"
+                              className="edit-btn"
+                              onClick={() => handleUpdateWarehouse(item._id)}
+                            >
+                              <i className="fa-solid fa-pen-to-square"></i>Update
+                            </Button>
+                            <button type="button" className="btn btn-danger">
+                              <i className="fa-solid fa-trash"></i>Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
+
                 </Table>
               </Row>
               <Row>
