@@ -34,7 +34,11 @@ const Shop = mongoose.model(
             staffNoteId: {
                 type: [{ type: mongoose.Schema.Types.ObjectId, ref: "StaffNote" }],
             },
+<<<<<<< HEAD
+            receipt: {
+=======
             receiptId: {
+>>>>>>> 1b2986056825d589e96c8716449bdff42565021d
                 type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Receipt" }],
             },
         },

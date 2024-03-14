@@ -100,6 +100,33 @@ export const categoryService = {
     });
   },
 
+<<<<<<< HEAD
+  getAllCategoriesInShop: async (managerId) => {
+    try {
+      // Tìm kiếm cửa hàng dựa trên managerId
+      const shop = await Shop.findOne({ managerId: managerId }).populate('categoryId')
+      // Kiểm tra nếu không tìm thấy cửa hàng
+      if (shop==null) {
+        throw new Error('Shop not found');
+      }
+  
+      // Lấy ra tất cả các danh mục liên kết với cửa hàng
+      const categories = shop.categoryId;
+  
+      // Trả về kết quả thành công
+      return {
+        status: 'OK',
+        message: 'Categories retrieved successfully',
+        data: categories,
+      };
+    } catch (err) {
+      // Xử lý lỗi
+      console.error('Error retrieving categories:', err);
+      throw new Error('Error retrieving categories: ' + err.message);
+    }
+  },
+  
+=======
   getAllCategoriesInShop: async (shopId) => {
     const shop = await Shop.findById(shopId);
     if (shop) {
@@ -109,6 +136,7 @@ export const categoryService = {
         throw new Error("Shop not found with id: " + shopId);
     }
 },
+>>>>>>> 1b2986056825d589e96c8716449bdff42565021d
 
   deleteCategory: async (categoryId) => {
     return new Promise(async (resolve, reject) => {

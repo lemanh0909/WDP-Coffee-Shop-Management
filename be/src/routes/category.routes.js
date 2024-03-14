@@ -20,6 +20,7 @@ categoryRouter.get('/:shopId/getAllCategoriesInShop', CategoryController.getAllC
 categoryRouter.put('/update', CategoryController.updateCategory);
 categoryRouter.post('/create', CategoryController.createCategory);
 categoryRouter.delete('/delete', CategoryController.deleteCategory);
+categoryRouter.get('/:managerId/getAllCategoriesInShop', CategoryController.getAllCategoriesInShop);
 
 
 export default categoryRouter;

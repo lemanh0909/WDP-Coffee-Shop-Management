@@ -16,5 +16,6 @@ userRouter.get('/:managerId/getStaffList', UserController.getStaffList);
 userRouter.put('/staffAuthorization', UserController.staffAuthorization);
 userRouter.put('/managerAuthorization', UserController.managerAuthorization);
 userRouter.post('/createStaff', UserController.createStaff);
+userRouter.get('/getManagerList', UserController.getManagerList);
 
 export default userRouter

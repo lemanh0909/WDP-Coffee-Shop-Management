@@ -109,6 +109,15 @@ export const userService = {
             throw error;
         }
     },
+    getManagerList: async () => {
+        try {
+            const managerList = await User.find({ role: "Manager" });
+            return managerList;
+        } catch (error) {
+            console.error('Error in getManagerList:', error);
+            throw error;
+        }
+    },
     staffAuthorization: async ({ managerId, staffId, status }) => {
         try {
             const shop = await Shop.findOne({ managerId: { $in: managerId } });

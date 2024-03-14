@@ -58,6 +58,17 @@ export const UserController = {
             })
         }
     },
+    getManagerList : async (req, res) => {
+        try {
+            const response = await userService.getManagerList();
+            return res.status(200).json(response)
+        } catch (error) {
+            return res.status(404).json({
+                status: 'ERR',
+                message: error.message
+            })
+        }
+    },
     staffAuthorization : async (req, res) => {
         const data = req.body;
         try {
