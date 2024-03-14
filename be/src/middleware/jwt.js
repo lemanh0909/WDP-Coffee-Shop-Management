@@ -27,7 +27,6 @@ const verifyAccessToken = async (req, res, next) => {
 const verifyRefreshToken = async (req, res, next) => {
   try {
     let token = req.header("Authorization");
-
     if (!token)
       return res
         .status(401)
@@ -54,51 +53,38 @@ const verifyRoleToken = (role = []) => {
       if (!token)
         return res
           .status(401)
-          .json({ stautsCode: 401, message: authConstant.UNAUTHORIZED });
+          .json({ statusCode: 401, message: authConstant.UNAUTHORIZED });
 
       if (token.startsWith("Bearer "))
         token = token.slice(7, token.length).trimLeft();
 
       const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-      if (!role.includes(payload.role.id))
+      if (!role.includes(payload.role))
         return res
           .status(403)
-          .json({ stautsCode: 403, message: authConstant.FORBIDDEN });
+          .json({ statusCode: 403, message: authConstant.FORBIDDEN });
 
       req.user = payload;
       req.refreshToken = token;
       next();
     } catch (err) {
-      res.status(401).json({ stautsCode: 401, message: err.message });
+      res.status(401).json({ statusCode: 401, message: err.message });
     }
   };
 };
 
-const verifyAdminOrHigherToken = verifyRoleToken([1]);
+const verifyAdminOrHigherToken = verifyRoleToken(["Admin"]);
 
-const verifyModeratorOrHigherToken = verifyRoleToken([1, 2]);
+const verifyManagerOrHigherToken = verifyRoleToken(["Manager"]);
 
-const verifyLoggedIn = async (req, res, next) => {
-  try {
-    let token = req.header("Authorization");
-
-    if (token.startsWith("Bearer "))
-      token = token.slice(7, token.length).trimLeft();
-
-    const payload = jwt.verify(token, process.env.JWT_ACCESS_KEY);
-
-    req.user = payload;
-    next();
-  } catch (err) {
-    next();
-  }
-};
+const verifyStaffOrHigherToken = verifyRoleToken(["Staff"]);
 
 export {
   verifyAccessToken,
   verifyRefreshToken,
-  verifyLoggedIn,
   verifyAdminOrHigherToken,
-  verifyModeratorOrHigherToken,
+  verifyManagerOrHigherToken,
+  verifyStaffOrHigherToken
 };
+

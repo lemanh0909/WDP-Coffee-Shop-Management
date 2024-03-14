@@ -1,0 +1,138 @@
+.custom-brand {
+    font-size: 24px;
+    /* tăng kích thước font chữ */
+    background-color: #A8715C;
+    border-radius: 2px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-navbar {
+    background-color: #A8715C;
+    color: #ecf0f1;
+  }
+  
+  .custom-navbar .nav-link {
+    color: #ecf0f1;
+  }
+  
+  .custom-brand {
+    color: #ecf0f1;
+  }
+  
+  .sidebar {
+    background-color: rgba(224, 224, 224, 1);
+    height: 100%;
+    bottom: 0;
+    width: 250px;
+    padding: 20px;
+    color: #ecf0f1;
+  }
+  
+  .sidebar h5 {
+    color: rgba(51, 51, 51, 1);
+    text-decoration: underline;
+    margin-bottom: 10px;
+  
+  }
+  
+  .filter-section {
+    margin-top: 20px;
+  }
+  
+  .filter-section {
+    margin-top: 20px;
+  }
+  
+  .form-check {
+    color: rgba(51, 51, 51, 1);
+  }
+  
+  .filter-section button:hover {
+    color: rgb(248, 245, 245);
+    background-color: #A8715C;
+    /* background-color: #fff; */
+  }
+  
+  .filter-section button:onclick {
+    color: rgb(248, 245, 245);
+    background-color: #A8715C;
+    /* background-color: #fff; */
+  }
+  
+  .filter-section h5 {
+    margin-bottom: 10px;
+  }
+  
+  .checkbox-label {
+    font-weight: normal;
+    color: rgba(51, 51, 51, 1)
+  }
+  
+  .checkbox-input {
+    margin-right: 5px;
+  }
+  
+  
+  .btn-outline-primary {
+  
+    color: white;
+    border-color: #e4cfc0;
+  
+  }
+  
+  .btn-outline-primary:hover {
+    color: #fff;
+    background-color: #8B4513;
+    border-color: #8B4513;
+  }
+  
+  .selected {
+    /* background-color: #FFFFFF; */
+    background-color: #A8715C;
+    color: #A8715C;
+  }
+  
+  .edit-btn {
+    margin: 10px;
+  }
+  
+  .add-btn {
+    margin: 10px;
+  }
+  
+  .title {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: white;
+  }
+  
+  .btn-outline-primary {
+    color: white;
+    border-color: #e4cfc0;
+    margin: 5px;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #8B4513;
+    color: #fff;
+  }
+  
+  .btn-zoom {
+    transition: transform 0.3s ease;
+    height: 4;
+    width: 70%;
+    padding: 0.5em 1em;
+    font-size: 1em;
+  }
+  
+  .btn-zoom:hover {
+    transform: scale(1.1);
+  }
+ 

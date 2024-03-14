@@ -18,6 +18,7 @@ const warehouseRouter = express.Router();
 warehouseRouter.get('/getAll', warehouseController.getAllWarehouses)
 warehouseRouter.get('/:id/getDetail', warehouseController.getDetailWarehouse)
 warehouseRouter.put('/update', warehouseController.updateWarehouse)
+warehouseRouter.put('/:_id/updateBasis', warehouseController.updateWarehouseBasis);
 warehouseRouter.post('/create', warehouseController.createWarehouse)
 warehouseRouter.delete('/delete', warehouseController.deleteWarehouse)
 warehouseRouter.get('/:shopId/getAllWarehousesInShop', warehouseController.getAllWarehousesInShop);
