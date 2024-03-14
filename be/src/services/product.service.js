@@ -93,8 +93,21 @@ export const productService = {
         // Xóa Product
         const deletedProduct = await Product.findByIdAndDelete(productId);
 
+        // Tìm tất cả các Category chứa productId này
+        const categories = await Category.find({ products: productId });
+
+        // Lặp qua từng Category và xóa productId khỏi mảng products
+        categories.forEach(async (category) => {
+            const index = category.products.indexOf(productId);
+            if (index !== -1) {
+                category.products.splice(index, 1);
+                await category.save();
+            }
+        });
+
         return deletedProduct;
     },
+
 
     getAllProductsWithCategoryInShop: async (shopId) => {
         try {

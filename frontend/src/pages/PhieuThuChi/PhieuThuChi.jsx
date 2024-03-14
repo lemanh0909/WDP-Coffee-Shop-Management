@@ -6,7 +6,6 @@ import {
   Table,
   Pagination,
   Button,
-  Modal,
 } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";

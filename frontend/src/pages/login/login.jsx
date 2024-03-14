@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './login.css';
 
 function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [fullName, setFullName] = useState('');
-    const [emailError, setEmailError] = useState('');
+    const [password, setPassword] = useState('');
     const [dob, setDoB] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [shopName, setShopName] = useState('');
     const [currentForm, setCurrentForm] = useState('login');
-    const [registerSuccess, setRegisterSuccess] = useState(false);
     const [phoneNumberError, setphoneNumberError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [nameError, setNameError] = useState('');
 
     const validateEmail = (email) => {
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
@@ -36,7 +38,7 @@ function Login() {
         axios.post('http://localhost:5000/api/v1/auth/login', data)
             .then(response => {
                 if (response.data.isSuccess === true) {
-                    console.log('Login successful', response);
+                    toast.success("Login successfully!");
 
                     const userData = {
                         shopId: response.data.data.user.shopId,
@@ -49,8 +51,11 @@ function Login() {
                     };
                     localStorage.setItem('userData', JSON.stringify(userData));
 
-                    navigate("/employee-management");
+                    setTimeout(() => {
+                        navigate("/control");
+                    }, 800);
                 } else {
+                    toast.error("Please check your email or password or login permission!!");
                     console.log('Login failed', response);
                 }
             })
@@ -68,6 +73,14 @@ function Login() {
             return;
         } else {
             setphoneNumberError('')
+        }
+
+        const specialCharactersRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        if (specialCharactersRegex.test(fullName)) {
+            setNameError('Full name cannot contain special characters');
+            return;
+        } else {
+            setNameError('');
         }
 
         if (!validateEmail(email)) {
@@ -90,7 +103,7 @@ function Login() {
             .then(response => {
                 if (response.data.isSuccess === true) {
                     console.log('Successful registration:', response);
-                    setRegisterSuccess(true);
+                    toast.success("Register Successfully!");
                 } else {
                     console.log('Register failed', response);
                     if (response.data.message === "Email is already exist") {
@@ -108,6 +121,7 @@ function Login() {
 
     return (
         <section className="user">
+            <ToastContainer position='top-right' />
             <div className="user_options-container">
                 <div className="user_options-text">
                     <div className="user_options-unregistered">
@@ -159,7 +173,11 @@ function Login() {
                             <form className="forms_form">
                                 <fieldset className="forms_fieldset">
                                     <div className="forms_field">
-                                        <input type="text" placeholder="Full Name" className="forms_field-input" required onChange={(e) => setFullName(e.target.value)} value={fullName} />
+                                        <input type="text" placeholder="Full Name" className="forms_field-input" required autoFocus onChange={(e) => {
+                                            setFullName(e.target.value);
+                                            setNameError('');
+                                        }} value={fullName} />
+                                        {nameError && <p className="error-message">{nameError}</p>}
                                     </div>
                                     <div className="forms_field">
                                         <input type="email" placeholder="Email" className="forms_field-input" required autoFocus onChange={(e) => {
@@ -186,7 +204,6 @@ function Login() {
                                     <input type="submit" value="Sign up" className="forms_buttons-action" onClick={handleRegisterClick} />
                                 </div>
                             </form>
-                            {registerSuccess && <p className="success-message">Register successful!</p>}
                         </div>
                     )}
                 </div>

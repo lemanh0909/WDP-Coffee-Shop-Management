@@ -18,8 +18,8 @@ const ProductVariantDisplay = ({
   };
 
   return (
-    <Card className="w-1/2">
-      <div className='mx-4'>
+    <Card className="w-1/2" style={{ maxHeight: '600px', overflowY: 'auto' }}>
+      <div className='ml-4 mr-2'>
         <h3 className='mt-4'>Products</h3>
         <div className="mb-3">
         <Form.Control
@@ -34,6 +34,7 @@ const ProductVariantDisplay = ({
           {filteredProductVariant.map(pv => (
             <Card key={pv._id} className="w-48 mb-4 flex flex-col">
               <div className="flex-grow mt-2">
+              <img src={pv.image[0]} alt={pv.name} className="mb-2 h-1/2 w-full" />
                 <p>Name: {pv.name}</p>
                 <p>Size: {pv.size}</p>
                 <p>Price: {pv.price}</p>

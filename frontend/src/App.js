@@ -15,6 +15,7 @@ import ExportImportNOte from './pages/ExportImportnote/exportimportnote.jsx';
 
 import ViewOrder from './pages/ViewOrder/viewOrder.jsx';
 import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
+import UploadImage from './pages/ImgUp/UploadImage.jsx';
 function App() {
   return (
     <Router>
@@ -34,9 +35,8 @@ function App() {
           <Route path="/exportimportnote" element={< ExportImportNOte />} />
 
           <Route path="/view-order" element={<ViewOrder/>}/>
-          <Route path="/view-order/detail" element={<ViewOrderDetail/>}/>
-
-
+          <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail/>}/>
+          <Route path="/upImg" element={<UploadImage/>}/>
         </Routes>
       </div>
     </Router>

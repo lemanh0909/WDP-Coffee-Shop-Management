@@ -9,8 +9,8 @@ import ProductVariantDisplay from './ProductVariantDisplay';
 
 const Order = () => {
   const [productVariant, setProductVariant] = useState([]);
-  const [shopId, setShopId] = useState('65d749ea36f223b9f7040016');
-  const [userId, setUserId] = useState('65d749ea36f223b9f7040014');
+  const [shopId, setShopId] = useState('');
+  const [userId, setUserId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -27,6 +27,30 @@ const Order = () => {
   const [orderErrorVisible, setOrderErrorVisible] = useState(false);
 
   useEffect(() => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const storedUserId = userData.userID;
+    const storedShopId = userData.shopId;
+    console.log(storedUserId, storedShopId);
+    if (storedUserId && storedShopId) {
+      setUserId(storedUserId);
+      setShopId(storedShopId);
+    }
+  }, []);
+
+  useEffect(() => {
+  // Lấy userId và shopId từ local storage
+  const userDataString = localStorage.getItem('userData');
+  if (!userDataString) {
+    throw new Error('User data not found in localStorage.');
+  }
+  const userData = JSON.parse(userDataString);
+  const shopId = userData.shopId;
+  const userId = userData.userID;
     axios.get(`http://localhost:5000/api/v1/productVariant/${shopId}/getAllProductVariantsInShop`)
       .then(response => {
         setProductVariant(response.data.data.allProductVariants);
@@ -107,7 +131,7 @@ const Order = () => {
   const handleCreateOrder = () => {
     const warehouseCopy = warehouse.map(item => ({ ...item }));
     setOrderMessage(null)
-    if (selectedProducts.length == 0) {
+    if (selectedProducts.length === 0) {
       setOrderMessage('Hóa đơn trống!');
       return;
     }
@@ -214,7 +238,7 @@ const Order = () => {
           </ul>
         </div>
       )}
-      <Container className="flex justify-center gap-4 mt-4">
+      <Container className="flex justify-center gap-2 mt-4">
         {showOrderSummary ? (
           <OrderSummary
             handleGoBack={handleGoBack}
