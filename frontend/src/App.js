@@ -8,7 +8,9 @@ import Order from './pages/Order/Order.jsx';
 import Category from './pages/Category/Category.jsx';
 import Control from './pages/Control/Control.jsx';
 import Sidebar from './pages/Common/sidebar.jsx';
+import Navbar from './pages/Common/navbar.jsx';
 import Thuchi from './pages/PhieuThuChi/PhieuThuChi.jsx';
+import ExportImportNOte from './pages/ExportImportnote/exportimportnote.jsx';
 function App() {
   return (
     <Router>
@@ -22,7 +24,9 @@ function App() {
           <Route path="/control" element={< Control />} />
           <Route path="/category" element={< Category />} />
           <Route path="/Sidebar" element={< Sidebar />} />
+          <Route path="/navbar" element={< Navbar />} />
           <Route path="/Thuchi" element={< Thuchi />} />
+          <Route path="/exportimportnote" element={< ExportImportNOte />} />
 
         </Routes>
       </div>

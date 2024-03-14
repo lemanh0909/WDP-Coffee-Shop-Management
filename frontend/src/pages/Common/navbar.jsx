@@ -21,7 +21,7 @@ const CommonNavbar = () => {
                     </Nav.Link>
 
                     <Nav.Link href="#store-list">
-                    <i class="fa-solid fa-store"></i>
+                    <i className="fa-solid fa-store"></i>
                         Danh sách cửa hàng
                         </Nav.Link>
                     <Nav.Link href="#transactions">
