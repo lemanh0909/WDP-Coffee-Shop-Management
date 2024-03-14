@@ -1,4 +1,3 @@
-// Warehouse.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
@@ -16,6 +15,7 @@ function Warehouse() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedWarehouseId, setSelectedWarehouseId] = useState(null);
+  const [selectedWarehouse, setSelectedWarehouse] = useState(null);
   const itemsPerPage = 6;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(items, itemsPerPage);
 
@@ -43,7 +43,9 @@ function Warehouse() {
   };
 
   const handleUpdateWarehouse = (warehouseId) => {
+    const selected = items.find(item => item._id === warehouseId);
     setSelectedWarehouseId(warehouseId);
+    setSelectedWarehouse(selected);
     setShowUpdateModal(true);
   };
 
@@ -56,22 +58,6 @@ function Warehouse() {
     fetchData();
     setShowUpdateModal(false);
     toast.success('Cập nhật kho thành công!');
-  };
-  useEffect(() => {
-    addCheckboxEventListeners();
-  }, []);
-
-  const addCheckboxEventListeners = () => {
-    const checkboxes = document.querySelectorAll('.filter-section input[type="checkbox"]');
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener("click", function () {
-        if (this.checked) {
-          this.parentElement.classList.add("selected");
-        } else {
-          this.parentElement.classList.remove("selected");
-        }
-      });
-    });
   };
 
   if (error) {
@@ -95,7 +81,7 @@ function Warehouse() {
             </Col>
             <Col md={4} />
             <Col md={4} className="button-container">
-              <button type="button" className="btn btn-primary btn-color" onClick={() => setShowAddModal(true)}>
+              <button type="button" className="btn btn-danger btn-color" style={{ marginRight: "10px" }} onClick={() => setShowAddModal(true)}>
                 <i className="fa-solid fa-plus"></i> Thêm sản phẩm
               </button>
               <button type="button" className="btn btn-primary btn-color">
@@ -155,7 +141,6 @@ function Warehouse() {
                       ))
                     )}
                   </tbody>
-
                 </Table>
               </Row>
               <Row>
@@ -194,6 +179,7 @@ function Warehouse() {
       {showUpdateModal && (
         <UpdateWarehouseModal
           warehouseId={selectedWarehouseId}
+          warehouseData={selectedWarehouse}
           onUpdateSuccess={handleUpdateSuccess}
           onHide={() => setShowUpdateModal(false)}
         />
