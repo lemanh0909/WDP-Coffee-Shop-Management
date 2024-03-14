@@ -133,7 +133,7 @@ export const ProductVariantService = {
             const productVariant = await ProductVariant.findById(productVariantId);
 
             if (!productVariant) {
-                throw new Error("ProductVariant not found with id: " + variantId);
+                throw new Error("ProductVariant not found with id: " + productVariantId);
             }
 
             // Kiểm tra xem có sự thay đổi trong tên hoặc kích thước không

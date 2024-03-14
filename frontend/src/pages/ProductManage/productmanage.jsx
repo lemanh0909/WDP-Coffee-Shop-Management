@@ -23,6 +23,7 @@ function ProductManage() {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productIdToUpdate, setProductIdToUpdate] = useState(null);
 
+
   const handleShowUpdateModal = (productId) => {
     setProductIdToUpdate(productId);
     setShowUpdateModal(true);
@@ -67,8 +68,16 @@ function ProductManage() {
 
 
   const fetchProducts = () => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
     axios
-      .get("http://localhost:5000/api/v1/product/getAllProducts")
+      .get(`http://localhost:5000/api/v1/product/${shopId}/getAllProductsWithCategoryInShop`)
       .then((response) => {
         setProducts(response.data.data);
       })
@@ -82,7 +91,7 @@ function ProductManage() {
       setShowDetailsTable(!showDetailsTable);
     } else {
       axios
-        .get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
+        .get(`http://localhost:5000/api/v1/product/${productId}/getProductByIdTotalVariant`)
         .then((response) => {
           setSelectedProduct(response.data.data);
           setShowDetailsTable(true);
@@ -93,9 +102,29 @@ function ProductManage() {
     }
   };
 
+
   useEffect(() => {
     fetchProducts();
   }, []);
+
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+      // Lấy userId và shopId từ local storage
+      const userDataString = localStorage.getItem('userData');
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+      const userData = JSON.parse(userDataString);
+      const shopId = userData.shopId;
+      const userId = userData.userID;
+        axios.get(`http://localhost:5000/api/v1/category/65d749ea36f223b9f7040014/getAllCategoriesInShop`)
+          .then(response => {
+            setCategories(response.data.data.data);
+          })
+          .catch(error => console.error('Error fetching categories:', error));
+      }, []);
+
 
   return (
     <>
@@ -151,7 +180,7 @@ function ProductManage() {
                         <tr>
                           <td>{item._id}</td>
                           <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
-                          <td></td>
+                          <td>{item.category.name}</td>
                           <td>
                             <Button onClick={() => showDetails(item._id)}>
                               Xem chi tiết
@@ -175,7 +204,7 @@ function ProductManage() {
                                     <Table bordered>
                                       <tbody>
                                         <tr>
-                                          <td className="field">Tên:</td>
+                                          <td className="field w-2/5">Tên:</td>
                                           <td>{selectedProduct.name}</td>
                                         </tr>
                                         <tr>
@@ -185,7 +214,22 @@ function ProductManage() {
                                         <tr>
                                           <td className="field">Hình ảnh:</td>
                                           <td>
-                                            <img src={selectedProduct.image} alt="Product" />
+                                            <div className="flex flex-wrap gap-3 justify-center">
+                                              {selectedProduct.image.map((imageUrl, index) => (
+                                                <img
+                                                  key={index}
+                                                  className="w-1/4 h-1/4"
+                                                  src={imageUrl}
+                                                  alt={`Product ${index + 1}`}
+                                                />
+                                              ))}
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td className="field">Số lượng biến thể:</td>
+                                          <td>
+                                            {selectedProduct.productVariant}
                                           </td>
                                         </tr>
                                       </tbody>
@@ -227,7 +271,14 @@ function ProductManage() {
           </Row>
         </Container>
       </div>
-      <AddProductModal show={showModal} handleClose={handleCloseModal} onAddSuccess={handleAddSuccess} />
+      <AddProductModal
+        show={showModal}
+        handleClose={handleCloseModal}
+        onAddSuccess={handleAddSuccess}
+        categories={categories}
+
+      />
+
 
       <UpdateProductModal
         show={showUpdateModal}

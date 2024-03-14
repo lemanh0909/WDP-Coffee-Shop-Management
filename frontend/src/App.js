@@ -11,6 +11,7 @@ import Sidebar from './pages/Common/sidebar.jsx';
 import Thuchi from './pages/PhieuThuChi/PhieuThuChi.jsx';
 import ViewOrder from './pages/ViewOrder/viewOrder.jsx';
 import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
+import UploadImage from './pages/ImgUp/UploadImage.jsx';
 function App() {
   return (
     <Router>
@@ -27,7 +28,7 @@ function App() {
           <Route path="/Thuchi" element={< Thuchi />} />
           <Route path="/view-order" element={<ViewOrder/>}/>
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail/>}/>
-
+          <Route path="/upImg" element={<UploadImage/>}/>
         </Routes>
       </div>
     </Router>

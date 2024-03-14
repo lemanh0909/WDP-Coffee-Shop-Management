@@ -34,8 +34,8 @@ const Shop = mongoose.model(
             staffNoteId: {
                 type: [{ type: mongoose.Schema.Types.ObjectId, ref: "StaffNote" }],
             },
-            imageId: {
-                type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Image" }],
+            receipt: {
+                type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Receipt" }],
             },
         },
         { timestamps: true },
