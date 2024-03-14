@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from 'axios';
 
@@ -11,6 +11,9 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess }) {
 
     const handleSave = async () => {
         try {
+            if(name ==="" || !name){
+                return console.log("Name cannot be empty!");
+            }
             const productUrls = [];
             for (let i = 0; i < images.length; i++) {
                 const formData = new FormData();
@@ -32,6 +35,9 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess }) {
     
             // Xử lý kết quả từ việc tạo sản phẩm
             console.log("Created product:", updateProductResponse.data);
+            setName(null);
+            setDescription(null);
+            setImages([]);            
             onAddSuccess();
         } catch (error) {
             console.error('Error uploading file:', error);
