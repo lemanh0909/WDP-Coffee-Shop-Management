@@ -28,6 +28,31 @@ export const warehouseController = {
     }
   },
 
+  updateWarehouseBasis: async (req, res) => {
+    try {
+      const warehouseId = req.params._id;
+      const data = req.body;
+
+      if (!warehouseId) {
+        return res.status(400).json({
+          error: 'Invalid warehouseId provided',
+        });
+      }
+
+      const updatedWarehouseBasis = await warehouseService.updateWarehouseBasis(warehouseId, data);
+
+      res.status(201).json({
+        message: 'Success',
+        data: updatedWarehouseBasis,
+      });
+    } catch (error) {
+      console.error('Error:', error.message);
+      res.status(500).json({
+        error: error.message,
+      });
+    }
+  },
+
   updateWarehouse: async (req, res) => {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
@@ -130,17 +155,17 @@ export const warehouseController = {
   },
   getAllWarehousesInShop: async (req, res) => {
     try {
-        const shopId = req.params.shopId;
-        const warehouse = await warehouseService.getAllWarehousesInShop(shopId);
-        res.status(200).json({
-            message: 'Success',
-            data: warehouse,
-        });
+      const shopId = req.params.shopId;
+      const warehouse = await warehouseService.getAllWarehousesInShop(shopId);
+      res.status(200).json({
+        message: 'Success',
+        data: warehouse,
+      });
     } catch (error) {
-        console.error('Error:', error.message);
-        res.status(500).json({
-            error: error.message,
-        });
+      console.error('Error:', error.message);
+      res.status(500).json({
+        error: error.message,
+      });
     }
-},
+  },
 };
