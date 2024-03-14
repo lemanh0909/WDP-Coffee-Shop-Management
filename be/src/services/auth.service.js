@@ -70,6 +70,9 @@ export const authService = {
 
     if (!user) throw new Error(authConstant.EMAIL_NOT_EXIST);
 
+    if (user.status !== 'Active') {
+      throw new Error(authConstant.STATUS_INACTIVE);
+    }
     const passwordOk = bcrypt.compareSync(password, user.password);
 
     if (!passwordOk) throw new Error(authConstant.PASSWORD_INVALID);
