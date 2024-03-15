@@ -18,5 +18,6 @@ export const authConstant = {
   OLD_PASSWORD_REQUIRED: "Old password is required",
   OLD_PASSWORD_INVALID: "Old password is invalid",
   TOKEN_EXPIRED: "Token expired",
-  ACCOUT_INACTIVE:"Your account is  disabled"
+  ACCOUT_INACTIVE:"Your account is  disabled",
+  MANAGER_ACCOUT_INACTIVE:"Your manager account is  disabled therefore you cannot login."
 };

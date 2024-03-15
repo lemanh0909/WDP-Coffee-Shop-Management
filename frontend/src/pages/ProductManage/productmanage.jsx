@@ -110,20 +110,20 @@ function ProductManage() {
 
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-    // Lấy userId và shopId từ local storage
-    const userDataString = localStorage.getItem('userData');
-    if (!userDataString) {
-      throw new Error('User data not found in localStorage.');
-    }
-    const userData = JSON.parse(userDataString);
-    const shopId = userData.shopId;
-    const userId = userData.userID;
-    axios.get(`http://localhost:5000/api/v1/category/65d749ea36f223b9f7040014/getAllCategoriesInShop`)
-      .then(response => {
-        setCategories(response.data.data.data);
-      })
-      .catch(error => console.error('Error fetching categories:', error));
-  }, []);
+      // Lấy userId và shopId từ local storage
+      const userDataString = localStorage.getItem('userData');
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+      const userData = JSON.parse(userDataString);
+      const shopId = userData.shopId;
+      const userId = userData.userID;
+        axios.get(`http://localhost:5000/api/v1/category/${userId}/getAllCategoriesInShop`)
+          .then(response => {
+            setCategories(response.data.data.data);
+          })
+          .catch(error => console.error('Error fetching categories:', error));
+      }, []);
 
 
   return (
