@@ -63,6 +63,11 @@ const CommonNavbar = () => {
                             <i className="fa-solid fa-money-bill-transfer"></i> Giao dịch
                         </Nav.Link>
                     )}
+                    {!isAdmin && (
+                        <Nav.Link href="/profile">
+                            <i className="fa-solid fa-money-bill-transfer"></i> Profile
+                        </Nav.Link>
+                    )}
                     {isLoggedIn && (
                         <Nav className="ml-auto">
                             <Nav.Link onClick={handleLogout}>Đăng xuất</Nav.Link>
