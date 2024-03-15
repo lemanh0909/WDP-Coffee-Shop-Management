@@ -1,7 +1,7 @@
 import Receipt from '../models/receipt.js';
 import Shop from '../models/shop.js';
 export const receiptService = {
- 
+
 
   createReceipt: async (data) => {
     return new Promise(async (resolve, reject) => {
@@ -20,10 +20,8 @@ export const receiptService = {
         const createdReceipt = await Receipt.create({ nameCreate,name, date, price, status, description });
         const shop = await Shop.findOne({ managerId });
         if (shop) {
-            // Thêm userId vào array trong shop
-            shop.receiptId.push(createdReceipt._id);
-            // Lưu lại thông tin shop
-            await shop.save();
+          shop.receiptId.push(createdReceipt._id);
+          await shop.save();
         } else {
             throw new Error("Shop not found with managerID: " + managerId);
         }
@@ -56,11 +54,11 @@ export const receiptService = {
   getAllReceiptsInShop: async (shopId) => {
     const shop = await Shop.findById(shopId);
     if (shop) {
-        const receipts = await Receipt.find({ _id: { $in: shop.receiptId } });
-        return receipts;
+      const receipts = await Receipt.find({ _id: { $in: shop.receiptId } });
+      return receipts;
     } else {
-        throw new Error("Shop not found with id: " + shopId);
+      throw new Error("Shop not found with id: " + shopId);
     }
-},
+  },
 };
 

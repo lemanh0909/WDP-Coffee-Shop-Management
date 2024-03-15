@@ -70,7 +70,14 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                             type="text"
                             name="name"
                             value={formData.name}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z\s]*$/.test(inputValue)) {
+                                    setFormData({ ...formData, name: inputValue });
+                                } else {
+                                    alert("Tên sản phẩm chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
+                            }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formQuantity">
@@ -79,7 +86,14 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                             type="number"
                             name="quantity"
                             value={formData.quantity}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[1-9]\d*$/.test(inputValue)) {
+                                    setFormData({ ...formData, quantity: inputValue });
+                                } else {
+                                    alert("Số lượng phải là số nguyên dương!");
+                                }
+                            }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formUnit">
