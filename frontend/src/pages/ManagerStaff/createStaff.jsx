@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
     const [formData, setFormData] = useState({
@@ -8,10 +9,9 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
         email: "",
         password: "",
         fullName: "",
-        dob: "",
-        phoneNumber: "",
-        shopName: "",
     });
+
+    const nav = useNavigate()
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,8 +26,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                 "http://localhost:5000/api/v1/user/createStaff",
                 formData
             );
-
-            if (response.data.isSuccess) {
+            if (response.data) {
                 onHide();
                 handleAddWarehouse(response.data.data);
                 setFormData({
@@ -35,11 +34,9 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                     email: "",
                     password: "",
                     fullName: "",
-                    dob: "",
-                    phoneNumber: "",
-                    shopName: "",
                 });
-                console.log("sucessfully added");
+                console.log("Successfully added");
+                nav("/employee-management")
             } else {
                 console.error("Error:", response.data.message);
             }
@@ -66,18 +63,6 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                     <Form.Group controlId="formFullName">
                         <Form.Label>Full Name:</Form.Label>
                         <Form.Control type="text" name="fullName" value={formData.fullName} onChange={handleChange} required />
-                    </Form.Group>
-                    <Form.Group controlId="formDob">
-                        <Form.Label>Date of Birth:</Form.Label>
-                        <Form.Control type="date" name="dob" value={formData.dob} onChange={handleChange} required />
-                    </Form.Group>
-                    <Form.Group controlId="formPhoneNumber">
-                        <Form.Label>Phone Number:</Form.Label>
-                        <Form.Control type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
-                    </Form.Group>
-                    <Form.Group controlId="formShopName">
-                        <Form.Label>Shop Name:</Form.Label>
-                        <Form.Control type="text" name="shopName" value={formData.shopName} onChange={handleChange} required />
                     </Form.Group>
                     <Button variant="primary" type="submit" style={{ marginTop: '30px' }}>
                         Create Staff

@@ -1,15 +1,23 @@
-// UpdateWarehouseModal.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 
-function UpdateWarehouseModal({ warehouseId, onUpdateSuccess, onHide }) {
+function UpdateWarehouseModal({ warehouseId, warehouseData, onUpdateSuccess, onHide }) {
     const [updatedData, setUpdatedData] = useState({
         name: "",
         unit: "",
         image: "",
-
     });
+
+    useEffect(() => {
+        if (warehouseData) {
+            setUpdatedData({
+                name: warehouseData.name,
+                unit: warehouseData.unit,
+                image: warehouseData.image,
+            });
+        }
+    }, [warehouseData]);
 
     const handleUpdate = async () => {
         try {
@@ -34,7 +42,14 @@ function UpdateWarehouseModal({ warehouseId, onUpdateSuccess, onHide }) {
                             type="text"
                             placeholder="Enter name"
                             value={updatedData.name}
-                            onChange={(e) => setUpdatedData({ ...updatedData, name: e.target.value })}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z\s]*$/.test(inputValue)) {
+                                    setUpdatedData({ ...updatedData, name: inputValue });
+                                } else {
+                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
+                            }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formUnit">

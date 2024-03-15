@@ -1,106 +1,158 @@
-import React, { useEffect } from "react";
-import {
-    Container,
-    Row,
-    Col,
-    Card,
-} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Table, Pagination, Button, Modal } from "react-bootstrap";
 import "./Category.css";
+import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import CommonNavbar from "../Common/navbar.jsx"
-import Sidebar from "../Common/sidebar.jsx"
+import CommonNavbar from "../Common/navbar.jsx";
+import CommonSlider from "../Common/sidebar.jsx";
+import AddCategoryModal from "./addCategory.jsx";
+import UpdateCategoryModal from "./updateCategory.jsx";
 
 function Category() {
+  const itemsPerPage = 7;
+  const [category, setCategory] = useState([]);
+  const [paginatedItems, activePage, totalPages, handlePageChange] =
+    usePagination(category, itemsPerPage);
+  const [showModal, setShowModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [categoryIdToUpdate, setCategoryIdToUpdate] = useState(null);
 
-    useEffect(() => {
-        const checkboxes = document.querySelectorAll(
-            '.filter-section input[type="checkbox"]'
-        );
+  // Fake data for demonstration
+  const fakeData = [
+    { categoryId: 1, name: "Category 1", description: "Description 1", products: { name: "Product 1" } },
+    { categoryId: 2, name: "Category 2", description: "Description 2", products: { name: "Product 2" } },
+    { categoryId: 3, name: "Category 3", description: "Description 3", products: { name: "Product 3" } },
+    // Add more fake data as needed
+  ];
 
-        checkboxes.forEach((checkbox) => {
-            checkbox.addEventListener("click", function () {
-                if (this.checked) {
-                    this.parentElement.classList.add("selected");
-                } else {
-                    this.parentElement.classList.remove("selected");
-                }
-            });
-        });
-    }, []);
+  useEffect(() => {
+    setCategory(fakeData); // Set fake data when component mounts
+  }, []);
 
-    return (
-        <>
-            <CommonNavbar />
-            <Row md={5} className="title">
-                <Col md={4}>
-                    <h2>Danh Mục</h2>
-                </Col><Col md={4} />
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
-                <Col md={4} className="button-container">
-                    <button type="button" className="btn btn-primary add-btn">
-                        <i class="fa-solid fa-plus"></i> Thêm danh mục
-                    </button>
-                    <button type="button" className="btn btn-primary">
-                        <i class="fa-solid fa-file-export"></i>
-                        Xuất ra file
-                    </button>
-                </Col>
+  const handleShowUpdateModal = (categoryId) => {
+    setCategoryIdToUpdate(categoryId);
+    setShowUpdateModal(true);
+  };
 
-            </Row>
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
+    setCategoryIdToUpdate(null);
+  };
 
-            <Container fluid>
-                <Row>
-                    <Sidebar />
-                    <Col xs={9}>
-                        <Row>
-                            <Container fluid>
-                                <Row className="justify-content-center">
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://assets.epicurious.com/photos/63e54a0664e14d52936a2937/1:1/w_2539,h_2539,c_limit/CoffeeSubscriptions_IG_V1_030922_6350_V1_final.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">COFFEE BEAN</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/AE8AB721-ACB5-4E82-845C-75CB6BCFFB96/Derivates/e3b88c15-1aea-4554-b9b0-77514681f359.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">MILK TEA</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2022/7/10/1066729/Dmaw_Kdxoaujopn.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">COFFEE</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://tutrungbaybanhkem.com/wp-content/uploads/2019/09/cafe-banh-ngot.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">CAKE</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Row>
+  const handleShowConfirmationModal = (categoryId) => {
+    setShowConfirmationModal(true);
+    setCategoryIdToDelete(categoryId);
+  };
 
-                        <Row>
-                            <Col>
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+    setCategoryIdToDelete(null);
+  };
 
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    )
+  const handleDelete = () => {
+    // Handle delete logic here
+    console.log("Deleting category with ID:", categoryIdToDelete);
+    setShowConfirmationModal(false);
+  };
+
+  return (
+    <>
+      <CommonNavbar />
+      <div className="flex">
+        <CommonSlider
+          handlePageChange={handlePageChange}
+          activePage={activePage}
+          totalPages={totalPages}
+        />
+        <Container className="ml-72">
+          <Row className="title mb-0">
+            <Col md={4} className="text-white">
+              <h2>Quản lý danh mục</h2>
+            </Col>
+            <Col md={4} />
+            <Col md={4} className="button-container">
+              <div className="">
+                <Button
+                  variant="primary"
+                  className="add-btn btn-color"
+                  onClick={handleShowModal}
+                >
+                  <i className="fa-solid fa-plus"></i> Thêm danh mục
+                </Button>
+                <Button variant="primary" className="btn-color">
+                  <i className="fa-solid fa-file-export"></i> Biến thể
+                </Button>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Category ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Products</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedItems.map((item) => (
+                    <tr key={item.categoryId}>
+                      <td>{item.categoryId}</td>
+                      <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
+                      <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.description}</td>
+                      <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.products.name}</td>
+                      <td>
+                        <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item.categoryId)}>
+                          <i className="fa-solid fa-pen-to-square"></i> Sửa
+                        </Button>
+                        <Button variant="danger" onClick={() => handleShowConfirmationModal(item.categoryId)}>
+                          <i className="fa-solid fa-trash"></i> Xóa
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <Pagination className="pagination">
+                {/* Pagination controls */}
+              </Pagination>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <AddCategoryModal
+        show={showModal}
+        handleClose={handleCloseModal}
+      />
+      <UpdateCategoryModal
+        show={showUpdateModal}
+        handleClose={handleCloseUpdateModal}
+        categoryId={categoryIdToUpdate}
+      />
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xoá danh mục</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xoá danh mục này không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+            Hủy
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Xoá
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
 export default Category;

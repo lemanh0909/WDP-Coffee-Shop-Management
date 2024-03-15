@@ -1,70 +1,49 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Table,
-  Pagination,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSlider from "../Common/sidebar.jsx";
-import AddPhieuThuModal from "./addPhieuThu.jsx";
-import AddPhieuChiModal from "./addPhieuChi.jsx";
-import StatisticsCard from './StatisticsCard';
+import AddThuModal from "./addPhieuThu.jsx";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function PhieuThuChi() {
   const itemsPerPage = 7;
   const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [paginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(products, itemsPerPage);
+  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
 
-  const [showAddPhieuThuModal, setShowAddPhieuThuModal] = useState(false);
-  const handleShowAddPhieuThuModal = () => setShowAddPhieuThuModal(true);
-  const handleCloseAddPhieuThuModal = () => setShowAddPhieuThuModal(false);
+  const [showAddThuModal, setShowAddThuModal] = useState(false);
+  const handleShowAddThuModal = () => setShowAddThuModal(true);
+  const handleCloseAddThuModal = () => setShowAddThuModal(false);
 
-  const handleAddPhieuThuSuccess = () => {
+  const handleAddThuSuccess = () => {
+    toast.success('Thêm kho thành công!');
     fetchProducts();
-    handleCloseAddPhieuThuModal();
-  };
-  const [showAddPhieuChiModal, setShowAddPhieuChiModal] = useState(false);
-  const handleShowAddPhieuChiModal = () => setShowAddPhieuChiModal(true);
-  const handleCloseAddPhieuChiModal = () => setShowAddPhieuChiModal(false);
-
-  const handleAddPhieuChiSuccess = () => {
-    fetchProducts();
-    handleCloseAddPhieuChiModal();
+    handleCloseAddThuModal();
   };
 
-  const fetchProducts = () => {
-    axios
-      .get("http://localhost:5000/api/v1/receipt/getAll")
-      .then((response) => {
-        setProducts(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
+  const fetchProducts = async () => {
+    try {
+      const userDataString = localStorage.getItem('userData');
+
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+
+      const userData = JSON.parse(userDataString);
+      const response = await axios.get(`http://localhost:5000/api/v1/receipt/${userData.shopId}/getAllReceiptsInShop`);
+      setProducts(response.data.data);
+    } catch (error) {
+      console.error('Error fetching warehouse data:', error);
+    } finally {
+      console.log('Warehouse data fetching completed.');
+    }
   };
 
   useEffect(() => {
     fetchProducts();
   }, []);
-
-  const totalRevenue = products.reduce((sum, item) => {
-    const value = parseFloat(item.giatri.replace(/,/g, ''));
-    return sum + (value > 0 ? value : 0);
-  }, 0);
-
-  const totalExpense = products.reduce((sum, item) => {
-    const value = parseFloat(item.giatri.replace(/,/g, ''));
-    return sum + (value < 0 ? Math.abs(value) : 0);
-  }, 0);
-
-  const balance = totalRevenue - totalExpense;
 
   return (
     <>
@@ -77,139 +56,71 @@ function PhieuThuChi() {
           getPaginatedItems={paginatedItems}
         />
         <Container className="ml-72 ">
+          <ToastContainer position='top-right' />
           <Row className="title mb-0">
-            <Col md={4} className="text-white ">
+            <Col md={6} className="text-left text-white">
               <h2>Quản lý Thu Chi</h2>
             </Col>
-            <Col md={4} />
-            <Col md={4} className="button-container">
-              <div className="d-flex gap-3">
-                <Button variant="primary" onClick={handleShowAddPhieuThuModal}>
-                  <i className="far fa-plus-square"></i> Thêm phiếu thu
-                </Button>
-                <Button variant="danger" onClick={handleShowAddPhieuChiModal}>
-                  <i className="far fa-plus-square"></i> Thêm phiếu chi
-                </Button>
-              </div>
+            <Col md={6} className="text-right">
+              <Button variant="primary" onClick={handleShowAddThuModal}>
+                <i className="far fa-plus-square"></i> Thêm phiếu
+              </Button>
             </Col>
           </Row>
-          {/* show thu chi  */}
-          <Row>
-            <div className="grid grid-cols-3 gap-4 mb-2">
-              <StatisticsCard
-                icon={<i className="bi bi-arrow-right-circle text-4xl leading-none"></i>}
-                title="Tổng thu"
-                value={totalRevenue.toLocaleString()}
-                valueColor="text-sky-600"
-                bgColor="bg-slate-200"
-                iconColor="bg-sky-600"
-              />
-              <StatisticsCard
-                icon={<i className="bi bi-arrow-left-circle text-4xl leading-none"></i>}
-                title="Tổng Chi"
-                value={totalExpense.toLocaleString()}
-                valueColor="text-red-600"
-                bgColor="bg-slate-200"
-                iconColor="bg-red-600"
-              />
-              <StatisticsCard
-                icon={<i className="bi bi-currency-dollar text-4xl leading-none"></i>}
-                title="Tồn quỹ"
-                value={balance.toLocaleString()}
-                valueColor="text-green-600"
-                bgColor="bg-slate-200"
-                iconColor="bg-green-600"
-              />
-            </div>
+          <Row className="mb-3">
+            <Col md={12}>
+            </Col>
           </Row>
           <Row>
             <Col xs={12}>
-              <Row>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Mã Chứng từ</th>
-                      <th>Người nộp/chi</th>
-                      <th>Hạng mục thu/chi</th>
-                      <th>Lí do</th>
-                      <th>Ngày giao dịch</th>
-                      <th>Giá trị</th>
-                      <th>Hình thức</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedItems.map((item, index) => (
-                      <React.Fragment key={index}>
-                        <tr>
-                          <td>{item.machungtu}</td>
-                          <td style={{ color: "#BB2649", fontWeight: "bold" }}>
-                            {item.nguoinop}
-                          </td>
-                          <td>{item.hangmucthuchi}</td>
-                          <td>{item.lido}</td>
-                          <td>{item.date}</td>
-                          <td>{item.giatri}</td>
-                          <td>{item.hinhthuc}</td>
-                        </tr>
-                      </React.Fragment>
-                    ))}
-                  </tbody>
-                </Table>
-              </Row>
-              <Row>
-                <Col>
-                  <Pagination className="pagination">
-                    <Pagination.Prev
-                      onClick={() => handlePageChange(activePage - 1)}
-                      disabled={activePage === 1}
-                    />
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <Pagination.Item
-                        key={i + 1}
-                        active={i + 1 === activePage}
-                        onClick={() => handlePageChange(i + 1)}
-                      >
-                        {i + 1}
-                      </Pagination.Item>
-                    ))}
-                    <Pagination.Next
-                      onClick={() => handlePageChange(activePage + 1)}
-                      disabled={activePage === totalPages}
-                    />
-                  </Pagination>
-                  {/*{paginatedItems
-    .slice(
-      (activePage - 1) * itemsPerPage,
-      activePage * itemsPerPage
-    )
-    .map((item, index) => (
-      <tr key={index}>
-        <td>{item.machungtu}</td>
-        <td style={{ color: "#BB2649", fontWeight: "bold" }}>
-          {item.nguoinop}
-        </td>
-        <td>{item.hangmucthuchi}</td>
-        <td>{item.lido}</td>
-        <td>{item.date}</td>
-        <td>{item.giatri}</td>
-        <td>{item.hinhthuc}</td>
-      </tr>
-    ))}*/}
-                </Col>
-              </Row>
+              <Table striped bordered hover className="custom-table">
+                <thead className="custom-table-header">
+                  <tr>
+                    <th>ID Phiếu</th>
+                    <th>Tên Phiếu</th>
+                    <th>Ngày tạo</th>
+                    <th>Giá trị</th>
+                    <th>Loại Phiếu</th>
+                    <th>Mô tả</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedItems.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <tr className="custom-table-row">
+                        <td>{item._id}</td>
+                        <td>{item.name}</td>
+                        <td>{item.date}</td>
+                        <td>{item.status === 'Expense' ? '-' + item.price : item.price}</td>
+                        <td>{item.status}</td>
+                        <td>{item.description}</td>
+                      </tr>
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </Table>
+              <Pagination className="pagination justify-content-center">
+                <Pagination.Prev onClick={() => handlePageChange(activePage - 1)} disabled={activePage === 1} />
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <Pagination.Item
+                    key={i + 1}
+                    active={i + 1 === activePage}
+                    onClick={() => handlePageChange(i + 1)}
+                  >
+                    {i + 1}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next onClick={() => handlePageChange(activePage + 1)} disabled={activePage === totalPages} />
+              </Pagination>
             </Col>
           </Row>
         </Container>
       </div>
-      <AddPhieuThuModal
-        show={showAddPhieuThuModal}
-        handleClose={handleCloseAddPhieuThuModal}
-        onAddSuccess={handleAddPhieuThuSuccess}
-      />
-      <AddPhieuChiModal
-        show={showAddPhieuChiModal}
-        handleClose={handleCloseAddPhieuChiModal}
-        onAddSuccess={handleAddPhieuChiSuccess}
+      <AddThuModal
+        userId={JSON.parse(localStorage.getItem('userData'))?.userID}
+        show={showAddThuModal}
+        onHide={handleCloseAddThuModal}
+        handleAddThu={handleAddThuSuccess}
       />
     </>
   );
