@@ -5,7 +5,10 @@ const { String, Number, ObjectId, Date } = mongoose.Schema.Types;
 const Receipt = mongoose.model(
   "Receipt",
   new mongoose.Schema(
-    {
+    {nameCreate: {
+      type: String,
+      required: true,
+    },
     
       name: {
         type: String,
