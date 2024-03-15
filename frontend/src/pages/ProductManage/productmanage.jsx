@@ -118,7 +118,7 @@ function ProductManage() {
       const userData = JSON.parse(userDataString);
       const shopId = userData.shopId;
       const userId = userData.userID;
-        axios.get(`http://localhost:5000/api/v1/category/65d749ea36f223b9f7040014/getAllCategoriesInShop`)
+        axios.get(`http://localhost:5000/api/v1/category/${userId}/getAllCategoriesInShop`)
           .then(response => {
             setCategories(response.data.data.data);
           })
