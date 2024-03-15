@@ -1,106 +1,307 @@
-import React, { useEffect } from "react";
-import {
-    Container,
-    Row,
-    Col,
-    Card,
-} from "react-bootstrap";
-import "./Category.css";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Table, Pagination, Button, Modal } from "react-bootstrap";
+// import "./productmanage.css";
+import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import CommonNavbar from "../Common/navbar.jsx"
-import Sidebar from "../Common/sidebar.jsx"
+import axios from "axios";
+import CommonNavbar from "../Common/navbar.jsx";
+import CommonSlider from "../Common/sidebar.jsx";
+import AddCategoryModal from "./addCategory.jsx";
+import UpdateCategoryModal from "./updateCategory.jsx";
 
-function Category() {
+function ProductManage() {
+  const itemsPerPage = 7;
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [paginatedItems, activePage, totalPages, handlePageChange] =
+    usePagination(products, itemsPerPage);
+  const [showModal, setShowModal] = useState(false);
+  const [showDetailsTable, setShowDetailsTable] = useState(false);
+  const handleShowModal = () => setShowModal(true);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [productIdToUpdate, setProductIdToUpdate] = useState(null);
 
-    useEffect(() => {
-        const checkboxes = document.querySelectorAll(
-            '.filter-section input[type="checkbox"]'
-        );
 
-        checkboxes.forEach((checkbox) => {
-            checkbox.addEventListener("click", function () {
-                if (this.checked) {
-                    this.parentElement.classList.add("selected");
-                } else {
-                    this.parentElement.classList.remove("selected");
-                }
-            });
+  const handleShowUpdateModal = (productId) => {
+    setProductIdToUpdate(productId);
+    setShowUpdateModal(true);
+  };
+
+  const handleAddSuccess = () => {
+    fetchProducts();
+  };
+  const handleCloseUpdateModal = () => {
+    setShowUpdateModal(false);
+    setProductIdToUpdate(null);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setShowDetailsTable(false);
+  };
+
+  const handleShowConfirmationModal = (productId) => {
+    setShowConfirmationModal(true);
+    setProductIdToDelete(productId);
+  };
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
+    setProductIdToDelete(null);
+  };
+
+  const handleDelete = () => {
+    axios
+      .delete("http://localhost:5000/api/v1/product/delete", {
+        data: { productId: productIdToDelete },
+      })
+      .then((response) => {
+        console.log("Product deleted successfully");
+        fetchProducts();
+        setShowConfirmationModal(false);
+      })
+      .catch((error) => {
+        console.error("Error deleting product:", error);
+      });
+  };
+
+
+  const fetchProducts = () => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    axios
+      .get(`http://localhost:5000/api/v1/product/${shopId}/getAllProductsWithCategoryInShop`)
+      .then((response) => {
+        setProducts(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  };
+
+  const showDetails = (productId) => {
+    if (selectedProduct && selectedProduct._id === productId) {
+      setShowDetailsTable(!showDetailsTable);
+    } else {
+      axios
+        .get(`http://localhost:5000/api/v1/product/${productId}/getProductByIdTotalVariant`)
+        .then((response) => {
+          setSelectedProduct(response.data.data);
+          setShowDetailsTable(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching product details:", error);
         });
-    }, []);
+    }
+  };
 
-    return (
-        <>
-            <CommonNavbar />
-            <Row md={5} className="title">
-                <Col md={4}>
-                    <h2>Danh Mục</h2>
-                </Col><Col md={4} />
 
-                <Col md={4} className="button-container">
-                    <button type="button" className="btn btn-primary add-btn">
-                        <i class="fa-solid fa-plus"></i> Thêm danh mục
-                    </button>
-                    <button type="button" className="btn btn-primary">
-                        <i class="fa-solid fa-file-export"></i>
-                        Xuất ra file
-                    </button>
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+      // Lấy userId và shopId từ local storage
+      const userDataString = localStorage.getItem('userData');
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+      const userData = JSON.parse(userDataString);
+      const shopId = userData.shopId;
+      const userId = userData.userID;
+        axios.get(`http://localhost:5000/api/v1/category/65d749ea36f223b9f7040014/getAllCategoriesInShop`)
+          .then(response => {
+            setCategories(response.data.data.data);
+          })
+          .catch(error => console.error('Error fetching categories:', error));
+      }, []);
+
+
+  return (
+    <>
+      <CommonNavbar />
+      <div className="flex">
+        <CommonSlider
+          handlePageChange={handlePageChange}
+          activePage={activePage}
+          totalPages={totalPages}
+          getPaginatedItems={paginatedItems}
+        />
+        <Container className="ml-72 ">
+          <Row className="title mb-0">
+            <Col md={4} className="text-white "  >
+              <h2>Quản lý sản phẩm</h2>
+            </Col>
+            <Col md={4} />
+            <Col md={4} className="button-container">
+              <div className="">
+                <Button
+                  variant="primary"
+                  className="add-btn btn-color"
+                  onClick={handleShowModal}
+                >
+                  <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                </Button>
+                <Button variant="primary" className="btn-color">
+                  <i className="fa-solid fa-file-export"></i> Biến thể
+                </Button>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <Row>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>
+                        Mã hàng hóa
+                      </th>
+                      <th>
+                        Tên hàng hóa
+                      </th>
+                      <th>Category</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedItems.map((item) => (
+                      <React.Fragment key={item._id}>
+                        <tr>
+                          <td>{item._id}</td>
+                          <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
+                          <td>{item.category.name}</td>
+                          <td>
+                            <Button onClick={() => showDetails(item._id)}>
+                              Xem chi tiết
+                            </Button>
+                          </td>
+                          <td>
+                            <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
+                              <i className="fa-solid fa-pen-to-square"></i> Update
+                            </Button>
+                            <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
+                              <i className="fa-solid fa-trash"></i> Delete
+                            </Button>
+                          </td>
+                        </tr>
+                        {showDetailsTable && selectedProduct &&
+                          selectedProduct._id === item._id && (
+                            <React.Fragment>
+                              <tr>
+                                <td colSpan="12">
+                                  <div className="details-table-container">
+                                    <Table bordered>
+                                      <tbody>
+                                        <tr>
+                                          <td className="field w-2/5">Tên:</td>
+                                          <td>{selectedProduct.name}</td>
+                                        </tr>
+                                        <tr>
+                                          <td className="field">Mô tả:</td>
+                                          <td>{selectedProduct.description}</td>
+                                        </tr>
+                                        <tr>
+                                          <td className="field">Hình ảnh:</td>
+                                          <td>
+                                            <div className="flex flex-wrap gap-3 justify-center">
+                                              {selectedProduct.image.map((imageUrl, index) => (
+                                                <img
+                                                  key={index}
+                                                  className="w-1/4 h-1/4"
+                                                  src={imageUrl}
+                                                  alt={`Product ${index + 1}`}
+                                                />
+                                              ))}
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td className="field">Số lượng biến thể:</td>
+                                          <td>
+                                            {selectedProduct.productVariant}
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </Table>
+                                  </div>
+                                </td>
+                              </tr>
+                            </React.Fragment>
+                          )}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </Table>
+              </Row>
+              <Row>
+                <Col>
+                  <Pagination className="pagination">
+                    <Pagination.Prev
+                      onClick={() => handlePageChange(activePage - 1)}
+                      disabled={activePage === 1}
+                    />
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <Pagination.Item
+                        key={i + 1}
+                        active={i + 1 === activePage}
+                        onClick={() => handlePageChange(i + 1)}
+                      >
+                        {i + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      onClick={() => handlePageChange(activePage + 1)}
+                      disabled={activePage === totalPages}
+                    />
+                  </Pagination>
                 </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      {/* <AddCategoryModallyComponent
+        show={showModal}
+        handleClose={handleCloseModal}
+        onAddSuccess={handleAddSuccess}
+        categories={categories}
 
-            </Row>
+      /> */}
 
-            <Container fluid>
-                <Row>
-                    <Sidebar />
-                    <Col xs={9}>
-                        <Row>
-                            <Container fluid>
-                                <Row className="justify-content-center">
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://assets.epicurious.com/photos/63e54a0664e14d52936a2937/1:1/w_2539,h_2539,c_limit/CoffeeSubscriptions_IG_V1_030922_6350_V1_final.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">COFFEE BEAN</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/AE8AB721-ACB5-4E82-845C-75CB6BCFFB96/Derivates/e3b88c15-1aea-4554-b9b0-77514681f359.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">MILK TEA</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2022/7/10/1066729/Dmaw_Kdxoaujopn.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">COFFEE</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Card className="my-3">
-                                            <Card.Img variant="top" src="https://tutrungbaybanhkem.com/wp-content/uploads/2019/09/cafe-banh-ngot.jpg" />
-                                            <Card.Body>
-                                                <Card.Title className="text-center">CAKE</Card.Title>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Row>
 
-                        <Row>
-                            <Col>
-
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    )
+      {/* <UpdateCategoryModal
+        show={showUpdateModal}
+        handleClose={handleCloseUpdateModal}
+        productId={productIdToUpdate}
+        onUpdate={fetchProducts}
+      /> */}
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Bạn có chắc chắn muốn xoá sản phẩm này không?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+            Hủy
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            Xoá
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
-export default Category;
+export default ProductManage;

@@ -6,7 +6,7 @@ export const receiptService = {
   createReceipt: async (data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { managerId, name, date, price, status, description } = data;
+        const {managerId,nameCreate, name, date, price, status, description} = data;
 
         const checkReceiptExists = await Receipt.findOne({ name });
 
@@ -17,17 +17,17 @@ export const receiptService = {
           });
         }
 
-        const createdReceipt = await Receipt.create({ name, date, price, status, description });
+        const createdReceipt = await Receipt.create({ nameCreate,name, date, price, status, description });
         const shop = await Shop.findOne({ managerId });
         if (shop) {
           shop.receiptId.push(createdReceipt._id);
           await shop.save();
         } else {
-          throw new Error("Shop not found with managerID: " + managerId);
+            throw new Error("Shop not found with managerID: " + managerId);
         }
         resolve({
           status: 'OK',
-          message: 'receipt created successfully',
+          message: 'Receipt created successfully',
           data: createdReceipt,
         });
       } catch (err) {
