@@ -5,16 +5,14 @@ export const staffNoteService = {
     try {
       const { managerId, staffId, note, money, type } = data;
 
-      // Create a new staff note
       const createdStaffNote = await StaffNote.create({ managerId, staffId, note, money, type });
       const shop = await Shop.findOne({ managerId });
       if (shop) {
-          // Thêm userId vào array trong shop
-          shop.staffNoteId.push(newUser._id);
-          // Lưu lại thông tin shop
-          await shop.save();
+
+        shop.staffNoteId.push(newUser._id);
+        await shop.save();
       } else {
-          throw new Error("Shop not found with managerId: " + managerId);
+        throw new Error("Shop not found with managerId: " + managerId);
       }
       return {
         status: 'OK',
@@ -85,12 +83,12 @@ export const staffNoteService = {
   getAllStaffNotesInShop: async (shopId) => {
     const shop = await Shop.findById(shopId);
     if (shop) {
-        const staffnotes = await StaffNote.find({ _id: { $in: shop.staffNoteId } });
-        return staffnotes;
+      const staffnotes = await StaffNote.find({ _id: { $in: shop.staffNoteId } });
+      return staffnotes;
     } else {
-        throw new Error("Shop not found with id: " + shopId);
+      throw new Error("Shop not found with id: " + shopId);
     }
-},
+  },
 
   deleteStaffNote: async (staffNoteId) => {
     try {
