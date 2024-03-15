@@ -110,20 +110,20 @@ function ProductManage() {
 
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-      // Lấy userId và shopId từ local storage
-      const userDataString = localStorage.getItem('userData');
-      if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
-      }
-      const userData = JSON.parse(userDataString);
-      const shopId = userData.shopId;
-      const userId = userData.userID;
-        axios.get(`http://localhost:5000/api/v1/category/65d749ea36f223b9f7040014/getAllCategoriesInShop`)
-          .then(response => {
-            setCategories(response.data.data.data);
-          })
-          .catch(error => console.error('Error fetching categories:', error));
-      }, []);
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    axios.get(`http://localhost:5000/api/v1/category/65d749ea36f223b9f7040014/getAllCategoriesInShop`)
+      .then(response => {
+        setCategories(response.data.data.data);
+      })
+      .catch(error => console.error('Error fetching categories:', error));
+  }, []);
 
 
   return (
@@ -146,12 +146,12 @@ function ProductManage() {
               <div className="">
                 <Button
                   variant="primary"
-                  className="add-btn btn-color"
+                  className="add-btn btn-danger"
                   onClick={handleShowModal}
                 >
                   <i className="fa-solid fa-plus"></i> Thêm sản phẩm
                 </Button>
-                <Button variant="primary" className="btn-color">
+                <Button variant="primary" className="btn-secondary">
                   <i className="fa-solid fa-file-export"></i> Biến thể
                 </Button>
               </div>
@@ -175,72 +175,77 @@ function ProductManage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedItems.map((item) => (
-                      <React.Fragment key={item._id}>
-                        <tr>
-                          <td>{item._id}</td>
-                          <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
-                          <td>{item.category.name}</td>
-                          <td>
-                            <Button onClick={() => showDetails(item._id)}>
-                              Xem chi tiết
-                            </Button>
-                          </td>
-                          <td>
-                            <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
-                              <i className="fa-solid fa-pen-to-square"></i> Update
-                            </Button>
-                            <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
-                              <i className="fa-solid fa-trash"></i> Delete
-                            </Button>
-                          </td>
-                        </tr>
-                        {showDetailsTable && selectedProduct &&
-                          selectedProduct._id === item._id && (
-                            <React.Fragment>
-                              <tr>
-                                <td colSpan="12">
-                                  <div className="details-table-container">
-                                    <Table bordered>
-                                      <tbody>
-                                        <tr>
-                                          <td className="field w-2/5">Tên:</td>
-                                          <td>{selectedProduct.name}</td>
-                                        </tr>
-                                        <tr>
-                                          <td className="field">Mô tả:</td>
-                                          <td>{selectedProduct.description}</td>
-                                        </tr>
-                                        <tr>
-                                          <td className="field">Hình ảnh:</td>
-                                          <td>
-                                            <div className="flex flex-wrap gap-3 justify-center">
-                                              {selectedProduct.image.map((imageUrl, index) => (
-                                                <img
-                                                  key={index}
-                                                  className="w-1/4 h-1/4"
-                                                  src={imageUrl}
-                                                  alt={`Product ${index + 1}`}
-                                                />
-                                              ))}
-                                            </div>
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td className="field">Số lượng biến thể:</td>
-                                          <td>
-                                            {selectedProduct.productVariant}
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </Table>
-                                  </div>
-                                </td>
-                              </tr>
-                            </React.Fragment>
-                          )}
-                      </React.Fragment>
-                    ))}
+                    {paginatedItems.length === 0 ? (
+                      <tr>
+                        <td colSpan="5" className="text-center">No data to present!</td>
+                      </tr>
+                    ) : (
+                      paginatedItems.map((item) => (
+                        <React.Fragment key={item._id}>
+                          <tr>
+                            <td>{item._id}</td>
+                            <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
+                            <td>{item.category.name}</td>
+                            <td>
+                              <Button onClick={() => showDetails(item._id)}>
+                                Xem chi tiết
+                              </Button>
+                            </td>
+                            <td>
+                              <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
+                                <i className="fa-solid fa-pen-to-square"></i> Update
+                              </Button>
+                              <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
+                                <i className="fa-solid fa-trash"></i> Delete
+                              </Button>
+                            </td>
+                          </tr>
+                          {showDetailsTable && selectedProduct &&
+                            selectedProduct._id === item._id && (
+                              <React.Fragment>
+                                <tr>
+                                  <td colSpan="12">
+                                    <div className="details-table-container">
+                                      <Table bordered>
+                                        <tbody>
+                                          <tr>
+                                            <td className="field w-2/5">Tên:</td>
+                                            <td>{selectedProduct.name}</td>
+                                          </tr>
+                                          <tr>
+                                            <td className="field">Mô tả:</td>
+                                            <td>{selectedProduct.description}</td>
+                                          </tr>
+                                          <tr>
+                                            <td className="field">Hình ảnh:</td>
+                                            <td>
+                                              <div className="flex flex-wrap gap-3 justify-center">
+                                                {selectedProduct.image.map((imageUrl, index) => (
+                                                  <img
+                                                    key={index}
+                                                    className="w-1/4 h-1/4"
+                                                    src={imageUrl}
+                                                    alt={`Product ${index + 1}`}
+                                                  />
+                                                ))}
+                                              </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td className="field">Số lượng biến thể:</td>
+                                            <td>
+                                              {selectedProduct.productVariant}
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </Table>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </React.Fragment>
+                            )}
+                        </React.Fragment>)
+                      ))}
                   </tbody>
                 </Table>
               </Row>

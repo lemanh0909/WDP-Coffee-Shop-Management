@@ -34,7 +34,7 @@ function Control() {
                 <Link to="#" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thanh Toán Tại Quầy</Link>
                 <Link to="/productmanage" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Quản lý product</Link>
                 <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Cài Đặt</Button>
-                <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Hướng Dẫn</Button>
+                <Link to="/category" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Category</Link>
               </Col>
             </Row>
           </Col>

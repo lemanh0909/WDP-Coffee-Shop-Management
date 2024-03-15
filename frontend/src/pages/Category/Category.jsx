@@ -17,12 +17,12 @@ function ProductManage() {
     usePagination(products, itemsPerPage);
   const [showModal, setShowModal] = useState(false);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
-  const handleShowModal = () => setShowModal(true);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const handleShowModal = () => setShowModal(true);
   const [productIdToDelete, setProductIdToDelete] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [productIdToUpdate, setProductIdToUpdate] = useState(null);
-
+  const [userRole, setUserRole] = useState('');
 
   const handleShowUpdateModal = (productId) => {
     setProductIdToUpdate(productId);
@@ -66,7 +66,6 @@ function ProductManage() {
       });
   };
 
-
   const fetchProducts = () => {
     // Lấy userId và shopId từ local storage
     const userDataString = localStorage.getItem('userData');
@@ -102,29 +101,15 @@ function ProductManage() {
     }
   };
 
-
   useEffect(() => {
     fetchProducts();
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    setUserRole(userData.role);
   }, []);
-
-
-  const [categories, setCategories] = useState([]);
-  useEffect(() => {
-      // Lấy userId và shopId từ local storage
-      const userDataString = localStorage.getItem('userData');
-      if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
-      }
-      const userData = JSON.parse(userDataString);
-      const shopId = userData.shopId;
-      const userId = userData.userID;
-        axios.get(`http://localhost:5000/api/v1/category/65d749ea36f223b9f7040014/getAllCategoriesInShop`)
-          .then(response => {
-            setCategories(response.data.data.data);
-          })
-          .catch(error => console.error('Error fetching categories:', error));
-      }, []);
-
 
   return (
     <>
@@ -144,16 +129,20 @@ function ProductManage() {
             <Col md={4} />
             <Col md={4} className="button-container">
               <div className="">
-                <Button
-                  variant="primary"
-                  className="add-btn btn-color"
-                  onClick={handleShowModal}
-                >
-                  <i className="fa-solid fa-plus"></i> Thêm sản phẩm
-                </Button>
-                <Button variant="primary" className="btn-color">
-                  <i className="fa-solid fa-file-export"></i> Biến thể
-                </Button>
+                {userRole !== 'Staff' && (
+                  <>
+                    <Button
+                      variant="primary"
+                      className="add-btn btn-color"
+                      onClick={handleShowModal}
+                    >
+                      <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                    </Button>
+                    <Button variant="primary" className="btn-color">
+                      <i className="fa-solid fa-file-export"></i> Biến thể
+                    </Button>
+                  </>
+                )}
               </div>
             </Col>
           </Row>
