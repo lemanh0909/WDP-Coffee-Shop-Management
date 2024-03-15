@@ -54,7 +54,9 @@ export const AuthController = {
 
       if (
         errMessage === authConstant.PASSWORD_INVALID ||
-        errMessage === authConstant.EMAIL_NOT_EXIST
+        errMessage === authConstant.EMAIL_NOT_EXIST  ||
+        errMessage === authConstant.MANAGER_ACCOUT_INACTIVE ||
+        errMessage === authConstant.ACCOUT_INACTIVE
       )
         res.status(200).json(
           response.error({

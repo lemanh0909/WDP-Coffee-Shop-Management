@@ -52,7 +52,11 @@ function Login() {
                     localStorage.setItem('userData', JSON.stringify(userData));
 
                     setTimeout(() => {
-                        navigate("/control");
+                        if (userData.role === 'Admin') {
+                            navigate("/adminManagement");
+                        } else {
+                            navigate("/control");
+                        }
                     }, 800);
                 } else {
                     toast.error("Please check your email or password or login permission!!");
@@ -62,6 +66,7 @@ function Login() {
             .catch(error => {
                 console.error('Login error:', error);
             });
+
     };
 
 

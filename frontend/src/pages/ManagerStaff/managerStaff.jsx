@@ -14,12 +14,18 @@ function EmployeeManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
-
-  const itemsPerPage = 5;
-  const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(employeeData, itemsPerPage);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const userDataString = localStorage.getItem('userData');
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      setIsAdmin(userData.role === 'Admin');
+    }
   }, []);
 
   const fetchData = async () => {
@@ -27,7 +33,7 @@ function EmployeeManagement() {
       const userDataString = localStorage.getItem('userData');
 
       if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
+        throw new Error('Insufficient permissions to use this function');
       }
 
       const userData = JSON.parse(userDataString);
@@ -36,7 +42,7 @@ function EmployeeManagement() {
       setEmployeeData(response.data);
     } catch (error) {
       console.error('Error fetching employee data:', error);
-      setError('An error occurred while fetching employee data.');
+      setError('Insufficient permissions to use this function');
     } finally {
       setLoading(false);
     }
@@ -84,12 +90,14 @@ function EmployeeManagement() {
         <ToastContainer position='top-right' />
         <Row className="justify-content-between align-items-center mb-4">
           <Col xs={6}>
-            <h1 className="text-center mb-0 text-white">Manager Staff</h1>
+            <h1 className="text-center mb-0 text-white">Staff login rights</h1>
           </Col>
           <Col xs={6} className="text-right">
-            <Button variant="primary" className="add-btn btn-color" onClick={() => setShowAddModal(true)}>
-              <i className="fa-solid fa-plus"></i> Create account
-            </Button>
+            {isAdmin && (
+              <Button variant="primary" className="add-btn btn-color" onClick={() => setShowAddModal(true)}>
+                <i className="fa-solid fa-plus"></i> Create account
+              </Button>
+            )}
           </Col>
         </Row>
 
@@ -102,15 +110,16 @@ function EmployeeManagement() {
         {!loading && !error && (
           <>
             <EmployeeTable
-              employeeData={getPaginatedItems}
+              employeeData={employeeData}
               toggleStatus={toggleStatus}
             />
 
-            <PaginationBar
-              activePage={activePage}
-              totalPages={totalPages}
-              handlePageChange={handlePageChange}
-            />
+            {isAdmin && (
+              <PaginationBar
+                employeeData={employeeData}
+                toggleStatus={toggleStatus}
+              />
+            )}
 
             <CreateStaffModal
               userId={JSON.parse(localStorage.getItem('userData'))?.userID}

@@ -1,135 +1,246 @@
-
-import { Container, Row, Col, Card, Pagination, Table, Button } from "react-bootstrap";
-import "./viewOrder.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import CommonNavbar from "../Common/navbar.jsx"
-import Sidebar from "../Common/sidebar.jsx"
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
-import { Link } from "react-router-dom";
-
-
-
-
-const orders = [
-  { id: 1, date: '2024-03-13', seller: 'John Doe', total: 100, paidByCustomer: 80, status: 'Completed', paymentMethod: 'Cash' },
-  { id: 2, date: '2024-03-12', seller: 'Jane Smith', total: 150, paidByCustomer: 150, status: 'Pending', paymentMethod: 'Credit Card' },
-
-];
+import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+import CommonNavbar from "../Common/navbar.jsx";
+import CommonSlider from "../Common/sidebar.jsx";
 
 function ViewOrder() {
-  const [activePage, setActivePage] = useState(1);
-  const itemsPerPage = 5;
-  const totalPages = Math.ceil(orders.length / itemsPerPage);
-  const paginatedItems = orders.slice((activePage - 1) * itemsPerPage, activePage * itemsPerPage);
-  const handlePageChange = (pageNumber) => {
-    setActivePage(pageNumber);
-  };
-  useEffect(() => {
-    const checkboxes = document.querySelectorAll(
-      '.filter-section input[type="checkbox"]'
-    );
+  const itemsPerPage = 7;
+  const [orders, setOrders] = useState([]);
+  const [paginatedItems, activePage, totalPages, handlePageChange] =
+    usePagination(orders, itemsPerPage);
+  const [searchOrderId, setSearchOrderId] = useState('');
+  const [searchDate, setSearchDate] = useState('');
+  const [selectedOrder, setSelectedOrder] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState([]);
 
-    checkboxes.forEach((checkbox) => {
-      checkbox.addEventListener("click", function () {
-        if (this.checked) {
-          this.parentElement.classList.add("selected");
-        } else {
-          this.parentElement.classList.remove("selected");
-        }
+  const fetchOrders = () => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+
+    let url = `http://localhost:5000/api/v1/order/${shopId}/getAllOrdersInShop`;
+    axios
+      .get(url)
+      .then((response) => {
+        setOrders(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [searchOrderId, searchDate]); // Trigger fetching when search parameters change
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const year = d.getFullYear().toString().substr(-2);
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes} ${day}/${month}/${year}`;
+  };
+
+  const handleDropdownChange = (orderId, newState) => {
+    axios.put("http://localhost:5000/api/v1/order/changeState", {
+      orderId: orderId,
+      state: newState
+    }).then(response => {
+      console.log("Success");
+      fetchOrders();
+      // Handle success
+      // You might want to update the state here to reflect the changes immediately
+    }).catch(error => {
+      console.error("Error updating order state:", error);
     });
-  }, []);
+  };
+
+  const handleDetailClick = (index) => {
+    const order = paginatedItems[index];
+    setSelectedOrder(order);
+  
+    // Nếu index đã tồn tại trong selectedIndex, loại bỏ nó
+    if (selectedIndex.includes(index)) {
+      const newSelectedIndex = selectedIndex.filter((i) => i !== index);
+      setSelectedIndex(newSelectedIndex);
+    } else {
+      // Nếu index chưa tồn tại trong selectedIndex, thêm vào selectedIndex
+      setSelectedIndex([...selectedIndex, index]);
+    }
+  };
+  
+
 
   return (
     <>
       <CommonNavbar />
-      <Row md={5} className="title">
-        <Col md={4}>
-          <h2>Danh sách đơn hàng</h2>
-        </Col><Col md={4} />
+      <div className="flex">
+        <CommonSlider
+          handlePageChange={handlePageChange}
+          activePage={activePage}
+          totalPages={totalPages}
+          getPaginatedItems={paginatedItems}
+        />
+        <Container className="ml-72 ">
+          <Row className="title mb-0">
+            <Col md={4} className="text-white">
+              <h2>Danh sách đơn hàng</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <Row>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Mã đơn hàng</th>
+                      <th>Ngày bán</th>
+                      <th>Người bán</th>
+                      <th>Tổng sản phẩm</th>
+                      <th>Tổng giá</th>
+                      <th>Hình thức thanh toán</th>
+                      <th>Trạng thái</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginatedItems.map((order, index) => (
+                      <React.Fragment key={order._id}>
+                        <tr key={order.id}>
+                          <td>{index + 1}</td>
+                          <td>{order._id}</td>
+                          <td>{formatDate(order.createdAt)}</td>
+                          <td>{order.userId}</td>
+                          <td>{order.totalProducts}</td>
+                          <td>{order.totalPrice}</td>
+                          <td>{order.paymentMethod}</td>
+                          <td>
+                            <select
+                              className="form-select"
+                              value={order.state}
+                              onChange={(e) => handleDropdownChange(order._id, e.target.value)}
+                            >
+                              <option value="Pending">Pending</option>
+                              <option value="Completed">Completed</option>
+                            </select>
+                          </td>
 
-        <Col md={4} className="button-container">
-          <button type="button" className="btn btn-primary add-btn">
-            <i class="fa-solid fa-plus"></i> Thêm danh mục
-          </button>
-          <button type="button" className="btn btn-primary">
-            <i class="fa-solid fa-file-export"></i>
-            Xuất ra file
-          </button>
-        </Col>
+                          <td>
+                            <Button onClick={() => handleDetailClick(index)}>Xem chi tiết</Button>
+                          </td>
+                        </tr>
+                        {selectedOrder && selectedIndex.includes(index) && (
+                          <tr>
+                            <td colSpan="9">
+                              <div className="details-table-container">
+                                <Table bordered>
+                                  <tbody>
+                                    <tr>
+                                      <td className="field">Mã đơn hàng:</td>
+                                      <td>{selectedOrder._id}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Người bán:</td>
+                                      <td>{selectedOrder.userId}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Ngày bán:</td>
+                                      <td>{formatDate(selectedOrder.createdAt)}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Số lượng sản phẩm:</td>
+                                      <td>{selectedOrder.totalProducts}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Tổng giá:</td>
+                                      <td>{selectedOrder.totalPrice}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Khách trả:</td>
+                                      <td>{selectedOrder.customerPay}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Trả lại:</td>
+                                      <td>{selectedOrder.refund}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Sản phẩm:</td>
+                                      <td>
+                                        <Table bordered>
+                                          <thead>
+                                            <tr>
+                                              <th>STT</th>
+                                              <th>Tên sản phẩm</th>
+                                              <th>Kích thước</th>
+                                              <th>Giá</th>
+                                              <th>Số lượng</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {selectedOrder.products.map((product, idx) => (
+                                              <tr key={idx}>
+                                                <td>{idx + 1}</td>
+                                                <td>{product.name}</td>
+                                                <td>{product.size}</td>
+                                                <td>{product.price}</td>
+                                                <td>{product.quantity}</td>
+                                              </tr>
+                                            ))}
+                                          </tbody>
+                                        </Table>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </Table>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
 
-      </Row>
-
-      <Container fluid>
-        
-
-        <Row className="justify-content-md-center align-items-center" style={{ minHeight: '100vh' }}>
-          <Sidebar />
-          <Col xs={10}>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Mã đơn hàng</th>
-                  <th>Ngày bán</th>
-                  <th>Người bán</th>
-                  <th>Tổng giá</th>
-                  <th>Khách trả</th>
-                  <th>Trạng thái</th>
-                  <th>Hình thức thanh toán</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedItems.map((order, index) => (
-                  <tr key={order.id}>
-                    <td>{index + 1}</td>
-                    <td>{order.id}</td>
-                    <td>{order.date}</td>
-                    <td>{order.seller}</td>
-                    <td>{order.total}</td>
-                    <td>{order.paidByCustomer}</td>
-                    <td>{order.status}</td>
-                    <td>{order.paymentMethod}</td>
-                    <td>
-                      <Link to={`/view-order/${order.id}`} className="btn btn-primary btn-sm">Xem chi tiết</Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-
-            <Row className="pagination-row">
-              <Col>
-                <Pagination className="pagination">
-                  <Pagination.Prev
-                    onClick={() => handlePageChange(activePage - 1)}
-                    disabled={activePage === 1}
-                  />
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <Pagination.Item
-                      key={i + 1}
-                      active={i + 1 === activePage}
-                      onClick={() => handlePageChange(i + 1)}
-                    >
-                      {i + 1}
-                    </Pagination.Item>
-                  ))}
-                  <Pagination.Next
-                    onClick={() => handlePageChange(activePage + 1)}
-                    disabled={activePage === totalPages}
-                  />
-                </Pagination>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-
-
+                </Table>
+              </Row>
+              <Row>
+                <Col>
+                  <Pagination className="pagination">
+                    <Pagination.Prev
+                      onClick={() => handlePageChange(activePage - 1)}
+                      disabled={activePage === 1}
+                    />
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <Pagination.Item
+                        key={i + 1}
+                        active={i + 1 === activePage}
+                        onClick={() => handlePageChange(i + 1)}
+                      >
+                        {i + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      onClick={() => handlePageChange(activePage + 1)}
+                      disabled={activePage === totalPages}
+                    />
+                  </Pagination>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      </div>
     </>
-  )
+  );
 }
 
 export default ViewOrder;

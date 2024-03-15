@@ -10,6 +10,7 @@ import Control from './pages/Control/Control.jsx';
 import Sidebar from './pages/Common/sidebar.jsx';
 import Navbar from './pages/Common/navbar.jsx';
 import Thuchi from './pages/PhieuThuChi/PhieuThuChi.jsx';
+import AdminManagement from './pages/ManagerStaff/manageAdmin.jsx'
 
 import ExportImportNOte from './pages/ExportImportnote/exportimportnote.jsx';
 
@@ -33,13 +34,12 @@ function App() {
           <Route path="/Sidebar" element={< Sidebar />} />
           <Route path="/navbar" element={< Navbar />} />
           <Route path="/Thuchi" element={< Thuchi />} />
-
+          <Route path="/AdminManagement" element={<AdminManagement />} />
           <Route path="/exportimportnote" element={< ExportImportNOte />} />
-
-          <Route path="/view-order" element={<ViewOrder/>}/>
-          <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail/>}/>
-          <Route path="/upImg" element={<UploadImage/>}/>
-          <Route path="/profile" element={<UserProfile/>}/>
+          <Route path="/view-order" element={<ViewOrder />} />
+          <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail />} />
+          <Route path="/upImg" element={<UploadImage />} />
+          <Route path="/profile" element={<UserProfile />} />
 
         </Routes>
       </div>

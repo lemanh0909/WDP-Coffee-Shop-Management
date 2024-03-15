@@ -5,7 +5,7 @@ import { ArrowLeft } from 'react-bootstrap-icons';
 
 // Import các thư viện và biểu tượng cần thiết
 
-const OrderSummary = ({handleGoBack, totalQuantity, calculateTotalPrice, paymentMethod, setPaymentMethod, customerPayment, refundAmount, handlePaymentChange, handleConfirmOrder, orderErrorVisible, creatOrderError }) => {
+const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymentMethod, setPaymentMethod, customerPayment, refundAmount, handlePaymentChange, handleConfirmOrder, orderErrorVisible, creatOrderError }) => {
   return (
     <Card className='w-1/2'>
       <Button variant="link" onClick={handleGoBack}>
@@ -40,13 +40,14 @@ const OrderSummary = ({handleGoBack, totalQuantity, calculateTotalPrice, payment
             <td colSpan="3">Customer Pay:</td>
             <td colSpan="2">
               <input
-                className='text-center'
-                type="text"
+                className='text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [appearance:textfield]'
+                type="number"
                 value={customerPayment}
                 onChange={handlePaymentChange}
                 inputMode="numeric"
                 pattern="[0-9]*"
-              /></td>
+              />
+            </td>
           </tr>
           <tr>
             <td colSpan="3">Trả lại:</td>
