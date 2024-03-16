@@ -26,6 +26,31 @@ export const CategoryController = {
     }
   },
 
+  updateCategoryBasis: async (req, res) => {
+    try {
+      const categoryId = req.params._id;
+      const data = req.body;
+
+      if (!categoryId) {
+        return res.status(400).json({
+          error: 'Invalid categoryId provided',
+        });
+      }
+
+      const updateCategoryBasis = await categoryService.updateCategoryBasis(categoryId, data);
+
+      res.status(201).json({
+        message: 'Success',
+        data: updateCategoryBasis,
+      });
+    } catch (error) {
+      console.error('Error:', error.message);
+      res.status(500).json({
+        error: error.message,
+      });
+    }
+  },
+
   updateCategory: async (req, res) => {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
