@@ -1,117 +1,120 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import axios from 'axios';
+import axios from "axios";
 
-function AddCategoryModal({ categories, show, handleClose, onAddSuccess }) {
-    const [manager, setManager] = useState("")
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [images, setImages] = useState([]);
+const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
+    const [formData, setFormData] = useState({
+        managerId: userId,
+        name: "",
+        description: "",
+        products: [""],
+        
+    });
 
-
-    const handleSave = async () => {
+    const handleChange = async (e) => {
+        e.persist();
         try {
-            if(name ==="" || !name){
-                return console.log("Name cannot be empty!");
-            }
-            const categoryUrls = [];
-            for (let i = 0; i < images.length; i++) {
-                const formData = new FormData();
-                formData.append("file", images[i]);
-                formData.append("upload_preset", "c1xbmqbk");
-                const response = await axios.post("https://api.cloudinary.com/v1_1/dvusaqmma/image/upload", formData);
-                categoryUrls.push(response.data.url);
-            }
-    
-            // Xây dựng dữ liệu sản phẩm
-            const categoryData = {
-                managerId: manager,
-                name: name,
-                description: description,
-                image: categoryUrls, // Sử dụng mảng các URL ảnh tải lên từ Cloudinary
-            };
-            // Gọi API tạo sản phẩm
-            const updateCategoryResponse = await axios.post("http://localhost:5000/api/v1/category/create", categoryData);
-    
-            // Xử lý kết quả từ việc tạo sản phẩm
-            console.log("Created category:", updateCategoryResponse.data);
-            setName(null);
-            setDescription(null);
-            setImages([]);            
-            onAddSuccess();
+            const { name, value } = e.target;
+
+            
+
+            setFormData((prevData) => ({ ...prevData, [name]: value }));
         } catch (error) {
-            console.error('Error uploading file:', error);
+            console.error("Error handling change:", error);
         }
-    
-        handleClose();
-    };
-    
-
-
-    const handleRemoveImage = (indexToRemove) => {
-        setImages(images.filter((_, index) => index !== indexToRemove));
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
+       
+
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/api/v1/category/create",
+                formData
+            );
+
+            if (response.data.isSuccess) {
+                onHide();
+                handleAddCategory(response.data.data);
+                setFormData({
+                    managerId: userId,
+                    name: "",
+                    description: "",
+                    products: [""],
+                });
+            } else {
+                console.error("Error:", response.data.message);
+            }
+        } catch (error) {
+            console.error("Unexpected error:", error);
+        }
+    };
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={onHide} animation={false}>
             <Modal.Header closeButton>
                 <Modal.Title>Thêm sản phẩm</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
-                   
-                    <Form.Group controlId="name">
-                        <Form.Label>Name</Form.Label>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="formName">
+                        <Form.Label>Tên sản phẩm:</Form.Label>
                         <Form.Control
                             type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="description">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="images">
-                        <Form.Label>Images</Form.Label>
-                        <div className="flex flex-wrap">
-                            {images.map((image, index) => (
-                                <div key={index} className="relative mr-2 mb-2 w-24 h-24 overflow-hidden">
-                                    <img className="w-100 h-100 object-cover" src={URL.createObjectURL(image)} alt={`Image ${index + 1}`} />
-                                    <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-white bg-opacity-70 flex items-center justify-center cursor-pointer" onClick={() => handleRemoveImage(index)}>
-                                        <i className="fas fa-times text-red-500"></i>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        <Form.Control
-                            type="file"
-                            multiple
+                            name="name"
+                            value={formData.name}
                             onChange={(e) => {
-                                const selectedFiles = Array.from(e.target.files);
-                                setImages([...images, ...selectedFiles]); // Thêm các tập tin được chọn vào mảng images
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                    setFormData({ ...formData, name: inputValue });
+                                } else {
+                                    alert("Tên sản phẩm chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
                             }}
                         />
                     </Form.Group>
+                    <Form.Group controlId="formDes">
+                        <Form.Label>Mo Ta:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="description"
+                            value={formData.description}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                    setFormData({ ...formData, description: inputValue });
+                                } else {
+                                    alert("Tên sản phẩm chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
+                            }}
+                        />
+                    </Form.Group>
+                   
+                    <Form.Group controlId="formProduct">
+                        <Form.Label>Ma sản phẩm:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="products"
+                            value={formData.products}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                    setFormData({ ...formData, products: inputValue });
+                                } else {
+                                    alert("Tên sản phẩm chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
+                            }}
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Thêm sản phẩm
+                    </Button>
                 </Form>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Hủy
-                </Button>
-                <Button variant="primary" onClick={handleSave}>
-                    Lưu
-                </Button>
-            </Modal.Footer>
         </Modal>
     );
-}
+};
 
 export default AddCategoryModal;
