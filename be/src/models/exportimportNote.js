@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Warehouse from "./warehouse";
 
 const { String, Number, ObjectId, Date } = mongoose.Schema.Types;
 
@@ -6,12 +7,19 @@ const ExportImportNote = mongoose.model(
   "ExportImportNote",
   new mongoose.Schema(
     {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+      warehouse: {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: Warehouse,
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
       },
       userId: {
-        type: String, 
+        type: String,
         required: true,
       },
       quantity: {
@@ -24,16 +32,13 @@ const ExportImportNote = mongoose.model(
       },
       status: {
         type: String,
-        enum: ["Imported", "Exported"], 
-        default: "Imported", 
+        enum: ["Imported", "Exported"],
+        default: "Imported",
       },
       description: {
         type: String,
       },
-      image: {
-        type: String, 
-      },
-     
+
     },
     { timestamps: true }
   )
