@@ -1,81 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 
-const UpdateCategoryModal = ({ show, handleClose, id, onUpdate }) => {
-    const [formData, setFormData] = useState({
+function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide }) {
+    const [updatedData, setUpdatedData] = useState({
         name: "",
         description: "",
-        products: []
+        products: [""],
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    };
-
-    const handleUpdate = () => {
-        axios
-            .put(`http://localhost:5000/api/v1/category/${id}/update`, formData)
-            .then((response) => {
-                onUpdate();
-                handleClose();
-            })
-            .catch((error) => {
-                console.error("Error updating product:", error);
+    useEffect(() => {
+        if (categoryData) {
+            setUpdatedData({
+                name: categoryData.name,
+                description: categoryData.description,
+                products: categoryData.products,
             });
+        }
+    }, [categoryData]);
+
+    const handleUpdate = async () => {
+        try {
+            await axios.put(`http://localhost:5000/api/v1/category/${categoryId}/updateBasis`, updatedData);
+            onUpdateSuccess();
+            console.log(onUpdateSuccess())
+            onHide();
+        } catch (error) {
+            console.error('Error updating category data:', error);
+        }
     };
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={true} onHide={onHide}>
             <Modal.Header closeButton>
-                <Modal.Title>Cập Nhật Thể loại</Modal.Title>
+                <Modal.Title>Update Category</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group controlId="formName">
-                        <Form.Label>Tên thể loại</Form.Label>
+                        <Form.Label>Name</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Nhập tên thể loại"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
+                            placeholder="Enter name"
+                            value={updatedData.name}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                    setUpdatedData({ ...updatedData, name: inputValue });
+                                } else {
+                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
+                            }}
                         />
                     </Form.Group>
-                    <Form.Group controlId="formDescription">
-                        <Form.Label>Mô tả</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            placeholder="Nhập mô tả"
-                            name="description"
-                            value={formData.description}
-                            onChange={handleChange}
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="formName">
-                        <Form.Label>Tên sản phẩm</Form.Label>
+                    <Form.Group controlId="formDes">
+                        <Form.Label>Mo ta</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Nhập tên sản phẩm"
-                            name="name"
-                            value={formData.products.name}
-                            onChange={handleChange}
+                            placeholder="Enter mo ta"
+                            value={updatedData.description}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                    setUpdatedData({ ...updatedData, description: inputValue });
+                                } else {
+                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
+                            }}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="formProducts">
+                        <Form.Label>Ma san pham</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter ma san pham"
+                            value={updatedData.products}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                    setUpdatedData({ ...updatedData, products: inputValue });
+                                } else {
+                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                }
+                            }}
                         />
                     </Form.Group>
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Đóng
+                <Button variant="secondary" onClick={onHide}>
+                    Close
                 </Button>
                 <Button variant="primary" onClick={handleUpdate}>
-                    Cập Nhật
+                    Update
                 </Button>
             </Modal.Footer>
         </Modal>
     );
-};
+}
 
 export default UpdateCategoryModal;

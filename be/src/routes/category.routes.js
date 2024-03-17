@@ -18,6 +18,7 @@ categoryRouter.get('/getAll', CategoryController.getAllCategories);
 categoryRouter.get('/:id/getDetail', CategoryController.getCategoryDetail);
 // categoryRouter.get('/:shopId/getAllCategoriesInShop', CategoryController.getAllCategoriesInShop);
 categoryRouter.put('/:id/update', CategoryController.updateCategory);
+categoryRouter.put('/:_id/updateBasis', CategoryController.updateCategoryBasis);
 categoryRouter.post('/create', CategoryController.createCategory);
 categoryRouter.delete('/delete', CategoryController.deleteCategory);
 categoryRouter.get('/:managerId/getAllCategoriesInShop', CategoryController.getAllCategoriesInShop);

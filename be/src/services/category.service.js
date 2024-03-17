@@ -61,6 +61,25 @@ export const categoryService = {
     });
   },
 
+  updateCategoryBasis: async (id, { name, description, products }) => {
+    try {
+        const category = await Category.findById(id);
+
+        if (!category) {
+            throw new Error(`category not found with id: ${id}`);
+        }
+
+        category.name = name !== undefined ? name : category.name;
+        category.description = description !== undefined ? description : category.description;
+        category.products = products !== undefined ? products : category.products;
+
+        await category.save();
+        return category;
+    } catch (error) {
+        throw new Error(`Error updating category basis: ${error.message}`);
+    }
+},
+
   getCategoryDetail: async (categoryId) => {
     return new Promise(async (resolve, reject) => {
       try {

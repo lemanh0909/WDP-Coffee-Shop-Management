@@ -7,6 +7,8 @@ import CommonSlider from "../Common/sidebar.jsx";
 import AddThuModal from "./addPhieuThu.jsx";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 function PhieuThuChi() {
   const itemsPerPage = 7;
@@ -45,6 +47,17 @@ function PhieuThuChi() {
     fetchProducts();
   }, []);
 
+  const exportToCSV = (csvData, fileName) => {
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
+
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+  };
+
   return (
     <>
       <CommonNavbar />
@@ -65,6 +78,7 @@ function PhieuThuChi() {
               <Button variant="primary" onClick={handleShowAddThuModal}>
                 <i className="far fa-plus-square"></i> Thêm phiếu
               </Button>
+              <Button variant="warning" onClick={() => exportToCSV(products, "phieu_thu_chi")}>Export</Button>
             </Col>
           </Row>
           <Row className="mb-3">

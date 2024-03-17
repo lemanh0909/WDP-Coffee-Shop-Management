@@ -1,64 +1,129 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Pagination, Button, Modal } from "react-bootstrap";
-import "./Category.css";
+import axios from "axios";
+import { Container, Row, Col, Table, Pagination, Button,Modal } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
-import "bootstrap/dist/css/bootstrap.min.css";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSlider from "../Common/sidebar.jsx";
 import AddCategoryModal from "./addCategory.jsx";
 import UpdateCategoryModal from "./updateCategory.jsx";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Category() {
-  const itemsPerPage = 7;
-  const [category, setCategory] = useState([]);
-  const [paginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(category, itemsPerPage);
-  const [showModal, setShowModal] = useState(false);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [items, setItems] = useState([]);
+  const [error, setError] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [categoryIdToDelete, setCategoryIdToDelete] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [categoryIdToUpdate, setCategoryIdToUpdate] = useState(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  // Fake data for demonstration
-  const fakeData = [
-    { categoryId: 1, name: "Category 1", description: "Description 1", products: { name: "Product 1" } },
-    { categoryId: 2, name: "Category 2", description: "Description 2", products: { name: "Product 2" } },
-    { categoryId: 3, name: "Category 3", description: "Description 3", products: { name: "Product 3" } },
-    // Add more fake data as needed
-  ];
-
+  const [showModal, setShowModal] = useState(false);
+  const [showDetailsTable, setShowDetailsTable] = useState(false);
+  const [productDetails, setProductDetails] = useState(null); 
+  const handleShowModal = () => setShowModal(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+ 
+  const itemsPerPage = 6;
+  const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(items, itemsPerPage);
+ 
   useEffect(() => {
-    setCategory(fakeData); // Set fake data when component mounts
+    fetchData();
   }, []);
 
-  const handleShowModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+  const fetchData = async () => {
+    try {
+      const userDataString = localStorage.getItem('userData');
 
-  const handleShowUpdateModal = (categoryId) => {
-    setCategoryIdToUpdate(categoryId);
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+
+      const userData = JSON.parse(userDataString);
+      const response = await axios.get(`http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`);
+      setItems(response.data.data.data);
+
+     
+    } catch (error) {
+      console.error('Error fetching category data:', error);
+      setError('An error occurred while fetching category data.');
+    } finally {
+      console.log('category data fetching completed.');
+    }
+  };
+
+  
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const showDetails = (productId) => {
+    
+    if (selectedProduct && selectedProduct._id === productId) {
+      setShowDetailsTable(!showDetailsTable);
+    } else {
+      axios
+        .get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
+        .then((response) => {
+          setSelectedProduct(response.data.data);
+          console.log(response.data.data)
+          setShowDetailsTable(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching product details:", error);
+        });
+    }
+  };
+  
+  const handleDelete = () => {
+    axios
+      .delete("http://localhost:5000/api/v1/category/delete", {
+        data: { categoryId: categoryIdToDelete },
+      })
+      .then((response) => {
+        console.log("category deleted successfully");
+        fetchData();
+        setShowConfirmationModal(false);
+      })
+      .catch((error) => {
+        console.error("Error deleting product:", error);
+      });
+  };
+  
+
+  const handleUpdateCategory = (categoryId) => {
+    const selected = items.find(item => item._id === categoryId);
+    setSelectedCategoryId(categoryId);
+    setSelectedCategory(selected);
     setShowUpdateModal(true);
   };
 
-  const handleCloseUpdateModal = () => {
-    setShowUpdateModal(false);
-    setCategoryIdToUpdate(null);
+  const handleAddCategory = () => {
+    toast.success('Thêm the loai thành công!');
+    fetchData();
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setShowDetailsTable(false);
+  };
+
+  
   const handleShowConfirmationModal = (categoryId) => {
     setShowConfirmationModal(true);
     setCategoryIdToDelete(categoryId);
   };
-
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
     setCategoryIdToDelete(null);
   };
 
-  const handleDelete = () => {
-    // Handle delete logic here
-    console.log("Deleting category with ID:", categoryIdToDelete);
-    setShowConfirmationModal(false);
+  const handleUpdateSuccess = () => {
+    fetchData();
+    setShowUpdateModal(false);
+    toast.success('Cập nhật the loai thành công!');
   };
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <>
@@ -70,78 +135,155 @@ function Category() {
           totalPages={totalPages}
         />
         <Container className="ml-72">
+          <ToastContainer position='top-right' />
           <Row className="title mb-0">
-            <Col md={4} className="text-white">
-              <h2>Quản lý danh mục</h2>
+            <Col md={4} className="text-white" >
+              <h2>Quản lý the loai</h2>
             </Col>
             <Col md={4} />
             <Col md={4} className="button-container">
-              <div className="">
-                <Button
-                  variant="primary"
-                  className="add-btn btn-color"
-                  onClick={handleShowModal}
-                >
-                  <i className="fa-solid fa-plus"></i> Thêm danh mục
-                </Button>
-                <Button variant="primary" className="btn-color">
-                  <i className="fa-solid fa-file-export"></i> Biến thể
-                </Button>
-              </div>
+              <button type="button" className="btn btn-danger btn-color" style={{ marginRight: "10px" }} onClick={() => setShowAddModal(true)}>
+                <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+              </button>
+              <button type="button" className="btn btn-primary btn-color">
+                <i className="fa-solid fa-file-export"></i>
+                Xuất ra file
+              </button>
             </Col>
           </Row>
           <Row>
-            <Col xs={12}>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Category ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Products</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {paginatedItems.map((item) => (
-                    <tr key={item.categoryId}>
-                      <td>{item.categoryId}</td>
-                      <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
-                      <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.description}</td>
-                      <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.products.name}</td>
-                      <td>
-                        <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item.categoryId)}>
-                          <i className="fa-solid fa-pen-to-square"></i> Sửa
-                        </Button>
-                        <Button variant="danger" onClick={() => handleShowConfirmationModal(item.categoryId)}>
-                          <i className="fa-solid fa-trash"></i> Xóa
-                        </Button>
-                      </td>
+            <Col>
+              <Row>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Mã Category</th>
+                      <th>Tên the loai</th>
+                      <th>Mo ta</th>
+                      <th>Products</th>
+                      <th>Ngày tạo</th>
+                      <th>Thao tác</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <Pagination className="pagination">
-                {/* Pagination controls */}
-              </Pagination>
+                  </thead>
+                  <tbody>
+                    {getPaginatedItems.length === 0 ? (
+                      <tr>
+                        <td colSpan="7" className="text-center">No data to present!</td>
+                      </tr>
+                    ) : (
+                      getPaginatedItems.map((item) => (
+                        <React.Fragment key={item._id}>
+                        <tr>
+                          <td>{item._id}</td>
+                          <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
+                          <td>{item.description}</td>
+                          <td>
+                            <Button onClick={() => showDetails(item.products)}>
+                              Xem chi tiết
+                            </Button>
+                          </td>
+                          <td>{item.createdAt}</td>
+
+                          <td>
+                            <Button
+                              variant="primary"
+                              className="edit-btn"
+                              onClick={() => handleUpdateCategory(item._id)}
+                            >
+                              <i className="fa-solid fa-pen-to-square"></i>Update
+                            </Button>
+                            <button type="button" className="btn btn-danger" onClick={() => handleShowConfirmationModal(item.products)}>
+                              <i className="fa-solid fa-trash" 
+                              
+                              ></i>Delete
+                            </button>
+                          </td>
+
+                        </tr>
+                        {showDetailsTable && selectedProduct &&
+                          selectedProduct._id === item.products && (
+                            <React.Fragment key={item._id}>
+                        {/* Your existing table rows */}
+                        {showDetailsTable && selectedProduct && selectedProduct._id === item.products && (
+                          <tr>
+                            <td colSpan="6">
+                              <div className="details-table-container">
+                                <Table bordered>
+                                  <tbody>
+                                    <tr>
+                                      <td className="field w-2/5">Name:</td>
+                                      <td>{selectedProduct.name}</td>
+                                    </tr>
+                                    <tr>
+                                      <td className="field">Description:</td>
+                                      <td>{selectedProduct.description}</td>
+                                    </tr>
+                                    {/* Add more rows for displaying other product details */}
+                                  </tbody>
+                                </Table>
+                                <Button onClick={handleCloseModal}>Close</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                          )}
+                      </React.Fragment>
+                         
+                        
+                      ))
+                    )}
+                  </tbody>
+                </Table>
+              </Row>
+              <Row>
+                <Col>
+                  <Pagination>
+                    <Pagination.Prev
+                      onClick={() => handlePageChange(activePage - 1)}
+                      disabled={activePage === 1}
+                    />
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <Pagination.Item
+                        key={i + 1}
+                        active={i + 1 === activePage}
+                        onClick={() => handlePageChange(i + 1)}
+                      >
+                        {i + 1}
+                      </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                      onClick={() => handlePageChange(activePage + 1)}
+                      disabled={activePage === totalPages}
+                    />
+                  </Pagination>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>
       </div>
       <AddCategoryModal
-        show={showModal}
+        userId={JSON.parse(localStorage.getItem('userData'))?.userID}
+        show={showAddModal}
+        onHide={() => setShowAddModal(false)}
         handleClose={handleCloseModal}
+        handleAddCategory={handleAddCategory}
       />
-      <UpdateCategoryModal
-        show={showUpdateModal}
-        handleClose={handleCloseUpdateModal}
-        categoryId={categoryIdToUpdate}
-      />
-      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+      {showUpdateModal && (
+        <UpdateCategoryModal
+          categoryId={selectedCategoryId}
+          categoryData={selectedCategory}
+          onUpdateSuccess={handleUpdateSuccess}
+          onHide={() => setShowUpdateModal(false)}
+        />
+      )}
+
+<Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Xác nhận xoá danh mục</Modal.Title>
+          <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Bạn có chắc chắn muốn xoá danh mục này không?</Modal.Body>
+        <Modal.Body>Bạn có chắc chắn muốn xoá sản phẩm này không?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseConfirmationModal}>
             Hủy
