@@ -17,7 +17,7 @@ export const exportImportNoteService = {
             throw error;
         }
     },
-    createNote: async ({ shopId, warehouseId, name, userId, quantity, price, status, description }) => {
+    createNote: async ({ shopId, warehouseId, userId, quantity, price, status, description }) => {
         try {
             // Tìm cửa hàng dựa trên shopId và bắt đầu một phiên giao dịch
             const shop = await Shop.findById(shopId);

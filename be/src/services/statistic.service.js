@@ -39,7 +39,6 @@ export const statisticService = {
                         productList.push({
                             _id: product._id,
                             name: product.name,
-                            price: product.price,
                             quantity: product.quantity,
                             totalPrice: product.price * product.quantity
                         });
