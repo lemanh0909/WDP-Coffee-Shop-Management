@@ -55,7 +55,7 @@ const CommonNavbar = () => {
                     )}
                     {!isAdmin && (
                         <Nav.Link href="/order">
-                            <i class="fa-solid fa-store"></i> Order
+                            <i className="fa-solid fa-store"></i> Order
                         </Nav.Link>
                     )}
                     {!isAdmin && (

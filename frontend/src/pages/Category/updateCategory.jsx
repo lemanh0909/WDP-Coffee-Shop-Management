@@ -38,39 +38,35 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
             <Modal.Body>
                 <Form>
                     <Form.Group controlId="formName">
-                        <Form.Label>Name</Form.Label>
+                        <Form.Label>Tên loại sản phẩm</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter name"
                             value={updatedData.name}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                
                                     setUpdatedData({ ...updatedData, name: inputValue });
-                                } else {
-                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
-                                }
+                                
                             }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formDes">
-                        <Form.Label>Mo ta</Form.Label>
+                        <Form.Label>Mô tả</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter mo ta"
                             value={updatedData.description}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                               
                                     setUpdatedData({ ...updatedData, description: inputValue });
-                                } else {
-                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
-                                }
+                               
                             }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formProducts">
-                        <Form.Label>Ma san pham</Form.Label>
+                        <Form.Label>Mã sản phẩm</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter ma san pham"

@@ -6,6 +6,8 @@ import Warehouse from './pages/WarehouseManage/warehouse.jsx';
 import ProductManage from './pages/ProductManage/productmanage.jsx';
 import Order from './pages/Order/Order.jsx';
 import Category from './pages/Category/Category.jsx';
+import Categorynew from './pages/Category/Categorynew.jsx';
+import AddCategory from './pages/Category/addCategory.jsx';
 import Control from './pages/Control/Control.jsx';
 import Sidebar from './pages/Common/sidebar.jsx';
 import Navbar from './pages/Common/navbar.jsx';
@@ -31,6 +33,8 @@ function App() {
           <Route path="/order" element={< Order />} />
           <Route path="/control" element={< Control />} />
           <Route path="/category" element={< Category />} />
+          <Route path="/categorynew" element={< Categorynew />} />
+          <Route path="/addcategory" element={< AddCategory />} />
           <Route path="/Sidebar" element={< Sidebar />} />
           <Route path="/navbar" element={< Navbar />} />
           <Route path="/Thuchi" element={< Thuchi />} />
