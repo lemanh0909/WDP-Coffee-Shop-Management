@@ -3,11 +3,12 @@ import axios from "axios";
 import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import CommonNavbar from "../Common/navbar.jsx";
-import CommonSlider from "../Common/sidebar.jsx";
+import CommonSidebar from "../Common/sidebar.jsx";
 import AddWarehouseModal from "./addWarehouse.jsx";
 import UpdateWarehouseModal from "./updateWarehouse.jsx";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "../WarehouseManage/warehouse.css"
 
 function Warehouse() {
   const [items, setItems] = useState([]);
@@ -68,31 +69,29 @@ function Warehouse() {
     <>
       <CommonNavbar />
       <div className="flex">
-        <CommonSlider
-          handlePageChange={handlePageChange}
-          activePage={activePage}
-          totalPages={totalPages}
-        />
-        <Container className="ml-72">
-          <ToastContainer position='top-right' />
-          <Row className="title mb-0">
-            <Col md={4} className="text-white" >
-              <h2>Quản lý nhà kho</h2>
-            </Col>
-            <Col md={4} />
-            <Col md={4} className="button-container">
-              <button type="button" className="btn btn-danger btn-color" style={{ marginRight: "10px" }} onClick={() => setShowAddModal(true)}>
-                <i className="fa-solid fa-plus"></i> Thêm sản phẩm
-              </button>
-              <button type="button" className="btn btn-primary btn-color">
-                <i className="fa-solid fa-file-export"></i>
-                Xuất ra file
-              </button>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Row>
+        <Col md={2}>
+          <CommonSidebar />
+        </Col>
+
+        <Col md={10}>
+          <Container>
+            <ToastContainer position='top-right' />
+            <Row className="title" style={{ marginTop: "20px", marginRight: "20px" }}>
+              <Col md={4} className="text-white">
+                <h2>Quản lý nhà kho</h2>
+              </Col>
+              <Col md={8} className="button-container d-flex justify-content-end">
+                <button type="button" className="btn btn-danger btn-color" style={{ marginRight: "10px" }} onClick={() => setShowAddModal(true)}>
+                  <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                </button>
+                <button type="button" className="btn btn-primary btn-color">
+                  <i className="fa-solid fa-file-export"></i>
+                  Xuất ra file
+                </button>
+              </Col>
+            </Row>
+            <Row className="container-table" style={{ marginRight: "20px" }}>
+              <Col>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
@@ -142,33 +141,34 @@ function Warehouse() {
                     )}
                   </tbody>
                 </Table>
-              </Row>
-              <Row>
-                <Col>
-                  <Pagination>
-                    <Pagination.Prev
-                      onClick={() => handlePageChange(activePage - 1)}
-                      disabled={activePage === 1}
-                    />
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <Pagination.Item
-                        key={i + 1}
-                        active={i + 1 === activePage}
-                        onClick={() => handlePageChange(i + 1)}
-                      >
-                        {i + 1}
-                      </Pagination.Item>
-                    ))}
-                    <Pagination.Next
-                      onClick={() => handlePageChange(activePage + 1)}
-                      disabled={activePage === totalPages}
-                    />
-                  </Pagination>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+              </Col>
+            </Row>
+            <Row>
+              <Col className="d-flex justify-content-center">
+                <Pagination>
+                  <Pagination.Prev
+                    onClick={() => handlePageChange(activePage - 1)}
+                    disabled={activePage === 1}
+                  />
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <Pagination.Item
+                      key={i + 1}
+                      active={i + 1 === activePage}
+                      onClick={() => handlePageChange(i + 1)}
+                    >
+                      {i + 1}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next
+                    onClick={() => handlePageChange(activePage + 1)}
+                    disabled={activePage === totalPages}
+                  />
+                </Pagination>
+              </Col>
+            </Row>
+          </Container>
+        </Col>
+
       </div>
       <AddWarehouseModal
         userId={JSON.parse(localStorage.getItem('userData'))?.userID}

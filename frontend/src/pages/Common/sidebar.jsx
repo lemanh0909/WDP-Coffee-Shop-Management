@@ -1,84 +1,75 @@
-import React, { useState } from "react";
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
+import React from "react";
+import { List, ListItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import UserIcon from '@mui/icons-material/AccountCircle';
 import CategoryIcon from '@mui/icons-material/Category';
-import { grey } from '@mui/material/colors';
+import "../Common/sidebar.css"
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(true);
-
-  const toggleSidebar = () => {
-    setOpen(!open);
-  };
-
   return (
-    <Drawer
-      variant="permanent"
-      className={`drawer ${open ? "open" : ""}`}
-      classes={{
-        paper: `paper ${open ? "open" : ""}`
-      }}
-    >
-      <i className="fa-solid fa-filter pt-8"></i>
-
-      <div className={`content ${open ? "open" : ""}`}>
+    <div className="sidebar-container">
+      <div className="logo-container">
+        <UserIcon className="icon-container" alt="company logo" style={{ fontSize: 60, color: 'white' }} />
+      </div>
+      <p className="user-container">User sidebar</p>
+      <div className="flex flex-col">
         <List>
-          <ListItem button>
+          <ListItem button className="list-item" style={{ color: 'white' }}>
             <ListItemIcon>
-              <DashboardIcon style={{ color: grey[500] }} />
+              <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button className="list-item" style={{ color: 'white' }}>
             <ListItemIcon>
-              <ShoppingCartIcon style={{ color: grey[500] }} />
+              <ShoppingCartIcon />
             </ListItemIcon>
             <ListItemText primary="Product" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button className="list-item" style={{ color: 'white' }}>
             <ListItemIcon>
-              <LocationOnIcon style={{ color: grey[500] }} />
+              <LocationOnIcon />
             </ListItemIcon>
             <ListItemText primary="Warehouse" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button className="list-item" style={{ color: 'white' }}>
             <ListItemIcon>
-              <ReceiptIcon style={{ color: grey[500] }} />
+              <ReceiptIcon />
             </ListItemIcon>
             <ListItemText primary="Receipt" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button className="list-item" style={{ color: 'white' }}>
             <ListItemIcon>
-              <AssignmentIcon style={{ color: grey[500] }} />
+              <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Order" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button className="list-item" style={{ color: 'white' }}>
             <ListItemIcon>
-              <SupervisorAccountIcon style={{ color: grey[500] }} />
+              <SupervisorAccountIcon />
             </ListItemIcon>
             <ListItemText primary="Employee" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button className="list-item" style={{ color: 'white' }}>
             <ListItemIcon>
-              <CategoryIcon style={{ color: grey[500] }} />
+              <CategoryIcon />
             </ListItemIcon>
             <ListItemText primary="Category" />
           </ListItem>
         </List>
       </div>
-    </Drawer>
+    </div>
   );
 };
 

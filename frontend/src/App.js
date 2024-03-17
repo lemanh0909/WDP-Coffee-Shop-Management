@@ -11,6 +11,8 @@ import Sidebar from './pages/Common/sidebar.jsx';
 import Navbar from './pages/Common/navbar.jsx';
 import Thuchi from './pages/PhieuThuChi/PhieuThuChi.jsx';
 import AdminManagement from './pages/ManagerStaff/manageAdmin.jsx'
+import Tables from "./pages/Common/table.jsx"
+
 
 import ExportImportNOte from './pages/ExportImportnote/exportimportnote.jsx';
 
@@ -40,6 +42,7 @@ function App() {
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail />} />
           <Route path="/upImg" element={<UploadImage />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path="/table" element={<Tables />} />
 
         </Routes>
       </div>
