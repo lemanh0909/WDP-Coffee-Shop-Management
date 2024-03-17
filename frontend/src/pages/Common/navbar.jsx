@@ -1,82 +1,129 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
-import "./navbar.css";
+import { AppBar, Toolbar, Typography, IconButton, Button, Menu, MenuItem, Box } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import DescriptionIcon from '@mui/icons-material/Description';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import logoImage from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
+import "./navbar.css";
 
 const CommonNavbar = () => {
     const navigate = useNavigate();
-    const [isLoggedIn, setLoggedIn] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [isStaff, setIsStaff] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+    const isMobile = window.innerWidth <= 768;
 
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if (userData) {
-            if (userData.role === 'Admin') {
-                setIsAdmin(true);
-            } else if (userData.role === 'Staff') {
-                setIsStaff(true);
-            }
-        }
+        const handleResize = () => {
+            setAnchorEl(null);
+            setAnchorElUser(null);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleUserMenuClick = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
-        setLoggedIn(false);
         navigate("/");
     };
 
+    const navigateToProfile = () => {
+        navigate("/path-to-profile");
+    };
+
     return (
-        <Navbar expand="lg" className="custom-navbar">
-            <Container>
-                <Navbar.Brand href="#home" className="custom-brand col-3 ">
-                    <img src={logoImage} alt="Logo" className="navbar-logo img-fluid " />
-                </Navbar.Brand>
-                <div className="col-3"></div>
-                <Nav className="mr-auto font-semibold">
-                    {!isAdmin && (
-                        <Nav.Link href="/control">Tổng quan</Nav.Link>
+        <AppBar position="static">
+            <Toolbar className="toolbar">
+                <Typography variant="h6" component="div">
+                    <img src={logoImage} alt="Logo" className="logo" />
+                </Typography>
+
+                <Box className="menu-container">
+                    {isMobile ? (
+                        <IconButton size="large" edge="end" color="inherit" aria-label="menu" onClick={handleMenuClick}>
+                            <MenuIcon />
+                        </IconButton>
+                    ) : (
+                        <>
+                            <Button
+                                color="inherit"
+                                aria-haspopup="true"
+                                endIcon={<ExpandMoreIcon />}
+                                onClick={handleMenuClick}
+                                className="menu-button"
+                            >
+                                <DescriptionIcon />
+                                Docs
+                            </Button>
+                            <Button color="inherit" href="https://github.com/lemanh0909/WDP-Coffee-Shop-Management.git" target="_blank" className="menu-button">
+                                <GitHubIcon />
+                                Github
+                            </Button>
+                            <Button color="inherit" href="https://trello.com/b/4vx9Loyf/se1634nj-wdp301-team-2" target="_blank" className="menu-button">
+                                <AssignmentIcon />
+                                Trello
+                            </Button>
+                        </>
                     )}
-                    {!isAdmin && !isStaff && (
-                        <Nav.Link href="/employee-management">
-                            <i className="fa-solid fa-users"></i> Nhân viên
-                        </Nav.Link>
-                    )}
-                    {!isAdmin && (
-                        <Nav.Link href="/warehouse">
-                            <i className="fa-solid fa-box-archive"></i> Hàng Hóa
-                        </Nav.Link>
-                    )}
-                    {!isAdmin && (
-                        <Nav.Link href="#store-list">
-                            <i className="fa-solid fa-store"></i> Danh sách cửa hàng
-                        </Nav.Link>
-                    )}
-                    {!isAdmin && (
-                        <Nav.Link href="/order">
-                            <i class="fa-solid fa-store"></i> Order
-                        </Nav.Link>
-                    )}
-                    {!isAdmin && (
-                        <Nav.Link href="#transactions">
-                            <i className="fa-solid fa-money-bill-transfer"></i> Giao dịch
-                        </Nav.Link>
-                    )}
-                    {!isAdmin && (
-                        <Nav.Link href="/profile">
-                            <i className="fa-solid fa-money-bill-transfer"></i> Profile
-                        </Nav.Link>
-                    )}
-                    {isLoggedIn && (
-                        <Nav className="ml-auto">
-                            <Nav.Link onClick={handleLogout}>Đăng xuất</Nav.Link>
-                        </Nav>
-                    )}
-                </Nav>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            </Container>
-        </Navbar>
+                    <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleCloseMenu}
+                        className="menu"
+                    >
+                        <MenuItem href="https://docs.google.com/document/d/1f1Px-0mp5XsJo2jzmWJLLiWxDRmUZV6A/edit" target="_blank" onClick={handleCloseMenu}>
+                            <DescriptionIcon />
+                            Docs
+                        </MenuItem>
+                        <MenuItem href="https://github.com/lemanh0909/WDP-Coffee-Shop-Management.git" target="_blank" onClick={handleCloseMenu}>
+                            <GitHubIcon />
+                            Github
+                        </MenuItem>
+                        <MenuItem href="https://trello.com/b/4vx9Loyf/se1634nj-wdp301-team-2" target="_blank" onClick={handleCloseMenu}>
+                            <AssignmentIcon />
+                            Trello
+                        </MenuItem>
+                    </Menu>
+                </Box>
+
+                <Box>
+                    <IconButton color="inherit" onClick={handleUserMenuClick} className="navbar-user-button">
+                        <AccountCircleIcon />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorElUser}
+                        open={Boolean(anchorElUser)}
+                        onClose={handleCloseUserMenu}
+                        className="user-menu"
+                    >
+                        <MenuItem>
+                            {localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).fullName : 'My Profile'}
+                        </MenuItem>
+                        <MenuItem onClick={navigateToProfile}>My Profile</MenuItem>
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Menu>
+                </Box>
+            </Toolbar>
+        </AppBar>
     );
 };
 
