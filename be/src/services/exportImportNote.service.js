@@ -4,7 +4,7 @@ import ExportImportNote from "../models/exportimportNote.js";
 
 
 export const exportImportNoteService = {
-    getNoteFromShop: async ({ shopId, startDate, endDate }) => {
+    getNoteFromShop: async (shopId) => {
         try {
             const shop = await Shop.findById(shopId);
             if (!shop) throw new Error(`Shop not found Id ${shopId}`);
