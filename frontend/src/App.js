@@ -19,6 +19,7 @@ import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
 import UploadImage from './pages/ImgUp/UploadImage.jsx';
 import UserProfile from './pages/UserProfile/UserProfile.jsx';
 
+
 function App() {
   return (
     <Router>
@@ -40,6 +41,7 @@ function App() {
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail />} />
           <Route path="/upImg" element={<UploadImage />} />
           <Route path="/profile" element={<UserProfile />} />
+
 
         </Routes>
       </div>
