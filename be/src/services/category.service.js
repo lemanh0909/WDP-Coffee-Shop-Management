@@ -1,10 +1,12 @@
 import Category from '../models/category.js';
 import Shop from '../models/shop.js';
+import Product from '../models/product.js';
+
 export const categoryService = {
   createCategory: async (data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const {managerId, name, description, products } = data;
+        const { managerId, name, description, products } = data;
 
         const checkCategoryExists = await Category.findOne({ name });
 
@@ -18,12 +20,12 @@ export const categoryService = {
         const createdCategory = await Category.create({ name, description, products });
         const shop = await Shop.findOne({ managerId });
         if (shop) {
-            // Thêm userId vào array trong shop
-            shop.categoryId.push(createdCategory._id);
-            // Lưu lại thông tin shop
-            await shop.save();
+          // Thêm userId vào array trong shop
+          shop.categoryId.push(createdCategory._id);
+          // Lưu lại thông tin shop
+          await shop.save();
         } else {
-            throw new Error("Shop not found with managerId: " + managerId);
+          throw new Error("Shop not found with managerId: " + managerId);
         }
         resolve({
           status: 'OK',
@@ -63,22 +65,22 @@ export const categoryService = {
 
   updateCategoryBasis: async (id, { name, description, products }) => {
     try {
-        const category = await Category.findById(id);
+      const category = await Category.findById(id);
 
-        if (!category) {
-            throw new Error(`category not found with id: ${id}`);
-        }
+      if (!category) {
+        throw new Error(`category not found with id: ${id}`);
+      }
 
-        category.name = name !== undefined ? name : category.name;
-        category.description = description !== undefined ? description : category.description;
-        category.products = products !== undefined ? products : category.products;
+      category.name = name !== undefined ? name : category.name;
+      category.description = description !== undefined ? description : category.description;
+      category.products = products !== undefined ? products : category.products;
 
-        await category.save();
-        return category;
+      await category.save();
+      return category;
     } catch (error) {
-        throw new Error(`Error updating category basis: ${error.message}`);
+      throw new Error(`Error updating category basis: ${error.message}`);
     }
-},
+  },
 
   getCategoryDetail: async (categoryId) => {
     return new Promise(async (resolve, reject) => {
@@ -124,13 +126,13 @@ export const categoryService = {
       // Tìm kiếm cửa hàng dựa trên managerId
       const shop = await Shop.findOne({ managerId: managerId }).populate('categoryId')
       // Kiểm tra nếu không tìm thấy cửa hàng
-      if (shop==null) {
-        throw new Error('Shop not found with managerId:'+managerId);
+      if (shop == null) {
+        throw new Error('Shop not found with managerId:' + managerId);
       }
-  
+
       // Lấy ra tất cả các danh mục liên kết với cửa hàng
       const categories = shop.categoryId;
-  
+
       // Trả về kết quả thành công
       return {
         status: 'OK',
@@ -147,15 +149,30 @@ export const categoryService = {
   deleteCategory: async (categoryId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const category = await Category.findByIdAndDelete(categoryId);
-
+        const category = await Category.findById(categoryId);
         if (!category) {
-          resolve({
-            status: 'ERR',
-            message: 'Category not found',
-          });
+            resolve({
+                status: 'ERR',
+                message: 'Category not found',
+            });
+            return;
         }
 
+        const products = category.products;
+
+        await Product.deleteMany({ _id: { $in: products } });
+
+        await Category.findByIdAndDelete(categoryId);
+
+        const shop = await Shop.find({ categoryId: categoryId });
+
+        shop.forEach(async (s) => {
+          const index = s.categoryId.indexOf(categoryId);
+          if (index !== -1) {
+            s.categoryId.splice(index, 1);
+            await s.save();
+          }
+        });
         resolve({
           status: 'OK',
           message: 'Category deleted successfully',
