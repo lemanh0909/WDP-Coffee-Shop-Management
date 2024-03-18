@@ -88,12 +88,7 @@ function Login() {
             setNameError('');
         }
 
-        if (!validateEmail(email)) {
-            setEmailError('Invalid email address');
-            return;
-        } else {
-            setEmailError('')
-        }
+       
 
         const data = {
             fullName: fullName,
@@ -106,9 +101,10 @@ function Login() {
 
         axios.post('http://localhost:5000/api/v1/auth/register', data)
             .then(response => {
+                console.log(response)
                 if (response.data.isSuccess === true) {
                     console.log('Successful registration:', response);
-                    toast.success("Register Successfully!");
+                    toast.success("Check email verify");
                 } else {
                     console.log('Register failed', response);
                     if (response.data.message === "Email is already exist") {

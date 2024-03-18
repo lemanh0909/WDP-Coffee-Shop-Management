@@ -16,25 +16,32 @@ export const AuthController = {
   register: async (req, res) => {
     const error = validation.validationRequest(req, res);
 
-    if (error) return res.status(200).json(error);
+    if (error) {
+      return res.status(400).json(error); // Sử dụng mã trạng thái 400 cho các lỗi dữ liệu không hợp lệ
+    }
 
     const data = req.body;
     try {
       const user = await authService.createUser(data);
-      res.status(200).json(
+      res.status(201).json( // Sử dụng mã trạng thái 201 cho các tài nguyên mới được tạo thành công
         response.success({
           data: { user },
+          
         })
+        
       );
+      console.log(data)
     } catch (err) {
-      res.status(200).json(
+      console.error(err); // In lỗi ra console để dễ dàng xác định và sửa lỗi
+      res.status(500).json( // Sử dụng mã trạng thái 500 cho lỗi nội bộ của máy chủ
         response.error({
           code: 500,
-          message: err.message,
+          message: 'Internal Server Error',
         })
       );
     }
   },
+
   login: async (req, res) => {
     const error = validation.validationRequest(req, res);
 

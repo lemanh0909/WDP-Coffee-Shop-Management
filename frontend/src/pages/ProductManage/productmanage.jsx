@@ -5,7 +5,7 @@ import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
-import CommonSlider from "../Common/sidebar.jsx";
+import CommonSidebar from "../Common/sidebar.jsx";
 import AddProductModal from "./addProduct.jsx";
 import UpdateProductModal from "./updateProduct.jsx";
 
@@ -110,171 +110,171 @@ function ProductManage() {
 
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-      // Lấy userId và shopId từ local storage
-      const userDataString = localStorage.getItem('userData');
-      if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
-      }
-      const userData = JSON.parse(userDataString);
-      const shopId = userData.shopId;
-      const userId = userData.userID;
-        axios.get(`http://localhost:5000/api/v1/category/${userId}/getAllCategoriesInShop`)
-          .then(response => {
-            setCategories(response.data.data.data);
-          })
-          .catch(error => console.error('Error fetching categories:', error));
-      }, []);
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    axios.get(`http://localhost:5000/api/v1/category/${userId}/getAllCategoriesInShop`)
+      .then(response => {
+        setCategories(response.data.data.data);
+      })
+      .catch(error => console.error('Error fetching categories:', error));
+  }, []);
 
 
   return (
     <>
       <CommonNavbar />
       <div className="flex">
-        <CommonSlider
-          handlePageChange={handlePageChange}
-          activePage={activePage}
-          totalPages={totalPages}
-          getPaginatedItems={paginatedItems}
-        />
-        <Container className="ml-72 ">
-          <Row className="title mb-0">
-            <Col md={4} className="text-white "  >
-              <h2>Quản lý sản phẩm</h2>
-            </Col>
-            <Col md={4} />
-            <Col md={4} className="button-container">
-              <div className="">
-                <Button
-                  variant="primary"
-                  className="add-btn btn-danger"
-                  onClick={handleShowModal}
-                >
-                  <i className="fa-solid fa-plus"></i> Thêm sản phẩm
-                </Button>
-                <Button variant="primary" className="btn-secondary">
-                  <i className="fa-solid fa-file-export"></i> Biến thể
-                </Button>
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <Row>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>
-                        Mã hàng hóa
-                      </th>
-                      <th>
-                        Tên hàng hóa
-                      </th>
-                      <th>Category</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedItems.length === 0 ? (
+        <Col md={2}>
+          <CommonSidebar />
+        </Col>
+
+        <Col md={10}>
+          <Container className="ml-72 ">
+            <Row className="title mb-0">
+              <Col md={4} className="text-white "  >
+                <h2>Quản lý sản phẩm</h2>
+              </Col>
+              <Col md={4} />
+              <Col md={4} className="button-container">
+                <div className="">
+                  <Button
+                    variant="primary"
+                    className="add-btn btn-danger"
+                    onClick={handleShowModal}
+                  >
+                    <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                  </Button>
+                  <Button variant="primary" className="btn-secondary">
+                    <i className="fa-solid fa-file-export"></i> Biến thể
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <Row>
+                  <Table striped bordered hover>
+                    <thead>
                       <tr>
-                        <td colSpan="5" className="text-center">No data to present!</td>
+                        <th>
+                          Mã hàng hóa
+                        </th>
+                        <th>
+                          Tên hàng hóa
+                        </th>
+                        <th>Category</th>
+                        <th></th>
+                        <th></th>
                       </tr>
-                    ) : (
-                      paginatedItems.map((item) => (
-                        <React.Fragment key={item._id}>
-                          <tr>
-                            <td>{item._id}</td>
-                            <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
-                            <td>{item.category.name}</td>
-                            <td>
-                              <Button onClick={() => showDetails(item._id)}>
-                                Xem chi tiết
-                              </Button>
-                            </td>
-                            <td>
-                              <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
-                                <i className="fa-solid fa-pen-to-square"></i> Update
-                              </Button>
-                              <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
-                                <i className="fa-solid fa-trash"></i> Delete
-                              </Button>
-                            </td>
-                          </tr>
-                          {showDetailsTable && selectedProduct &&
-                            selectedProduct._id === item._id && (
-                              <React.Fragment>
-                                <tr>
-                                  <td colSpan="12">
-                                    <div className="details-table-container">
-                                      <Table bordered>
-                                        <tbody>
-                                          <tr>
-                                            <td className="field w-2/5">Tên:</td>
-                                            <td>{selectedProduct.name}</td>
-                                          </tr>
-                                          <tr>
-                                            <td className="field">Mô tả:</td>
-                                            <td>{selectedProduct.description}</td>
-                                          </tr>
-                                          <tr>
-                                            <td className="field">Hình ảnh:</td>
-                                            <td>
-                                              <div className="flex flex-wrap gap-3 justify-center">
-                                                {selectedProduct.image.map((imageUrl, index) => (
-                                                  <img
-                                                    key={index}
-                                                    className="w-1/4 h-1/4"
-                                                    src={imageUrl}
-                                                    alt={`Product ${index + 1}`}
-                                                  />
-                                                ))}
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td className="field">Số lượng biến thể:</td>
-                                            <td>
-                                              {selectedProduct.productVariant}
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </Table>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </React.Fragment>
-                            )}
-                        </React.Fragment>)
+                    </thead>
+                    <tbody>
+                      {paginatedItems.length === 0 ? (
+                        <tr>
+                          <td colSpan="5" className="text-center">No data to present!</td>
+                        </tr>
+                      ) : (
+                        paginatedItems.map((item) => (
+                          <React.Fragment key={item._id}>
+                            <tr>
+                              <td>{item._id}</td>
+                              <td style={{ color: "#BB2649", fontWeight: "bold" }}>{item.name}</td>
+                              <td>{item.category.name}</td>
+                              <td>
+                                <Button onClick={() => showDetails(item._id)}>
+                                  Xem chi tiết
+                                </Button>
+                              </td>
+                              <td>
+                                <Button variant="primary" className="edit-btn" onClick={() => handleShowUpdateModal(item._id)}>
+                                  <i className="fa-solid fa-pen-to-square"></i> Update
+                                </Button>
+                                <Button variant="danger" onClick={() => handleShowConfirmationModal(item._id)}>
+                                  <i className="fa-solid fa-trash"></i> Delete
+                                </Button>
+                              </td>
+                            </tr>
+                            {showDetailsTable && selectedProduct &&
+                              selectedProduct._id === item._id && (
+                                <React.Fragment>
+                                  <tr>
+                                    <td colSpan="12">
+                                      <div className="details-table-container">
+                                        <Table bordered>
+                                          <tbody>
+                                            <tr>
+                                              <td className="field w-2/5">Tên:</td>
+                                              <td>{selectedProduct.name}</td>
+                                            </tr>
+                                            <tr>
+                                              <td className="field">Mô tả:</td>
+                                              <td>{selectedProduct.description}</td>
+                                            </tr>
+                                            <tr>
+                                              <td className="field">Hình ảnh:</td>
+                                              <td>
+                                                <div className="flex flex-wrap gap-3 justify-center">
+                                                  {selectedProduct.image.map((imageUrl, index) => (
+                                                    <img
+                                                      key={index}
+                                                      className="w-1/4 h-1/4"
+                                                      src={imageUrl}
+                                                      alt={`Product ${index + 1}`}
+                                                    />
+                                                  ))}
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td className="field">Số lượng biến thể:</td>
+                                              <td>
+                                                {selectedProduct.productVariant}
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </Table>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </React.Fragment>
+                              )}
+                          </React.Fragment>)
+                        ))}
+                    </tbody>
+                  </Table>
+                </Row>
+                <Row>
+                  <Col>
+                    <Pagination className="pagination">
+                      <Pagination.Prev
+                        onClick={() => handlePageChange(activePage - 1)}
+                        disabled={activePage === 1}
+                      />
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <Pagination.Item
+                          key={i + 1}
+                          active={i + 1 === activePage}
+                          onClick={() => handlePageChange(i + 1)}
+                        >
+                          {i + 1}
+                        </Pagination.Item>
                       ))}
-                  </tbody>
-                </Table>
-              </Row>
-              <Row>
-                <Col>
-                  <Pagination className="pagination">
-                    <Pagination.Prev
-                      onClick={() => handlePageChange(activePage - 1)}
-                      disabled={activePage === 1}
-                    />
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <Pagination.Item
-                        key={i + 1}
-                        active={i + 1 === activePage}
-                        onClick={() => handlePageChange(i + 1)}
-                      >
-                        {i + 1}
-                      </Pagination.Item>
-                    ))}
-                    <Pagination.Next
-                      onClick={() => handlePageChange(activePage + 1)}
-                      disabled={activePage === totalPages}
-                    />
-                  </Pagination>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+                      <Pagination.Next
+                        onClick={() => handlePageChange(activePage + 1)}
+                        disabled={activePage === totalPages}
+                      />
+                    </Pagination>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
+        </Col>
       </div>
       <AddProductModal
         show={showModal}

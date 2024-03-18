@@ -2,9 +2,9 @@ import { exportImportNoteService } from "../services/exportImportNote.service.js
 
 export const exportImportNoteController = {
     getNoteFromShop: async (req, res) => {
-        const data = req.body;
+        const shopId = req.params.shopId;
         try {
-            const note = await exportImportNoteService.getNoteFromShop(data);
+            const note = await exportImportNoteService.getNoteFromShop(shopId);
       
             res.status(200).json({
                 message: 'Success',
