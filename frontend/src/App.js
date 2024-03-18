@@ -10,7 +10,9 @@ import Control from './pages/Control/Control.jsx';
 import Sidebar from './pages/Common/sidebar.jsx';
 import Navbar from './pages/Common/navbar.jsx';
 import Thuchi from './pages/PhieuThuChi/PhieuThuChi.jsx';
-import AdminManagement from './pages/ManagerStaff/manageAdmin.jsx'
+
+import AdminManagement from './pages/ManagerStaff/manageAdmin.jsx';
+import AuthenPage from './pages/authService/AuthenPage.jsx';
 import Tables from "./pages/Common/table.jsx"
 
 
@@ -42,7 +44,9 @@ function App() {
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail />} />
           <Route path="/upImg" element={<UploadImage />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route path='/verify/:id/:uniqueString' element={<AuthenPage></AuthenPage>}></Route>
           <Route path="/table" element={<Tables />} />
+
 
         </Routes>
       </div>

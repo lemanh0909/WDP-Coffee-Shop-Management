@@ -1,5 +1,6 @@
 export const authConstant = {
   EMAIL_EXISTED: "Email is already exist",
+  EMAILL_VERIFY: "Email chua verified",
   EMAIL_NOT_EXIST: "Email dose not exist",
   EMAIL_REQUIRE: "Email is required",
   EMAIL_INVALID: "Invalid email",
