@@ -217,7 +217,7 @@ export const productService = {
     
             // Lấy thông tin chi tiết của từng danh mục
             const categories = await Category.find({ _id: { $in: shop.categoryId } });
-    
+            console.log(categories);
             // Ghép cặp sản phẩm với danh mục tương ứng
             const productsWithCategory = products.map(product => {
                 // Tìm danh mục tương ứng cho sản phẩm
