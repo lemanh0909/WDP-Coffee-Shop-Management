@@ -1,20 +1,53 @@
 import mongoose from "mongoose";
-import ProductVariant from "./productVariant.js";
+import Warehouse from "./warehouse.js";
 
+const IngredientSchema = new mongoose.Schema({
+    warehouse: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Warehouse',
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+    },
+    require: {
+      type: Number,
+      required: true,
+    },
+    // Các trường khác của nguyên liệu
+  });
 const Product = mongoose.model(
-    'Product',
+    "Product",
     new mongoose.Schema(
         {
             name: {
                 type: String,
                 required: true,
             },
-            description: { type: String },
-            image: [{ type: String}],
-            productVariant: [ProductVariant.schema]
+            description: {
+                type: String,
+            },
+            size: {
+                type: String,
+                enum: ["S", "M", "L", "None"],
+                default: "None",
+            },
+            price: {
+                type: Number,
+                required: true,
+            },
+            image: {
+                type: [String],
+            },
+            recipe: {
+                type: [IngredientSchema],
+            },
         },
-        {timestamps: true}
+        { timestamps: true }
     )
-)
+);
 
 export default Product;

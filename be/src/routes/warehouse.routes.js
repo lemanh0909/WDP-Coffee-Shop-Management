@@ -20,7 +20,7 @@ warehouseRouter.get('/:id/getDetail', warehouseController.getDetailWarehouse)
 warehouseRouter.put('/update', warehouseController.updateWarehouse)
 warehouseRouter.put('/:_id/updateBasis', warehouseController.updateWarehouseBasis);
 warehouseRouter.post('/create', warehouseController.createWarehouse)
-warehouseRouter.delete('/delete', warehouseController.deleteWarehouse)
+warehouseRouter.delete('/:warehouseId/delete', warehouseController.deleteWarehouse)
 warehouseRouter.get('/:shopId/getAllWarehousesInShop', warehouseController.getAllWarehousesInShop);
 
 export default warehouseRouter;

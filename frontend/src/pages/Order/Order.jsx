@@ -51,7 +51,7 @@ const Order = () => {
   const userData = JSON.parse(userDataString);
   const shopId = userData.shopId;
   const userId = userData.userID;
-    axios.get(`http://localhost:5000/api/v1/productVariant/${shopId}/getAllProductVariantsInShop`)
+    axios.get(`http://localhost:5000/api/v1/product/${shopId}/getAllProductVariantsInShop`)
       .then(response => {
         setProductVariant(response.data.data.allProductVariants);
       })

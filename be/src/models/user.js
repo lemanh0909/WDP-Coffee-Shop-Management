@@ -17,22 +17,12 @@ const User = mongoose.model(
         required: true,
         minlength: 6,
       },
-      email: {
-        type: String,
-        required: true,
-        minlength: 10,
-        maxlength: 50,
-      },
-      password: {
-        type: String,
-        required: true,
-        minlength: 6,
-      },
       verificationCode: {
         type: String,
       },
-      isVerified: {
-        type: Boolean
+      verificated: {
+        type: Boolean,
+        default: false
       },
       fullName: {
         type: String,
@@ -48,7 +38,6 @@ const User = mongoose.model(
         type: String,
         default: null,
       },
-      
       role: {
         type: String,
         enum: ["Admin", "Manager", "Staff"],

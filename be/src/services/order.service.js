@@ -1,6 +1,5 @@
 import Order from "../models/order.js";
 import Product from "../models/product.js";
-import ProductVariant from "../models/productVariant.js";
 import Warehouse from "../models/warehouse.js";
 import Shop from "../models/shop.js";
 
@@ -10,9 +9,9 @@ export const orderService = {
             
             // Lấy thông tin đầy đủ của sản phẩm từ database
             const populatedProducts = await Promise.all(products.map(async ({ productId, quantity }) => {
-                const product = await ProductVariant.findById(productId);
+                const product = await Product.findById(productId);
                 if (!product) {
-                    throw new Error(`Product Variant not found with id: ${productId}`);
+                    throw new Error(`Product not found with id: ${productId}`);
                 }
                 return {
                     _id: product._id,
@@ -24,7 +23,7 @@ export const orderService = {
             }));
 
             const listWarehouseItems = await Promise.all(populatedProducts.map(async (product) => {
-                const productVariant = await ProductVariant.findById(product._id);
+                const productVariant = await Product.findById(product._id);
                 // const recipeList = await Warehouse.findByProductId(product._id) 
                 const recipeList = productVariant.recipe;
                 const recipeList1 = recipeList.map((recipe) =>{
