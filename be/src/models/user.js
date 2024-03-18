@@ -31,8 +31,9 @@ const User = mongoose.model(
       verificationCode: {
         type: String,
       },
-      isVerified: {
-        type: Boolean
+      verificated: {
+        type: Boolean,
+        default: false
       },
       fullName: {
         type: String,

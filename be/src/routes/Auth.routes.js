@@ -4,7 +4,7 @@ import express from "express";
 // ** Controllers
 
 import { AuthController } from "../controller/Auth.controller.js"
-
+import { authService } from "../services/auth.service.js";
 // ** Constants
 import { authConstant, userConstant } from "../constant/index.js";
 
@@ -108,6 +108,7 @@ authRouter.get(
   verifyRefreshToken,
   AuthController.refreshToken
 );
+authRouter.post("/verify/:id/:uniqueString",authService.verify);
 
 authRouter.post(
   "/sendMail",
