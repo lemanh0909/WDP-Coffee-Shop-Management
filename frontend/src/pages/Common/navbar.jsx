@@ -7,7 +7,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import DescriptionIcon from '@mui/icons-material/Description';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import logoImage from "../images/logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./navbar.css";
 
 const CommonNavbar = () => {
@@ -47,7 +47,7 @@ const CommonNavbar = () => {
     };
 
     const navigateToProfile = () => {
-        navigate("/path-to-profile");
+        navigate("/update");
     };
 
     return (
@@ -106,18 +106,24 @@ const CommonNavbar = () => {
                 </Box>
 
                 <Box>
-                    <IconButton color="inherit" onClick={handleUserMenuClick} className="navbar-user-button">
-                        <AccountCircleIcon />
+                    <IconButton
+                        color="inherit"
+                        onClick={handleUserMenuClick}
+                        className="navbar-user-button"
+                        style={{ display: "flex", alignItems: "center" }}
+                    >
+                        <AccountCircleIcon style={{ fontSize: 24 }} />
+                        <span style={{ fontSize: 16, marginLeft: 8 }}>
+                            {localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).fullName : 'Hello'}
+                        </span>
                     </IconButton>
+
                     <Menu
                         anchorEl={anchorElUser}
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                         className="user-menu"
                     >
-                        <MenuItem>
-                            {localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).fullName : 'My Profile'}
-                        </MenuItem>
                         <MenuItem onClick={navigateToProfile}>My Profile</MenuItem>
                         <MenuItem onClick={handleLogout}>Logout</MenuItem>
                     </Menu>

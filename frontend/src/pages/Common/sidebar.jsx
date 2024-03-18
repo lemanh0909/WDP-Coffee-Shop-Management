@@ -8,6 +8,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import UserIcon from '@mui/icons-material/AccountCircle';
 import CategoryIcon from '@mui/icons-material/Category';
+import { Link } from "react-router-dom";
 import "../Common/sidebar.css"
 
 const Sidebar = () => {
@@ -16,57 +17,71 @@ const Sidebar = () => {
       <div className="logo-container">
         <UserIcon className="icon-container" alt="company logo" style={{ fontSize: 60, color: 'white' }} />
       </div>
-      <p className="user-container">User sidebar</p>
+      <p className="user-container">{localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).fullName : 'Hello'}</p>
       <div className="flex flex-col">
         <List>
-          <ListItem button className="list-item" style={{ color: 'white' }}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
+          <Link to="/control" className="list-item" style={{ color: 'white', textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+          </Link>
           <Divider />
-          <ListItem button className="list-item" style={{ color: 'white' }}>
-            <ListItemIcon>
-              <ShoppingCartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Product" />
-          </ListItem>
+          <Link to="/productmanage" className="list-item" style={{ color: 'white', textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Product" />
+            </ListItem>
+          </Link>
           <Divider />
-          <ListItem button className="list-item" style={{ color: 'white' }}>
-            <ListItemIcon>
-              <LocationOnIcon />
-            </ListItemIcon>
-            <ListItemText primary="Warehouse" />
-          </ListItem>
+          <Link to="/warehouse" className="list-item" style={{ color: 'white', textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon>
+                <LocationOnIcon />
+              </ListItemIcon>
+              <ListItemText primary="Warehouse" />
+            </ListItem>
+          </Link>
           <Divider />
-          <ListItem button className="list-item" style={{ color: 'white' }}>
-            <ListItemIcon>
-              <ReceiptIcon />
-            </ListItemIcon>
-            <ListItemText primary="Receipt" />
-          </ListItem>
+          <Link to="/exportimportnote" className="list-item" style={{ color: 'white', textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon>
+                <ReceiptIcon />
+              </ListItemIcon>
+              <ListItemText primary="Receipt" />
+            </ListItem>
+          </Link>
           <Divider />
-          <ListItem button className="list-item" style={{ color: 'white' }}>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Order" />
-          </ListItem>
+          <Link to="/order" className="list-item" style={{ color: 'white', textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Order" />
+            </ListItem>
+          </Link>
           <Divider />
-          <ListItem button className="list-item" style={{ color: 'white' }}>
-            <ListItemIcon>
-              <SupervisorAccountIcon />
-            </ListItemIcon>
-            <ListItemText primary="Employee" />
-          </ListItem>
+          <Link to="/employee-management" className="list-item" style={{ color: 'white', textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon>
+                <SupervisorAccountIcon />
+              </ListItemIcon>
+              <ListItemText primary="Employee" />
+            </ListItem>
+          </Link>
           <Divider />
-          <ListItem button className="list-item" style={{ color: 'white' }}>
-            <ListItemIcon>
-              <CategoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="Category" />
-          </ListItem>
+          <Link to="/category" className="list-item" style={{ color: 'white', textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon>
+                <CategoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Category" />
+            </ListItem>
+          </Link>
         </List>
       </div>
     </div>

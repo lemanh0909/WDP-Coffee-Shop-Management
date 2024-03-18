@@ -250,7 +250,7 @@ function ProductManage() {
                 </Row>
                 <Row>
                   <Col>
-                    <Pagination className="pagination">
+                    <Pagination>
                       <Pagination.Prev
                         onClick={() => handlePageChange(activePage - 1)}
                         disabled={activePage === 1}

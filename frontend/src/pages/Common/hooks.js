@@ -3,7 +3,7 @@ import { useState } from 'react';
 export const usePagination = (items, itemsPerPage) => {
     const [activePage, setActivePage] = useState(1);
 
-    const totalPages = items ? Math.ceil(items.length / itemsPerPage) : 0; // Kiểm tra nếu items tồn tại
+    const totalPages = items ? Math.ceil(items.length / itemsPerPage) : 0;
 
     const handlePageChange = (pageNumber) => {
         setActivePage(pageNumber);
@@ -41,6 +41,6 @@ export const useEmployees = (initialEmployees) => {
 
     return [employees, handleToggleAdmin, handleToggleAllowLogin];
 
-    
+
 };
 

@@ -6,20 +6,16 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
     z-index: 10;
     transition: width 0.3s ease;
-    /* Thêm hiệu ứng transition */
 }
 
 .sidebar-container.collapsed {
     width: 3rem;
-    /* Đặt kích thước mới cho sidebar khi thu nhỏ */
 }
 
-/* Ẩn các văn bản khi sidebar thu nhỏ */
 .sidebar-container.collapsed .list-item-text {
     display: none;
 }
 
-/* Hiển thị icon mũi tên chỉ khi sidebar thu nhỏ */
 .sidebar-container.collapsed .expand-icon {
     display: block;
 }
@@ -37,6 +33,7 @@
     border-radius: 9999px;
     border-width: 4px;
     --tw-ring-offset-width: 4px;
+    text-decoration: none;
 }
 
 .user-container {
