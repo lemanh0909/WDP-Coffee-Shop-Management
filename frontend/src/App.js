@@ -23,6 +23,7 @@ import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
 import UploadImage from './pages/ImgUp/UploadImage.jsx';
 import UserProfile from './pages/UserProfile/UserProfile.jsx';
 
+
 function App() {
   return (
     <Router>
@@ -46,6 +47,7 @@ function App() {
           <Route path="/profile" element={<UserProfile />} />
           <Route path='/verify/:id/:uniqueString' element={<AuthenPage></AuthenPage>}></Route>
           <Route path="/table" element={<Tables />} />
+
 
 
         </Routes>
