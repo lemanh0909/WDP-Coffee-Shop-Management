@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 import {
   Container,
   Row,
@@ -9,6 +10,7 @@ import {
   Button,
   Modal,
 } from "react-bootstrap";
+
 import { usePagination } from "../Common/hooks.js";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSidebar from "../Common/sidebar.jsx";
@@ -28,15 +30,19 @@ function Category() {
   const [showModal, setShowModal] = useState(false);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
   const [productDetails, setProductDetails] = useState(null);
+
   const [productDetails, setProductDetails] = useState(null);
+
   const handleShowModal = () => setShowModal(true);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
 
+
   const itemsPerPage = 6;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] =
     usePagination(items, itemsPerPage);
+
 
   useEffect(() => {
     fetchData();
@@ -55,6 +61,7 @@ function Category() {
         `http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`
       );
       setItems(response.data.data.data);
+
     } catch (error) {
       console.error("Error fetching category data:", error);
       setError("An error occurred while fetching category data.");
@@ -62,6 +69,7 @@ function Category() {
       console.log("category data fetching completed.");
     }
   };
+
 
   // Thêm một state để lưu trữ sản phẩm được chọn để hiển thị chi tiết
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -71,6 +79,7 @@ function Category() {
     console.log("showDetails function is called.");
     if (selectedRowId === rowId && showDetailsTable) {
       setShowDetailsTable(false); // Ẩn chi tiết nếu đã được hiển thị
+
     } else {
       axios
         .get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
@@ -101,6 +110,7 @@ function Category() {
       });
   };
 
+
   const handleUpdateCategory = (categoryId) => {
     const selected = items.find((item) => item._id === categoryId);
     setSelectedCategoryId(categoryId);
@@ -117,6 +127,7 @@ function Category() {
     setShowModal(false);
     setShowDetailsTable(false);
   };
+
 
   const handleShowConfirmationModal = (categoryId) => {
     setShowConfirmationModal(true);
@@ -141,6 +152,7 @@ function Category() {
     <>
       <CommonNavbar />
       <div className="flex">
+
         <CommonSlider
           handlePageChange={handlePageChange}
           activePage={activePage}
@@ -331,6 +343,8 @@ function Category() {
             </Col>
           </Row>
         </Container>
+
+        
       </div>
       <AddCategoryModal
         userId={JSON.parse(localStorage.getItem("userData"))?.userID}
@@ -349,7 +363,9 @@ function Category() {
       )}
 
       <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+
       <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+
         <Modal.Header closeButton>
           <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>
         </Modal.Header>
