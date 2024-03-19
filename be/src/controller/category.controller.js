@@ -150,10 +150,10 @@ export const CategoryController = {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
 
-    const { id } = req.params;
+    const { categoryId } = req.params;
 
     try {
-      const result = await categoryService.deleteCategory(id);
+      const result = await categoryService.deleteCategory(categoryId);
 
       res.status(200).json(
         response.success({

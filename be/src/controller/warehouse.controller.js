@@ -57,11 +57,10 @@ export const warehouseController = {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
 
-    const { id } = req.params;
     const data = req.body;
 
     try {
-      const result = await warehouseService.updateWarehouse(id, data);
+      const result = await warehouseService.updateWarehouse(data);
 
       res.status(200).json(
         response.success({
@@ -134,10 +133,10 @@ export const warehouseController = {
     const error = validation.validationRequest(req, res);
     if (error) return res.status(200).json(error);
 
-    const { id } = req.params;
+    const { warehouseId } = req.params;
 
     try {
-      const result = await warehouseService.deleteWarehouse(id);
+      const result = await warehouseService.deleteWarehouse(warehouseId);
 
       res.status(200).json(
         response.success({

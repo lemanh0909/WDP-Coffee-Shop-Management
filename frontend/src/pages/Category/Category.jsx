@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import CommonNavbar from "../Common/navbar.jsx";
-import CommonSlider from "../Common/sidebar.jsx";
+import CommonSidebar from "../Common/sidebar.jsx";
 import AddCategoryModal from "./addCategory.jsx";
 import UpdateCategoryModal from "./updateCategory.jsx";
 import { ToastContainer, toast } from "react-toastify";
@@ -28,9 +28,11 @@ function Category() {
   const [showModal, setShowModal] = useState(false);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
   const [productDetails, setProductDetails] = useState(null);
+  const [productDetails, setProductDetails] = useState(null);
   const handleShowModal = () => setShowModal(true);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
 
   const itemsPerPage = 6;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] =
@@ -82,6 +84,7 @@ function Category() {
         });
     }
   };
+
 
   const handleDelete = () => {
     axios
@@ -345,6 +348,7 @@ function Category() {
         />
       )}
 
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
       <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
         <Modal.Header closeButton>
           <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>

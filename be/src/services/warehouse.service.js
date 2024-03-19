@@ -161,14 +161,22 @@ export const warehouseService = {
         return new Promise(async (resolve, reject) => {
             try {
                 const warehouse = await Warehouse.findByIdAndDelete(warehouseId);
-
+                console.log(warehouseId);
                 if (!warehouse) {
                     resolve({
                         status: 'ERR',
                         message: 'Warehouse not found',
                     });
                 }
+                const shop = await Shop.find({ warehouseId: warehouseId });
 
+                shop.forEach(async (s) => {
+                    const index = s.warehouseId.indexOf(warehouseId);
+                    if (index !== -1) {
+                        s.warehouseId.splice(index, 1);
+                        await s.save();
+                    }
+                });
                 resolve({
                     status: 'OK',
                     message: 'Warehouse deleted successfully',

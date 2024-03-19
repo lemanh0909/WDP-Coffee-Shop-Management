@@ -93,16 +93,6 @@
     margin: 10px;
 }
 
-.pagination {
-    justify-content: center;
-    margin-top: 20px;
-    position: fixed;
-    bottom: -10px;
-    left: 17%;
-    right: 0;
-    align-items: center;
-}
-
 .detail-table {
     width: 100%;
     border-collapse: collapse;
@@ -121,17 +111,17 @@
 }
 
 .btn-color {
-    background-color: #b45309; 
+    background-color: #b45309;
     border-color: #b45309;
-  }
-  .btn-color:hover {
-    background-color: #da640a; 
-    border-color: #b45309;
-  }
-  /* Scroll khi click vào product thứ 7 */
-  .container-scroll {
-    max-height: 650px; 
-    overflow-y: auto;
-  }
+}
 
-  
+.btn-color:hover {
+    background-color: #da640a;
+    border-color: #b45309;
+}
+
+/* Scroll khi click vào product thứ 7 */
+.container-scroll {
+    max-height: 650px;
+    overflow-y: auto;
+}
