@@ -8,8 +8,8 @@ export const exportImportNoteService = {
         try {
             const shop = await Shop.findById(shopId);
             if (!shop) throw new Error(`Shop not found Id ${shopId}`);
-            const listNote = shop.exportImportNoteId;
-
+            const listNoteId = shop.exportImportNoteId;
+            const listNote = await ExportImportNote.find({_id: listNoteId});
             // Trả về mảng kết quả
             return listNote;
         } catch (error) {
