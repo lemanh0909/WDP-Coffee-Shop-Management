@@ -18,7 +18,7 @@ import { authConstant } from "../constant/index.js";
 
 // import { transporter } from "../config/nodemailer";
 
-import { sendMail } from "../config/nodemailer";
+import { sendMail } from "../config/nodemailer.js";
 import nodemailer from "nodemailer";
 import { v4 as uuidv4 } from "uuid";
 

@@ -26,11 +26,6 @@ function Warehouse() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setActivePage(1);
-  }, [searchTerm]);
-
   const fetchData = async () => {
     try {
       const userDataString = localStorage.getItem("userData");

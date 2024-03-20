@@ -51,6 +51,7 @@ const CommonNavbar = () => {
     };
 
     return (
+
         <AppBar position="static">
             <Toolbar className="toolbar">
                 <Typography variant="h6" component="div">
@@ -83,6 +84,7 @@ const CommonNavbar = () => {
                                 Trello
                             </Button>
                         </>
+
                     )}
                     <Menu
                         anchorEl={anchorEl}
