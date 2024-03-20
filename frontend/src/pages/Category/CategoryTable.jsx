@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
-import "./CategoryTable.css";
+import "../WarehouseManage/tableWarehouse.css";
 
 function WarehouseTable({
   currentItems,
@@ -64,87 +64,87 @@ function WarehouseTable({
                     </td>
                   </tr>
                   {selectedRowId === index && showDetailsTable && (
-                            <tr key={`${item._id}-details`}>
-                              <td colSpan="9">
-                                <div className="details-table-container">
-                                  {console.log(
-                                    `Rendering details for item ${item._id}`
-                                  )}
-                                  <Table bordered>
-                                    <tbody>
-                                      <tr>
-                                        <td className="field w-2/5">
-                                          Mã category
-                                        </td>
-                                        <td>{selectedProduct._id}</td>
-                                      </tr>
-                                      <tr>
-                                        <td className="field w-2/5">
-                                          Tên loại hàng hoá
-                                        </td>
-                                        <td>{item.name}</td>
-                                      </tr>
-                                      <tr>
-                                        <td className="field w-2/5">Mô tả</td>
-                                        <td>{item.description}</td>
-                                      </tr>
-                                      <tr>
-                                        <td className="field w-2/5">
-                                          Ngày tạo
-                                        </td>
-                                        <td>{item.createdAt}</td>
-                                      </tr>
-                                      <tr>
-                                        <td className="field w-2/5">
-                                          Sản phẩm
-                                        </td>
-                                        <td key={`${item._id}-details`}>
-                                          {selectedRowId === index &&
-                                            showDetailsTable && (
-                                              <Table bordered>
-                                                <thead>
-                                                  <tr>
-                                                    <th>Mã sản phẩm</th>
-                                                    <th>Tên hàng hoá:</th>
-                                                    <th>Miêu tả:</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                  {selectedProduct ? (
-                                                    <tr>
-                                                      <td>
-                                                        {selectedProduct._id}
-                                                      </td>
-                                                      <td>
-                                                        {selectedProduct.name}
-                                                      </td>
-                                                      <td>
-                                                        {
-                                                          selectedProduct.description
-                                                        }
-                                                      </td>
-                                                    </tr>
-                                                  ) : (
-                                                    <tr>
-                                                      <td colSpan="3">
-                                                        Không có sản phẩm nào
-                                                      </td>
-                                                    </tr>
-                                                  )}
-                                                </tbody>
-                                              </Table>
-                                            )}
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  </Table>
-                                  <Button onClick={handleCloseModal}>
-                                    Close
-                                  </Button>
-                                </div>
-                              </td>
-                            </tr>
+                    <tr key={`${item._id}-details`}>
+                      <td colSpan="9">
+                        <div className="details-table-container">
+                          {console.log(
+                            `Rendering details for item ${item._id}`
                           )}
+                          <Table bordered>
+                            <tbody>
+                              <tr>
+                                <td className="field w-2/5">
+                                  Mã category
+                                </td>
+                                <td>{selectedProduct._id}</td>
+                              </tr>
+                              <tr>
+                                <td className="field w-2/5">
+                                  Tên loại hàng hoá
+                                </td>
+                                <td>{item.name}</td>
+                              </tr>
+                              <tr>
+                                <td className="field w-2/5">Mô tả</td>
+                                <td>{item.description}</td>
+                              </tr>
+                              <tr>
+                                <td className="field w-2/5">
+                                  Ngày tạo
+                                </td>
+                                <td>{item.createdAt}</td>
+                              </tr>
+                              <tr>
+                                <td className="field w-2/5">
+                                  Sản phẩm
+                                </td>
+                                <td key={`${item._id}-details`}>
+                                  {selectedRowId === index &&
+                                    showDetailsTable && (
+                                      <Table bordered>
+                                        <thead>
+                                          <tr>
+                                            <th>Mã sản phẩm</th>
+                                            <th>Tên hàng hoá:</th>
+                                            <th>Miêu tả:</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {selectedProduct ? (
+                                            <tr>
+                                              <td>
+                                                {selectedProduct._id}
+                                              </td>
+                                              <td>
+                                                {selectedProduct.name}
+                                              </td>
+                                              <td>
+                                                {
+                                                  selectedProduct.description
+                                                }
+                                              </td>
+                                            </tr>
+                                          ) : (
+                                            <tr>
+                                              <td colSpan="3">
+                                                Không có sản phẩm nào
+                                              </td>
+                                            </tr>
+                                          )}
+                                        </tbody>
+                                      </Table>
+                                    )}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </Table>
+                          <Button onClick={handleCloseModal}>
+                            Close
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </React.Fragment>
               ))
             )}

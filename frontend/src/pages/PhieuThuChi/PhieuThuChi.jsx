@@ -32,7 +32,6 @@ function PhieuThuChi() {
       if (!userDataString) {
         throw new Error('User data not found in localStorage.');
       }
-
       const userData = JSON.parse(userDataString);
       const response = await axios.get(`http://localhost:5000/api/v1/receipt/${userData.shopId}/getAllReceiptsInShop`);
       setProducts(response.data.data);

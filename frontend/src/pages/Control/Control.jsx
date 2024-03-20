@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Container,
   Row,
@@ -9,8 +9,14 @@ import {
 import "./Control.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CommonNavbar from "../Common/navbar.jsx";
+import useAuth from "../Common/Authorization.js";
 
 function Control() {
+  const [role] = useAuth();
+  const navigate = useNavigate();
+  if (role == "Admin") {
+    navigate("/AdminManagement");
+  }
   return (
     <>
       <CommonNavbar />
@@ -27,7 +33,7 @@ function Control() {
               <Col md={6} className="d-flex flex-column align-items-center">
                 <Button variant="outline-primary" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Bán Hàng</Button>
                 <Link to="/warehouse" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Kho</Link>
-                <Link to="/employee-management" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Quản Lý Nhân Viên</Link>
+                {role != "Staff" && <Link to="/employee-management" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Quản Lý Nhân Viên</Link>}
                 <Link to="/Thuchi" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Thu Chi</Link>
               </Col>
               <Col md={6} className="d-flex flex-column align-items-center">

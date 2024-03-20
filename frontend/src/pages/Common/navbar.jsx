@@ -54,9 +54,11 @@ const CommonNavbar = () => {
 
         <AppBar position="static">
             <Toolbar className="toolbar">
-                <Typography variant="h6" component="div">
-                    <img src={logoImage} alt="Logo" className="logo" />
-                </Typography>
+                <Link to="/control">
+                    <Typography variant="h6" component="div">
+                        <img src={logoImage} alt="Logo" className="logo" />
+                    </Typography>
+                </Link>
 
                 <Box className="menu-container">
                     {isMobile ? (
@@ -92,17 +94,17 @@ const CommonNavbar = () => {
                         onClose={handleCloseMenu}
                         className="menu"
                     >
-                        <MenuItem href="https://docs.google.com/document/d/1f1Px-0mp5XsJo2jzmWJLLiWxDRmUZV6A/edit" target="_blank" onClick={handleCloseMenu}>
+                        <MenuItem href="https://docs.google.com/document/d/1eeJoJAiYRPSNyCzV7gPlePC2p42alIuf/edit" target="_blank" onClick={handleCloseMenu}>
                             <DescriptionIcon />
-                            Docs
+                            RDS
                         </MenuItem>
-                        <MenuItem href="https://github.com/lemanh0909/WDP-Coffee-Shop-Management.git" target="_blank" onClick={handleCloseMenu}>
+                        <MenuItem href="https://docs.google.com/spreadsheets/d/1TAM8cVZHsPfbkoyXb7Mld_NW3vd1Sj40/edit#gid=106360820" target="_blank" onClick={handleCloseMenu}>
                             <GitHubIcon />
-                            Github
+                            PrT
                         </MenuItem>
-                        <MenuItem href="https://trello.com/b/4vx9Loyf/se1634nj-wdp301-team-2" target="_blank" onClick={handleCloseMenu}>
+                        <MenuItem href="https://docs.google.com/document/d/1tA73pdIg2yiiBHu4nmPeuB8xCefPYX6I/edit" target="_blank" onClick={handleCloseMenu}>
                             <AssignmentIcon />
-                            Trello
+                            FRD
                         </MenuItem>
                     </Menu>
                 </Box>
@@ -116,7 +118,7 @@ const CommonNavbar = () => {
                     >
                         <AccountCircleIcon style={{ fontSize: 24 }} />
                         <span style={{ fontSize: 16, marginLeft: 8 }}>
-                            {localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).fullName : 'Hello'}
+                            {localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).fullName : 'Welcome'}
                         </span>
                     </IconButton>
 

@@ -53,7 +53,7 @@ function Login() {
 
                     setTimeout(() => {
                         if (userData.role === 'Admin') {
-                            navigate("/adminManagement");
+                            navigate("/AdminManagement");
                         } else {
                             navigate("/control");
                         }
@@ -88,7 +88,7 @@ function Login() {
             setNameError('');
         }
 
-       
+
 
         const data = {
             fullName: fullName,

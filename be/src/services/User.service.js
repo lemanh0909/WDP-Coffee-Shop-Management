@@ -122,7 +122,6 @@ export const userService = {
         try {
             const shop = await Shop.findOne({ managerId: { $in: managerId } });
             if (!shop) throw new Error('Shop not found for the given Manager Id');
-            // Kiểm tra xem staffId có trong mảng staffIds của shop hay không
             const isInShop = shop.staffId.includes(staffId);
 
             if (!isInShop) {
@@ -131,10 +130,8 @@ export const userService = {
             const staff = await User.findById(staffId);
             if (!staff) throw new Error('Staff not found for the given Staff Id');
             staff.status = status;
-            // Lưu cập nhật vào cơ sở dữ liệu
             await staff.save();
 
-            // Trả về staff sau khi cập nhật
             return staff;
         } catch (error) {
             console.error('Error in staffAuthorization:', error);
@@ -154,22 +151,19 @@ export const userService = {
                 role: "Staff",
                 description: description || "",
                 salary: salary || 0,
+                verificated: "true"
             });
             const salt = bcrypt.genSaltSync();
             newUser.password = bcrypt.hashSync(newUser.password, salt);
 
-            // Tim kiem shop
             const shop = await Shop.findOne({ managerId });
             if (shop) {
-                // Thêm userId vào array trong shop
                 shop.staffId.push(newUser._id);
-                // Lưu lại thông tin shop
                 await shop.save();
             } else {
                 throw new Error("Shop not found with managerId: " + managerId);
             }
             newUser.save();
-            // Trả về staff sau khi cập nhật
             return newUser;
         } catch (error) {
             console.error('Error in staffAuthorization:', error);
@@ -180,7 +174,7 @@ export const userService = {
         try {
             const manager = await User.findById(managerId);
             if (!manager) throw new Error('Manager not found for the given manager Id');
-            if(manager.role !== 'Manager') throw new Error('This user is not a manager');
+            if (manager.role !== 'Manager') throw new Error('This user is not a manager');
             manager.status = status;
             // Lưu cập nhật vào cơ sở dữ liệu
             await manager.save();
