@@ -59,7 +59,6 @@ function AddModal({ show, handleClose, onAddSuccess, setProducts }) {
               type="text"
               value={machanghoa}
               onChange={(e) => setMachanghoa(e.target.value)}
-              disabled
             />
           </Form.Group>
           <Form.Group controlId="lydo">

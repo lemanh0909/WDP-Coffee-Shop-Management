@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Pagination, Button } from "react-bootstrap";
+import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
+import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSidebar from "../Common/sidebar.jsx";
-import ViewOrderTable from "./vieworderTable.jsx";
 
 function ViewOrder() {
   const itemsPerPage = 7;
   const [orders, setOrders] = useState([]);
   const [paginatedItems, activePage, totalPages, handlePageChange] =
     usePagination(orders, itemsPerPage);
+  const [searchOrderId, setSearchOrderId] = useState('');
+  const [searchDate, setSearchDate] = useState('');
   const [selectedOrder, setSelectedOrder] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState([]);
 
@@ -36,7 +38,17 @@ function ViewOrder() {
 
   useEffect(() => {
     fetchOrders();
-  }, []); // Fetch only once when component mounts
+  }, [searchOrderId, searchDate]); // Trigger fetching when search parameters change
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const day = d.getDate().toString().padStart(2, '0');
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const year = d.getFullYear().toString().substr(-2);
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes} ${day}/${month}/${year}`;
+  };
 
   const handleDropdownChange = (orderId, newState) => {
     axios.put("http://localhost:5000/api/v1/order/changeState", {
@@ -45,6 +57,8 @@ function ViewOrder() {
     }).then(response => {
       console.log("Success");
       fetchOrders();
+      // Handle success
+      // You might want to update the state here to reflect the changes immediately
     }).catch(error => {
       console.error("Error updating order state:", error);
     });
@@ -64,6 +78,8 @@ function ViewOrder() {
     }
   };
 
+
+
   return (
     <>
       <CommonNavbar />
@@ -82,18 +98,118 @@ function ViewOrder() {
             <Row>
               <Col xs={12} style={{ marginRight: "20px" }}>
                 <Row>
-                  {/* Sử dụng component ViewOrderTable thay vì viết mã trực tiếp */}
-                  <ViewOrderTable
-                    currentItems={paginatedItems}
-                    sortedItems={orders}
-                    handlePageChange={handlePageChange}
-                    activePage={activePage}
-                    itemsPerPage={itemsPerPage}
-                    selectedOrder={selectedOrder}
-                    selectedIndex={selectedIndex}
-                    handleDetailClick={handleDetailClick}
-                    handleDropdownChange={handleDropdownChange}
-                  />
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>STT</th>
+                        <th>Mã đơn hàng</th>
+                        <th>Ngày bán</th>
+                        <th>Người bán</th>
+                        <th>Tổng sản phẩm</th>
+                        <th>Tổng giá</th>
+                        <th>Hình thức thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedItems.map((order, index) => (
+                        <React.Fragment key={order._id}>
+                          <tr key={order.id}>
+                            <td>{index + 1}</td>
+                            <td>{order._id}</td>
+                            <td>{formatDate(order.createdAt)}</td>
+                            <td>{order.userId}</td>
+                            <td>{order.totalProducts}</td>
+                            <td>{order.totalPrice}</td>
+                            <td>{order.paymentMethod}</td>
+                            <td>
+                              <select
+                                className="form-select"
+                                value={order.state}
+                                onChange={(e) => handleDropdownChange(order._id, e.target.value)}
+                              >
+                                <option value="Pending">Pending</option>
+                                <option value="Completed">Completed</option>
+                              </select>
+                            </td>
+
+                            <td>
+                              <Button onClick={() => handleDetailClick(index)}>Xem chi tiết</Button>
+                            </td>
+                          </tr>
+                          {selectedOrder && selectedIndex.includes(index) && (
+                            <tr>
+                              <td colSpan="9">
+                                <div className="details-table-container">
+                                  <Table bordered>
+                                    <tbody>
+                                      <tr>
+                                        <td className="field">Mã đơn hàng:</td>
+                                        <td>{selectedOrder._id}</td>
+                                      </tr>
+                                      <tr>
+                                        <td className="field">Người bán:</td>
+                                        <td>{selectedOrder.userId}</td>
+                                      </tr>
+                                      <tr>
+                                        <td className="field">Ngày bán:</td>
+                                        <td>{formatDate(selectedOrder.createdAt)}</td>
+                                      </tr>
+                                      <tr>
+                                        <td className="field">Số lượng sản phẩm:</td>
+                                        <td>{selectedOrder.totalProducts}</td>
+                                      </tr>
+                                      <tr>
+                                        <td className="field">Tổng giá:</td>
+                                        <td>{selectedOrder.totalPrice}</td>
+                                      </tr>
+                                      <tr>
+                                        <td className="field">Khách trả:</td>
+                                        <td>{selectedOrder.customerPay}</td>
+                                      </tr>
+                                      <tr>
+                                        <td className="field">Trả lại:</td>
+                                        <td>{selectedOrder.refund}</td>
+                                      </tr>
+                                      <tr>
+                                        <td className="field">Sản phẩm:</td>
+                                        <td>
+                                          <Table bordered>
+                                            <thead>
+                                              <tr>
+                                                <th>STT</th>
+                                                <th>Tên sản phẩm</th>
+                                                <th>Kích thước</th>
+                                                <th>Giá</th>
+                                                <th>Số lượng</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {selectedOrder.products.map((product, idx) => (
+                                                <tr key={idx}>
+                                                  <td>{idx + 1}</td>
+                                                  <td>{product.name}</td>
+                                                  <td>{product.size}</td>
+                                                  <td>{product.price}</td>
+                                                  <td>{product.quantity}</td>
+                                                </tr>
+                                              ))}
+                                            </tbody>
+                                          </Table>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </Table>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </tbody>
+
+                  </Table>
                 </Row>
                 <Row>
                   <Col>
