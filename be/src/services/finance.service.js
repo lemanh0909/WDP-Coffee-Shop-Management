@@ -1,4 +1,4 @@
-import Shop from "../models/shop.js";
+import Shop from "../models/shop";
 
 export const financeService = {
   async calculateMonthlyFinance(year, month) {

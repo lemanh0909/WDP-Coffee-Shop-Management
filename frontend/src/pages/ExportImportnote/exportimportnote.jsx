@@ -51,12 +51,12 @@ function ExportImportNote() {
 
   const sortedItems = sortByQuantity
     ? [...filteredItems].sort((a, b) => {
-        if (sortByQuantity === "asc") {
-          return a.quantity - b.quantity;
-        } else {
-          return b.quantity - a.quantity;
-        }
-      })
+      if (sortByQuantity === "asc") {
+        return a.quantity - b.quantity;
+      } else {
+        return b.quantity - a.quantity;
+      }
+    })
     : filteredItems;
 
   const indexOfLastItem = activePage * itemsPerPage;

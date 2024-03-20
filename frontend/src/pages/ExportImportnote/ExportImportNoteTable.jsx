@@ -28,9 +28,8 @@ function EximportTable({
               <th>
                 Số lượng{" "}
                 <i
-                  className={`fas fa-sort-${
-                    sortByQuantity === "asc" ? "up" : "down"
-                  }`}
+                  className={`fas fa-sort-${sortByQuantity === "asc" ? "up" : "down"
+                    }`}
                   onClick={handleSortByQuantity}
                   style={{ cursor: "pointer" }}
                 ></i>

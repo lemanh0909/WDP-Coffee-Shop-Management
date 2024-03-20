@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Warehouse from "./warehouse.js";
+import Warehouse from "./warehouse";
 
 const { String, Number, ObjectId, Date } = mongoose.Schema.Types;
 
