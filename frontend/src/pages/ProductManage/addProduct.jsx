@@ -11,7 +11,7 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess }) {
 
     const handleSave = async () => {
         try {
-            if(name ==="" || !name){
+            if (name === "" || !name) {
                 return console.log("Name cannot be empty!");
             }
             const productUrls = [];
@@ -22,7 +22,7 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess }) {
                 const response = await axios.post("https://api.cloudinary.com/v1_1/dvusaqmma/image/upload", formData);
                 productUrls.push(response.data.url);
             }
-    
+
             // Xây dựng dữ liệu sản phẩm
             const productData = {
                 categoryId: category,
@@ -32,20 +32,20 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess }) {
             };
             // Gọi API tạo sản phẩm
             const updateProductResponse = await axios.post("http://localhost:5000/api/v1/product/create", productData);
-    
+
             // Xử lý kết quả từ việc tạo sản phẩm
             console.log("Created product:", updateProductResponse.data);
             setName(null);
             setDescription(null);
-            setImages([]);            
+            setImages([]);
             onAddSuccess();
         } catch (error) {
             console.error('Error uploading file:', error);
         }
-    
+
         handleClose();
     };
-    
+
 
 
     const handleRemoveImage = (indexToRemove) => {

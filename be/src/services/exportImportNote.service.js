@@ -17,7 +17,6 @@ export const exportImportNoteService = {
             // Lặp qua danh sách ghi chú để lấy thông tin người dùng và thêm email vào mỗi ghi chú
             for (let note of listNote) {
                 const user = await User.findById(note.userId);
-                console.log(user.email);
                 if (user) {
                     const noteWithUserEmail = {
                         ...note.toObject(), // Chuyển đổi đối tượng mongoose thành đối tượng JS plain

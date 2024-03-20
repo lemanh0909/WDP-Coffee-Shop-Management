@@ -26,17 +26,17 @@ function AddModal({ show, handleClose, onAddSuccess, setProducts }) {
       dateExport: dateExport,
       soluong: soluong,
     };
-  
+
     // Update the state to include the new product
     setProducts((prevProducts) => [...prevProducts, newProduct]);
-  
+
     // Call the callback function passed from the parent component
     onAddSuccess(newProduct);
-  
+
     // Close the modal
     handleClose();
   };
-  
+
 
   return (
     <Modal show={show} onHide={handleClose}>
