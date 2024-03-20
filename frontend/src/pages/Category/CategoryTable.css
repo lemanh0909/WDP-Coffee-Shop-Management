@@ -1,0 +1,125 @@
+.container-table {
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+}
+
+.container-table .table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to bottom, #f4e4d7, #dbc3ae);
+}
+
+.container-table .table th,
+.container-table .table td {
+    border: none;
+    padding: 12px;
+    text-align: left;
+    font-size: 16px;
+    color: #444;
+}
+
+.container-table .table th {
+    background-color: #8b5a2b;
+    color: #fff;
+    font-weight: bold;
+}
+
+.container-table .table tr:nth-child(even) {
+    background-color: #f8f4f0;
+}
+
+.container-table .table tr {
+    border-bottom: 1px solid rgba(152, 112, 32, 0.1);
+}
+
+.container-table .table tr:hover {
+    background-color: #ece8e4;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+.custom-btn-edit {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #8b5a2b !important;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 5px;
+}
+
+.custom-btn-edit:hover {
+    background-color: #6c442a;
+}
+
+.custom-btn-delete {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #6c442a !important;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-btn-delete:hover {
+    background-color: #50301b;
+}
+
+.pagination-bar {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination {
+    padding: 0;
+    margin: 4.5em 0 0 0;
+}
+
+.pagination .page-item {
+    margin: 0 1px;
+    background-color: #dbc3ae;
+    border-radius: 6px;
+}
+
+.pagination .page-link {
+    color: #6c442a;
+    background-color: transparent;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination .page-link:hover {
+    background-color: #f8f4f0;
+    color: #6c442a;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #8b5a2b;
+    color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c442a;
+    pointer-events: none;
+    cursor: not-allowed;
+}
