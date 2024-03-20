@@ -41,7 +41,7 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                         <Form.Label>Tên loại sản phẩm</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter name"
+                            placeholder="Nhập tên"
                             value={updatedData.name}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
@@ -55,7 +55,7 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                         <Form.Label>Mô tả</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter mo ta"
+                            placeholder="Nhập mô tả"
                             value={updatedData.description}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
@@ -69,14 +69,14 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                         <Form.Label>Mã sản phẩm</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter ma san pham"
+                            placeholder="Nhập mã sản phẩm"
                             value={updatedData.products}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
                                 if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
                                     setUpdatedData({ ...updatedData, products: inputValue });
                                 } else {
-                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                    alert("Mã chỉ được chứa các ký tự chữ cái và khoảng trắng!");
                                 }
                             }}
                         />

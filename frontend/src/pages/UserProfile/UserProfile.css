@@ -99,7 +99,9 @@
   .add-btn {
     margin: 10px;
   }
-  
+  .texttitle{
+    color: #3E3232;
+  }
   .title {
     display: flex;
     justify-content: left;

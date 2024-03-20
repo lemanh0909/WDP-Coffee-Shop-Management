@@ -16,6 +16,9 @@ function EmployeeManagement() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  const itemsPerPage = 5;
+  const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(employeeData, itemsPerPage);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -110,14 +113,15 @@ function EmployeeManagement() {
         {!loading && !error && (
           <>
             <EmployeeTable
-              employeeData={employeeData}
+              employeeData={getPaginatedItems}
               toggleStatus={toggleStatus}
             />
 
-            {isAdmin && (
+            {!isAdmin && (
               <PaginationBar
-                employeeData={employeeData}
-                toggleStatus={toggleStatus}
+                activePage={activePage}
+                totalPages={totalPages}
+                handlePageChange={handlePageChange}
               />
             )}
 

@@ -1,48 +1,47 @@
-.custom-navbar{
-    background-color: #c46826 !important;
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ccc;
+    background-color: #8b5a2b;
 }
 
-.custom-navbar .mr-auto {
-    margin-right: 0;
-
-    margin-left: auto; 
+.logo {
+    height: 40px;
+    width: auto;
+    border-radius: 50%;
+    transition: all 0.3s ease;
 }
 
-.custom-navbar .nav-link:hover {
-    color: #3E3232 ;
-
-    transition: color 0.3s ease;
+.logo:hover {
+    transform: scale(1.1);
 }
 
-.custom-brand {
-    /* color: #E8751A; */
-    box-shadow: none !important;
-    padding: 0;
+.menu-container {
+    display: flex;
+    align-items: center;
 }
 
-.navbar-logo {
-    width: 50%;
-    height: 100%;
-    object-fit: cover;
+.menu-button {
+    margin-right: 10px;
+    transition: all 0.3s ease;
 }
 
-.custom-navbar {
-    margin: 0;
-    padding: 0;
+.menu-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
 }
 
-.nav-dropdown-item:hover {
-    background-color: #da640a;
-
-  }
-
-
-
-.ml-auto .nav-link {
-    color: #fff;
-    cursor: pointer;
+.user-menu {
+    margin-top: 40px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.ml-auto .nav-link:hover {
-    text-decoration: underline;
+.user-menu-item {
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+.user-menu-item:hover {
+    background-color: #f0f0f0;
 }

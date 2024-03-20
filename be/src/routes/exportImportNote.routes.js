@@ -3,7 +3,7 @@ import { exportImportNoteController } from '../controller/exportImportNote.contr
 
 const exportImportNoteRouter = express.Router();
 
-exportImportNoteRouter.post('/getNoteFromShop', exportImportNoteController.getNoteFromShop);
+exportImportNoteRouter.get('/:shopId/getNoteFromShop', exportImportNoteController.getNoteFromShop);
 exportImportNoteRouter.post('/createNote', exportImportNoteController.createNote);
 
 
