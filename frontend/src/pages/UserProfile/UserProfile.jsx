@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import userService from "../UserProfile/userService";
 import "./UserProfile.css";
+import avatar from "../images/logo.png"
 
 const UserProfile = () => {
   const [user, setUser] = useState({});
@@ -75,12 +76,12 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="container snippet">
+    <div className="container snippet ">
       <ToastContainer />
       <div className="row">
-        <div className="col-md-10">
+        <div className="col-md-12">
             <br></br>
-          <h1>Thông tin người dùng</h1>
+          <h1 className="texttitle">Chỉnh sửa thông tin</h1>
           <br></br>
           <br></br>
         </div>
@@ -88,7 +89,7 @@ const UserProfile = () => {
       <div className="row">
         <div className="col-md-3">
           <div className="text-center">
-            {imageUrl ? (
+            {/* {imageUrl ? (
               <img
                 src={imagePreview || imageUrl}
                 className="avatar img-circle img-thumbnail"
@@ -100,7 +101,12 @@ const UserProfile = () => {
                 className="avatar img-circle img-thumbnail"
                 alt="avatar"
               />
-            )}
+            )} */}
+            <img
+                src={avatar}
+                className="avatar img-circle img-thumbnail"
+                alt="avatar"
+              />
 
             <input
               type="file"
@@ -147,7 +153,7 @@ const UserProfile = () => {
               <div className="form-group">
                 <div className="col-md-12">
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     {...register("phone_number", {
                       required: true,
@@ -160,13 +166,15 @@ const UserProfile = () => {
               <br />
               <div className="form-group">
                 <div className="col-md-12">
-                  <input
-                    type="email"
-                    className="form-control"
-                    {...register("email", { required: true })}
-                    placeholder="You@gmail.com"
-                    disabled
-                  />
+                <input
+  type="email"
+  className="form-control"
+  {...register("email", { required: true })}
+  placeholder="example@gmail.com"
+  disabled
+  style={{ backgroundColor: '#f0f0f0' }} // Thiết lập màu nền cho input khi disabled
+/>
+
                 </div>
               </div>
               <br />
@@ -192,7 +200,7 @@ const UserProfile = () => {
                     className="btn btn-lg btn-primary"
                     type="submit"
                   >
-                    <i className="glyphicon glyphicon-ok-sign"></i> Update Profile
+                    <i className="glyphicon glyphicon-ok-sign"></i> View Profile
                     </button>
 
                     <button
