@@ -37,7 +37,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-      <Navbar updateLatestFullName={updateLatestFullName} latestFullName={latestFullName} />
+        <Navbar updateLatestFullName={updateLatestFullName} latestFullName={latestFullName} />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/employee-management" element={<EmployeeManagement />} /> {/* Manager and staff author done */}
