@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
-import "./CategoryTable.css";
+import "../WarehouseManage/tableWarehouse.css";
 
 function CategoryTable({
   currentItems,
@@ -21,12 +21,12 @@ function CategoryTable({
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Mã Category</th>
-              <th>Tên loai hàng</th>
-              <th>Mô tả</th>
+              <th>Category code</th>
+              <th>Category name</th>
+              <th>Description</th>
               <th>Products</th>
-              <th>Ngày tạo</th>
-              <th>Thao tác</th>
+              <th>Create date</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -63,6 +63,7 @@ function CategoryTable({
                       </Button>
                     </td>
                   </tr>
+
                   {showDetailsTable && selectedProduct && selectedProduct._id === item._id && (
                     <tr>
                       <td colSpan="9">
@@ -71,12 +72,14 @@ function CategoryTable({
                             <tbody>
                               <tr>
                                 <td className="field w-2/5">Mã category</td>
+
                                 <td>{selectedProduct._id}</td>
                               </tr>
                               <tr>
                                 <td className="field w-2/5">
                                   Tên loại hàng hoá
                                 </td>
+
                                 <td>{selectedProduct.name}</td>
                               </tr>
                               <tr>
@@ -91,6 +94,7 @@ function CategoryTable({
                                 <td className="field w-2/5">Sản phẩm</td>
                                 <td key={`${selectedProduct._id}`}>
                                   {selectedRowId === index && showDetailsTable && (
+
                                       <Table bordered>
                                         <thead>
                                           <tr>
@@ -102,10 +106,12 @@ function CategoryTable({
                                         <tbody>
                                           {selectedProduct ? (
                                             <tr>
+
                                               <td>{selectedProduct._id}</td>
                                               <td>{selectedProduct.name}</td>
                                               <td>
                                                 {selectedProduct.description}
+
                                               </td>
                                             </tr>
                                           ) : (
@@ -122,7 +128,9 @@ function CategoryTable({
                               </tr>
                             </tbody>
                           </Table>
+
                           <Button onClick={handleCloseModal}>Close</Button>
+
                         </div>
                       </td>
                     </tr>

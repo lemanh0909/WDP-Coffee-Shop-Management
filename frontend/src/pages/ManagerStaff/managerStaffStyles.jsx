@@ -21,7 +21,7 @@ export const StyledTable = styled.table`
   }
 
   th {
-    background-color: #343a40;
+    background-color: #8b5a2b;
     color: #fff;
     padding: 15px;
     text-align: center;
@@ -41,9 +41,10 @@ export const StyledTable = styled.table`
 
 export const StyledPagination = styled(Pagination)`
   justify-content: center;
+  padding:0;
   margin-top: 20px;
   position: fixed;
-  bottom: 0;
+  bottom: 10px;
   left: 0;
   right: 0;
   align-item:center;

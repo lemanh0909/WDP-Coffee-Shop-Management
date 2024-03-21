@@ -1,22 +1,39 @@
 import Shop from "../models/shop.js";
 import Warehouse from "../models/warehouse.js";
 import ExportImportNote from "../models/exportimportNote.js";
-
+import User from "../models/user.js";
 
 export const exportImportNoteService = {
     getNoteFromShop: async (shopId) => {
         try {
             const shop = await Shop.findById(shopId);
-            if (!shop) throw new Error(`Shop not found Id ${shopId}`);
+            if (!shop) throw new Error(`Shop not found with Id ${shopId}`);
+    
             const listNoteId = shop.exportImportNoteId;
-            const listNote = await ExportImportNote.find({_id: listNoteId});
-            // Trả về mảng kết quả
-            return listNote;
+    
+            // Tìm danh sách ghi chú với các ID đã chỉ định
+            const listNote = await ExportImportNote.find({ _id: { $in: listNoteId } });
+            const listNoteWithUserEmail = [];
+            // Lặp qua danh sách ghi chú để lấy thông tin người dùng và thêm email vào mỗi ghi chú
+            for (let note of listNote) {
+                const user = await User.findById(note.userId);
+                if (user) {
+                    const noteWithUserEmail = {
+                        ...note.toObject(), // Chuyển đổi đối tượng mongoose thành đối tượng JS plain
+                        userEmail: user.email
+                    };
+                    listNoteWithUserEmail.push(noteWithUserEmail);
+                }
+            }
+    
+            // Trả về danh sách ghi chú đã được cập nhật với email
+            return listNoteWithUserEmail;
         } catch (error) {
             console.error(error);
             throw error;
         }
     },
+    
     createNote: async ({ shopId, warehouseId, userId, quantity, price, status, description }) => {
         try {
             // Tìm cửa hàng dựa trên shopId và bắt đầu một phiên giao dịch

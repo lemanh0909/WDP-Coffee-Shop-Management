@@ -2,10 +2,10 @@
 import express from "express";
 
 // ** Controllers
-import { staffNoteController } from "../controller/staffNote.controller.js";
+import { staffNoteController } from "../controller/staffNote.controller";
 
 // ** Middleware
-import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt.js";
+import { verifyAccessToken, verifyAdminOrHigherToken } from "../middleware/jwt";
 
 const staffNoteRouter = express.Router();
 
