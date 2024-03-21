@@ -22,7 +22,7 @@ export const UserController = {
       },
   
     updateUser : async (req, res) => {
-        const userId = req.user.id;
+        const userId = req.params.id;
         try {
             if (!userId) {
                 return res.status(200).json({
@@ -31,6 +31,19 @@ export const UserController = {
                 })
             }
             const response = await userService.updateUser(userId, req.body)
+            return res.status(200).json(response)
+        } catch (error) {
+            return res.status(404).json({
+                status: 'ERR',
+                message: error.message
+            })
+        }
+    },
+    getDetailUser : async (req, res) => {
+        const userId = req.params.id;
+        try {
+    
+            const response = await userService.getDetailUser(userId)
             return res.status(200).json(response)
         } catch (error) {
             return res.status(404).json({

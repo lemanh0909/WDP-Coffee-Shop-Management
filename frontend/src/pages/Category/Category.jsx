@@ -1,13 +1,13 @@
+// Category.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Row, Col, Button, Modal, } from "react-bootstrap";
-import { usePagination } from "../Common/hooks.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSlider from "../Common/sidebar.jsx";
 import AddCategoryModal from "./addCategory.jsx";
 import UpdateCategoryModal from "./updateCategory.jsx";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import CategoryTable from "./CategoryTable.jsx";
 
 function Category() {
@@ -18,33 +18,31 @@ function Category() {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedRowId, setSelectedRowId] = useState(null);
   const [showDetailsTable, setShowDetailsTable] = useState(false);
-
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [sortByQuantity, setSortByQuantity] = useState(null);
   const itemsPerPage = 5;
   const [activePage, setActivePage] = useState(1);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const userDataString = localStorage.getItem('userData');
-
       if (!userDataString) {
         throw new Error('User data not found in localStorage.');
       }
-
       const userData = JSON.parse(userDataString);
-      const response = await axios.get(`http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`);
-      setItems(response.data.data.data);
 
+      const shopId = userData.shopId;
+      const userId = userData.userID;
+      const response = await axios.get(
+        `http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`
+      );
+
+      setItems(response.data.data.data);
     } catch (error) {
       console.error('Error fetching category data:', error);
       setError('An error occurred while fetching category data.');
@@ -53,30 +51,40 @@ function Category() {
     }
   };
 
-
-  // Thêm một state để lưu trữ sản phẩm được chọn để hiển thị chi tiết
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedRowId, setSelectedRowId] = useState(null);
-
-  // Xử lý khi click vào nút "Xem chi tiết"
-  const showDetails = (productId, rowId) => {
-    console.log("showDetails function is called.");
+  const showDetails = (product, rowId) => {
     if (selectedRowId === rowId && showDetailsTable) {
-      setShowDetailsTable(false); // Ẩn chi tiết nếu đã được hiển thị
-
+      setShowDetailsTable(false);
     } else {
-      axios
-        .get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
-        .then((response) => {
-          setSelectedProduct(response.data.data);
-          console.log(response.data.data)
-          setShowDetailsTable(true);
-        })
-        .catch((error) => {
-          console.error("Error fetching product details:", error);
-        });
+      setSelectedProduct(product);
+      setShowDetailsTable(true);
     }
+    setSelectedRowId(rowId);
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      throw new Error("User data not found in localStorage.");
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    axios
+      .get(
+        `http://localhost:5000/api/v1/category/${shopId}/getAllCategoriesInShop`
+      )
+      .then((response) => {
+        setCategories(response.data.data.data);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+  
+  
 
   const handleDelete = () => {
     axios
@@ -95,7 +103,6 @@ function Category() {
 
   const handleUpdateCategory = (categoryId) => {
     const selected = items.find(item => item._id === categoryId);
-    setSelectedCategoryId(categoryId);
     setSelectedCategory(selected);
     setShowUpdateModal(true);
   };
@@ -106,7 +113,6 @@ function Category() {
   };
 
   const handleCloseModal = () => {
-    setShowModal(false);
     setShowDetailsTable(false);
   };
 
@@ -114,6 +120,7 @@ function Category() {
     setShowConfirmationModal(true);
     setCategoryIdToDelete(categoryId);
   };
+  
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
     setCategoryIdToDelete(null);
@@ -157,7 +164,7 @@ function Category() {
 
   return (
     <>
-      <CommonNavbar />
+
       <div className="flex">
         <Col md={2}> <CommonSlider />
         </Col>
@@ -209,8 +216,7 @@ function Category() {
       />
       {showUpdateModal && (
         <UpdateCategoryModal
-          categoryId={selectedCategoryId}
-          categoryData={selectedCategory}
+          categoryData={selectedProduct}
           onUpdateSuccess={handleUpdateSuccess}
           onHide={() => setShowUpdateModal(false)}
         />

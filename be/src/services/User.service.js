@@ -30,7 +30,7 @@ export const userService = {
                 if (user === null) {
                     resolve({
                         status: 'ERR',
-                        message: `The user is not defined `
+                        message: `The user is not defined`
                     })
                 }
                 const userUpdate = {
@@ -39,7 +39,7 @@ export const userService = {
                     phoneNumber, fullName, dob
                 }
                 await User.findByIdAndUpdate(user._id, userUpdate, { new: true })
-                userUpdate._id.password = "******";
+                userUpdate._id.password = "****";
                 resolve({
                     status: 'OK',
                     message: 'SUCCESS',
@@ -86,6 +86,34 @@ export const userService = {
                     totalUser,
                     currentPage: parseInt(page),
                     limit: parseInt(limit)
+                })
+            } catch (err) {
+                reject(err)
+            }
+        })
+    },
+     getDetailUser: async(userId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await User.findOne({
+                    _id: userId
+                })
+                    .populate('role')
+    
+                if (user === null) {
+                    resolve({
+                        status: 'ERR',
+                        message: `The user is not defined `
+                    })
+                }
+                const newUser = {
+                    ...user._doc,
+                    password: '****'
+                }
+                resolve({
+                    status: 'OK',
+                    message: 'SUCCESS',
+                    data: newUser
                 })
             } catch (err) {
                 reject(err)
