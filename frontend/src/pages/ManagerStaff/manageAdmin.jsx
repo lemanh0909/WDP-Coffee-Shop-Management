@@ -56,7 +56,7 @@ function AdminManagement() {
 
     return (
         <>
-            <CommonNavbar />
+      
             <Container className="mt-4">
                 <ToastContainer position='top-right' />
                 <Row className="justify-content-between align-items-center mb-4">

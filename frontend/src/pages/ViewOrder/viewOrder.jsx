@@ -66,7 +66,7 @@ function ViewOrder() {
 
   return (
     <>
-      <CommonNavbar />
+
       <div className="flex">
         <Col md={2}>
           <CommonSidebar />

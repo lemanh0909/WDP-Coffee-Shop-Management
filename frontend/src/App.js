@@ -1,4 +1,5 @@
 import './App.css';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import Routes
 import Login from './pages/login/login.jsx';
 import EmployeeManagement from './pages/ManagerStaff/managerStaff.jsx';
@@ -26,9 +27,17 @@ import UserProfilenew from './pages/UserProfile/UserProfilenew.jsx';
 
 
 function App() {
+
+  const [latestFullName, setLatestFullName] = useState('');
+
+  const updateLatestFullName = (newFullName) => {
+    setLatestFullName(newFullName);
+  };
+
   return (
     <Router>
       <div className="App">
+      <Navbar updateLatestFullName={updateLatestFullName} latestFullName={latestFullName} />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/employee-management" element={<EmployeeManagement />} />
@@ -46,7 +55,7 @@ function App() {
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail />} />
           <Route path="/upImg" element={<UploadImage />} />
           <Route path="/profile" element={<UserProfile />} />
-          <Route path="/profilenew" element={<UserProfilenew />} />
+          <Route path="/profilenew" element={<UserProfilenew updateLatestFullName={updateLatestFullName} />} />
           <Route path='/verify/:id/:uniqueString' element={<AuthenPage></AuthenPage>}></Route>
           <Route path="/table" element={<Tables />} />
 

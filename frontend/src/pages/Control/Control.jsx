@@ -13,7 +13,7 @@ import CommonNavbar from "../Common/navbar.jsx";
 function Control() {
   return (
     <>
-      <CommonNavbar />
+
       <Container fluid>
         <Row className="title justify-content-center">
           <Col md={8} className="text-center">

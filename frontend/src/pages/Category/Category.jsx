@@ -29,9 +29,6 @@ function Category() {
   const [sortByQuantity, setSortByQuantity] = useState(null);
   const itemsPerPage = 5;
   const [activePage, setActivePage] = useState(1);
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fetchData = async () => {
     try {
@@ -40,8 +37,9 @@ function Category() {
       if (!userDataString) {
         throw new Error("User data not found in localStorage.");
       }
-
       const userData = JSON.parse(userDataString);
+      const shopId = userData.shopId;
+      const userId = userData.userID;
       const response = await axios.get(
         `http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`
       );
@@ -53,29 +51,60 @@ function Category() {
       console.log("category data fetching completed.");
     }
   };
-
-  // Thêm một state để lưu trữ sản phẩm được chọn để hiển thị chi tiết
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedRowId, setSelectedRowId] = useState(null);
 
   // Xử lý khi click vào nút "Xem chi tiết"
-  const showDetails = (productId, rowId) => {
-    console.log("showDetails function is called.");
-    if (selectedRowId === rowId && showDetailsTable) {
-      setShowDetailsTable(false); // Ẩn chi tiết nếu đã được hiển thị
+  const showDetails = (productId) => {
+
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      throw new Error("User data not found in localStorage.");
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    if (selectedProduct && selectedProduct._id === productId) {
+      setShowDetailsTable(!showDetailsTable);
     } else {
       axios
-        .get(`http://localhost:5000/api/v1/product/${productId}/getProductById`)
+        .get(
+          `http://localhost:5000/api/v1/product/${productId}/getAllProductsWithCategoryInShop`
+        )
         .then((response) => {
           setSelectedProduct(response.data.data);
           setShowDetailsTable(true);
-          setSelectedRowId(rowId); // Lưu id của dòng được chọn
         })
         .catch((error) => {
           console.error("Error fetching product details:", error);
         });
     }
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      throw new Error("User data not found in localStorage.");
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    axios
+      .get(
+        `http://localhost:5000/api/v1/category/${shopId}/getAllCategoriesInShop`
+      )
+      .then((response) => {
+        setCategories(response.data.data.data);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+  
+  
 
   const handleDelete = () => {
     axios
@@ -156,7 +185,7 @@ function Category() {
 
   return (
     <>
-      <CommonNavbar />
+
       <div className="flex">
       <Col md={2}> <CommonSlider />
       </Col>

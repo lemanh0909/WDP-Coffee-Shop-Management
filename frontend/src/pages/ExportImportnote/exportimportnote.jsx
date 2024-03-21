@@ -73,7 +73,7 @@ function ExportImportNote() {
 
   return (
     <>
-      <CommonNavbar />
+
       <div className="flex">
         <Col md={2}>
           <CommonSlider />
