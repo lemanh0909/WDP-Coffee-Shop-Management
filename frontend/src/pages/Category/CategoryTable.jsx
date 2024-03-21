@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
 import "../WarehouseManage/tableWarehouse.css";
 
-function WarehouseTable({
+function CategoryTable({
   currentItems,
   sortedItems,
   handlePageChange,
@@ -46,7 +46,7 @@ function WarehouseTable({
                     </td>
                     <td>{item.description}</td>
                     <td>
-                      <Button onClick={() => showDetails(item.products, index)}>
+                    <Button onClick={() => showDetails(item.products)}>
                         Xem chi tiết
                       </Button>
                     </td>
@@ -63,44 +63,38 @@ function WarehouseTable({
                       </Button>
                     </td>
                   </tr>
-                  {selectedRowId === index && showDetailsTable && (
-                    <tr key={`${item._id}-details`}>
+
+                  {showDetailsTable && selectedProduct && selectedProduct._id === item._id && (
+                    <tr>
                       <td colSpan="9">
                         <div className="details-table-container">
-                          {console.log(
-                            `Rendering details for item ${item._id}`
-                          )}
                           <Table bordered>
                             <tbody>
                               <tr>
-                                <td className="field w-2/5">
-                                  Mã category
-                                </td>
+                                <td className="field w-2/5">Mã category</td>
+
                                 <td>{selectedProduct._id}</td>
                               </tr>
                               <tr>
                                 <td className="field w-2/5">
                                   Tên loại hàng hoá
                                 </td>
-                                <td>{item.name}</td>
+
+                                <td>{selectedProduct.name}</td>
                               </tr>
                               <tr>
                                 <td className="field w-2/5">Mô tả</td>
-                                <td>{item.description}</td>
+                                <td>{selectedProduct.description}</td>
                               </tr>
                               <tr>
-                                <td className="field w-2/5">
-                                  Ngày tạo
-                                </td>
-                                <td>{item.createdAt}</td>
+                                <td className="field w-2/5">Ngày tạo</td>
+                                <td>{selectedProduct.createdAt}</td>
                               </tr>
                               <tr>
-                                <td className="field w-2/5">
-                                  Sản phẩm
-                                </td>
-                                <td key={`${item._id}-details`}>
-                                  {selectedRowId === index &&
-                                    showDetailsTable && (
+                                <td className="field w-2/5">Sản phẩm</td>
+                                <td key={`${selectedProduct._id}`}>
+                                  {selectedRowId === index && showDetailsTable && (
+
                                       <Table bordered>
                                         <thead>
                                           <tr>
@@ -112,16 +106,12 @@ function WarehouseTable({
                                         <tbody>
                                           {selectedProduct ? (
                                             <tr>
+
+                                              <td>{selectedProduct._id}</td>
+                                              <td>{selectedProduct.name}</td>
                                               <td>
-                                                {selectedProduct._id}
-                                              </td>
-                                              <td>
-                                                {selectedProduct.name}
-                                              </td>
-                                              <td>
-                                                {
-                                                  selectedProduct.description
-                                                }
+                                                {selectedProduct.description}
+
                                               </td>
                                             </tr>
                                           ) : (
@@ -138,9 +128,9 @@ function WarehouseTable({
                               </tr>
                             </tbody>
                           </Table>
-                          <Button onClick={handleCloseModal}>
-                            Close
-                          </Button>
+
+                          <Button onClick={handleCloseModal}>Close</Button>
+
                         </div>
                       </td>
                     </tr>
@@ -214,4 +204,4 @@ function WarehouseTable({
   );
 }
 
-export default WarehouseTable;
+export default CategoryTable;
