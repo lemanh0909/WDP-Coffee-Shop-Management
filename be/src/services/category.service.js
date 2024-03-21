@@ -123,28 +123,32 @@ export const categoryService = {
 
   getAllCategoriesInShop: async (managerId) => {
     try {
-      // Tìm kiếm cửa hàng dựa trên managerId
-      const shop = await Shop.findOne({ managerId: managerId }).populate('categoryId')
-      // Kiểm tra nếu không tìm thấy cửa hàng
-      if (shop == null) {
-        throw new Error('Shop not found with managerId:' + managerId);
-      }
+        // Tìm kiếm cửa hàng dựa trên managerId
+        const shop = await Shop.findOne({ managerId: managerId }).populate('categoryId');
 
-      // Lấy ra tất cả các danh mục liên kết với cửa hàng
-      const categories = shop.categoryId;
+        // Kiểm tra nếu không tìm thấy cửa hàng
+        if (!shop) {
+            throw new Error('Shop not found with managerId:' + managerId);
+        }
 
-      // Trả về kết quả thành công
-      return {
-        status: 'OK',
-        message: 'Categories retrieved successfully',
-        data: categories,
-      };
+        // Lấy ra tất cả các danh mục liên kết với cửa hàng và populate sản phẩm trong mỗi danh mục
+        const categoriesWithProducts = await Promise.all(shop.categoryId.map(async (category) => {
+            const categoryWithProducts = await Category.findById(category._id).populate('products');
+            return categoryWithProducts;
+        }));
+
+        // Trả về kết quả thành công
+        return {
+            status: 'OK',
+            message: 'Categories retrieved successfully',
+            data: categoriesWithProducts,
+        };
     } catch (err) {
-      // Xử lý lỗi
-      console.error('Error retrieving categories:', err);
-      throw new Error('Error retrieving categories: ' + err.message);
+        // Xử lý lỗi
+        console.error('Error retrieving categories:', err);
+        throw new Error('Error retrieving categories: ' + err.message);
     }
-  },
+},
 
   deleteCategory: async (categoryId) => {
     return new Promise(async (resolve, reject) => {

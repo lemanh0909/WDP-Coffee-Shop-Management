@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
 import "../WarehouseManage/tableWarehouse.css";
 
-function WarehouseTable({
+function CategoryTable({
   currentItems,
   sortedItems,
   handlePageChange,
@@ -46,7 +46,7 @@ function WarehouseTable({
                     </td>
                     <td>{item.description}</td>
                     <td>
-                      <Button onClick={() => showDetails(item.products, index)}>
+                      <Button onClick={() => showDetails(item, index)}>
                         Xem chi tiết
                       </Button>
                     </td>
@@ -73,15 +73,11 @@ function WarehouseTable({
                           <Table bordered>
                             <tbody>
                               <tr>
-                                <td className="field w-2/5">
-                                  Mã category
-                                </td>
+                                <td className="field w-2/5">Mã category</td>
                                 <td>{selectedProduct._id}</td>
                               </tr>
                               <tr>
-                                <td className="field w-2/5">
-                                  Tên loại hàng hoá
-                                </td>
+                                <td className="field w-2/5">Tên loại hàng hoá</td>
                                 <td>{item.name}</td>
                               </tr>
                               <tr>
@@ -89,9 +85,7 @@ function WarehouseTable({
                                 <td>{item.description}</td>
                               </tr>
                               <tr>
-                                <td className="field w-2/5">
-                                  Ngày tạo
-                                </td>
+                                <td className="field w-2/5">Ngày tạo</td>
                                 <td>{item.createdAt}</td>
                               </tr>
                               <tr>
@@ -99,41 +93,24 @@ function WarehouseTable({
                                   Sản phẩm
                                 </td>
                                 <td key={`${item._id}-details`}>
-                                  {selectedRowId === index &&
-                                    showDetailsTable && (
-                                      <Table bordered>
-                                        <thead>
-                                          <tr>
-                                            <th>Mã sản phẩm</th>
-                                            <th>Tên hàng hoá:</th>
-                                            <th>Miêu tả:</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {selectedProduct ? (
-                                            <tr>
-                                              <td>
-                                                {selectedProduct._id}
-                                              </td>
-                                              <td>
-                                                {selectedProduct.name}
-                                              </td>
-                                              <td>
-                                                {
-                                                  selectedProduct.description
-                                                }
-                                              </td>
-                                            </tr>
-                                          ) : (
-                                            <tr>
-                                              <td colSpan="3">
-                                                Không có sản phẩm nào
-                                              </td>
-                                            </tr>
-                                          )}
-                                        </tbody>
-                                      </Table>
-                                    )}
+                                  <Table bordered>
+                                    <thead>
+                                      <tr>
+                                        <th>Mã sản phẩm</th>
+                                        <th>Tên hàng hoá:</th>
+                                        <th>Miêu tả:</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {item.products.map((product, idx) => (
+                                        <tr key={idx}>
+                                          <td>{product._id}</td>
+                                          <td>{product.name}</td>
+                                          <td>{product.description}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </Table>
                                 </td>
                               </tr>
                             </tbody>
@@ -214,4 +191,4 @@ function WarehouseTable({
   );
 }
 
-export default WarehouseTable;
+export default CategoryTable;
