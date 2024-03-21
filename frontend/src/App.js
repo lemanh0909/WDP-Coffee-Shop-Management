@@ -23,6 +23,7 @@ import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
 import UploadImage from './pages/ImgUp/UploadImage.jsx';
 import UserProfile from './pages/UserProfile/UserProfile.jsx';
 import UserProfilenew from './pages/UserProfile/UserProfilenew.jsx';
+import Statistic from './pages/Statistic/Statistic.jsx';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           <Route path="/profilenew" element={<UserProfilenew />} />
           <Route path='/verify/:id/:uniqueString' element={<AuthenPage></AuthenPage>}></Route>
           <Route path="/table" element={<Tables />} />
+          <Route path="/statistic" element={<Statistic />} />
         </Routes>
       </div>
     </Router>

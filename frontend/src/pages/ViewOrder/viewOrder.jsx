@@ -202,7 +202,7 @@ function ViewOrder() {
                 </Row>
                 <Row>
                   <Col>
-                    <Pagination className="pagination">
+                    <Pagination className="pagination justify-center">
                       <Pagination.Prev
                         onClick={() => handlePageChange(activePage - 1)}
                         disabled={activePage === 1}
