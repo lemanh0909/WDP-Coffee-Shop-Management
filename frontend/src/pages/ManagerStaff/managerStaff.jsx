@@ -8,28 +8,31 @@ import { usePagination } from '../Common/hooks.js';
 import CreateStaffModal from './createStaff.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '../Common/Authorization.js';
+import { useNavigate } from 'react-router-dom';
 
 function EmployeeManagement() {
+  const [role] = useAuth();
+  const navigate = useNavigate();
+  if (role == "Admin") { navigate("/adminManagement"); }
+  else {
+    if (role == "Staff") {
+      navigate("/control")
+    }
+  }
   const [employeeData, setEmployeeData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 7;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(employeeData, itemsPerPage);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const userDataString = localStorage.getItem('userData');
-    if (userDataString) {
-      const userData = JSON.parse(userDataString);
-      setIsAdmin(userData.role === 'Admin');
-    }
-  }, []);
+
 
   const fetchData = async () => {
     try {
@@ -96,8 +99,8 @@ function EmployeeManagement() {
             <h1 className="text-center mb-0 text-white">Staff login rights</h1>
           </Col>
           <Col xs={6} className="text-right">
-            {isAdmin && (
-              <Button variant="primary" className="add-btn btn-color" onClick={() => setShowAddModal(true)}>
+            {role == "Manager" && (
+              <Button style={{ backgroundColor: "#8b5a2b" }} variant="primary" className="add-btn btn-color" onClick={() => setShowAddModal(true)}>
                 <i className="fa-solid fa-plus"></i> Create account
               </Button>
             )}
@@ -116,21 +119,18 @@ function EmployeeManagement() {
               employeeData={getPaginatedItems}
               toggleStatus={toggleStatus}
             />
-
-            {!isAdmin && (
-              <PaginationBar
-                activePage={activePage}
-                totalPages={totalPages}
-                handlePageChange={handlePageChange}
-              />
-            )}
-
+            <PaginationBar
+              activePage={activePage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+            />
             <CreateStaffModal
               userId={JSON.parse(localStorage.getItem('userData'))?.userID}
               show={showAddModal}
               onHide={() => setShowAddModal(false)}
               handleAddWarehouse={handleAddWarehouse}
             />
+
           </>
         )}
       </Container>

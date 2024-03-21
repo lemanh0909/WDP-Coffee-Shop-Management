@@ -1,42 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { Fakedata } from "./Fakedata.js";
+import axios from "axios";
 
-function AddModal({ show, handleClose, onAddSuccess, setProducts }) {
-  const [tenhanghoa, setTenhanghoa] = useState("");
-  const [machanghoa, setMachanghoa] = useState(generateNewProductCode());
-  const [lydo, setLydo] = useState("");
-  const [dateImport, setDateImport] = useState("");
-  const [dateExport, setDateExport] = useState("");
-  const [soluong, setSoluong] = useState("");
+function AddModal({ show, handleClose, onAddSuccess }) {
+  const [warehouseOptions, setWarehouseOptions] = useState([]);
+  const [selectedWarehouse, setSelectedWarehouse] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [price, setPrice] = useState("");
+  const [status, setStatus] = useState("Imported");
+  const [description, setDescription] = useState("");
 
-  function generateNewProductCode() {
-    const existingCodes = Fakedata.map((item) => item.machanghoa);
-    const maxCode = Math.max(...existingCodes.map((code) => parseInt(code, 10)));
-    const newCode = (maxCode + 1).toString().padStart(3, '0');
-    return newCode;
-  }
+  const fetchWarehouses = async () => {
+    try {
+      const userDataString = localStorage.getItem('userData');
 
-  const handleSave = () => {
-    const newProduct = {
-      tenhanghoa: tenhanghoa,
-      machanghoa: machanghoa,
-      lydo: lydo,
-      dateImport: dateImport,
-      dateExport: dateExport,
-      soluong: soluong,
-    };
-  
-    // Update the state to include the new product
-    setProducts((prevProducts) => [...prevProducts, newProduct]);
-  
-    // Call the callback function passed from the parent component
-    onAddSuccess(newProduct);
-  
-    // Close the modal
-    handleClose();
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+      const userData = JSON.parse(userDataString);
+
+      const response = await axios.get(
+        `http://localhost:5000/api/v1/warehouse/${userData.shopId}/getAllWarehousesInShop`
+      );
+
+      if (response.status === 200) {
+        const warehouseData = response.data.data;
+        setWarehouseOptions(warehouseData);
+      } else {
+        throw new Error('Failed to fetch warehouses.');
+      }
+    } catch (error) {
+      console.error("Error fetching warehouses:", error);
+    }
   };
-  
+
+  useEffect(() => {
+    fetchWarehouses();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      console.log("Selected warehouse:", selectedWarehouse); // Thêm log này để kiểm tra giá trị của selectedWarehouse
+
+      const userDataString = localStorage.getItem('userData');
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+      const userData = JSON.parse(userDataString);
+
+      const data = {
+        shopId: userData.shopId,
+        warehouseId: selectedWarehouse,
+        userId: userData.userID,
+        quantity: quantity,
+        price: price,
+        status: status,
+        description: description
+      };
+
+      const response = await axios.post('http://localhost:5000/api/v1/note/createNote', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status === 201) {
+        console.log("Note created successfully:", response.data);
+        onAddSuccess(response.data);
+        handleClose();
+      } else {
+        throw new Error('Failed to create note.');
+      }
+    } catch (error) {
+      console.error("Error creating note:", error);
+    }
+  };
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -45,52 +83,55 @@ function AddModal({ show, handleClose, onAddSuccess, setProducts }) {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="tenhanghoa">
-            <Form.Label>Tên hàng hóa</Form.Label>
+          <Form.Group controlId="warehouseId">
+            <Form.Label>Chọn Warehouse</Form.Label>
             <Form.Control
-              type="text"
-              value={tenhanghoa}
-              onChange={(e) => setTenhanghoa(e.target.value)}
-            />
+              as="select"
+              value={selectedWarehouse}
+              onChange={(e) => setSelectedWarehouse(e.target.value)}
+            >
+              <option value="">Chọn Warehouse</option>
+              {warehouseOptions.map((warehouse) => (
+                <option key={warehouse._id} value={warehouse._id}>
+                  {warehouse.name}
+                </option>
+              ))}
+            </Form.Control>
           </Form.Group>
-          <Form.Group controlId="machanghoa">
-            <Form.Label>Mã hàng hóa</Form.Label>
-            <Form.Control
-              type="text"
-              value={machanghoa}
-              onChange={(e) => setMachanghoa(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="lydo">
-            <Form.Label>Lý do</Form.Label>
-            <Form.Control
-              type="text"
-              value={lydo}
-              onChange={(e) => setLydo(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="dateImport">
-            <Form.Label>Ngày nhập</Form.Label>
-            <Form.Control
-              type="date"
-              value={dateImport}
-              onChange={(e) => setDateImport(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="dateExport">
-            <Form.Label>Ngày xuất</Form.Label>
-            <Form.Control
-              type="date"
-              value={dateExport}
-              onChange={(e) => setDateExport(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="soluong">
+          <Form.Group controlId="quantity">
             <Form.Label>Số lượng</Form.Label>
             <Form.Control
               type="number"
-              value={soluong}
-              onChange={(e) => setSoluong(e.target.value)}
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="price">
+            <Form.Label>Giá</Form.Label>
+            <Form.Control
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="status">
+            <Form.Label>Tình trạng</Form.Label>
+            <Form.Control
+              as="select"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="Imported">Imported</option>
+              <option value="Exported">Exported</option>
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="description">
+            <Form.Label>Mô tả</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
         </Form>

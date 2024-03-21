@@ -95,7 +95,7 @@ function ViewOrder() {
                 <h2>Danh sách đơn hàng</h2>
               </Col>
             </Row>
-            <Row>
+            <Row className="container-table table">
               <Col xs={12} style={{ marginRight: "20px" }}>
                 <Row>
                   <Table striped bordered hover>

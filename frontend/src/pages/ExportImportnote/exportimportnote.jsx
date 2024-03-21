@@ -1,196 +1,150 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Table,
-  Pagination,
-  Button,
-} from "react-bootstrap";
+import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
-import CommonSlider from "../Common/sidebar.jsx";
+import CommonSidebar from "../Common/sidebar.jsx";
+import { ToastContainer, toast } from 'react-toastify';
 import AddModal from "./add.jsx";
+import 'react-toastify/dist/ReactToastify.css';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
-import { Fakedata } from "./Fakedata.js";
-
-function ExportImportNote() {
-  const itemsPerPage = 7;
+function PhieuThuChi() {
+  const itemsPerPage = 8;
   const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [paginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(products, itemsPerPage);
-  const [showDetailsTable, setShowDetailsTable] = useState(false);
+  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
+
   const [showAddModal, setShowAddModal] = useState(false);
 
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
 
-  const showDetails = (machanghoa) => {
-    const selectedProduct = Fakedata.find(
-      (product) => product.machanghoa === machanghoa
-    );
-
-    if (selectedProduct) {
-      setSelectedProduct(selectedProduct);
-      setShowDetailsTable(true);
-    } else {
-      console.error("Product not found in Fakedata");
-    }
-  };
   const handleAddSuccess = (newProduct) => {
     setProducts([...products, newProduct]);
+    fetchProducts();
   };
 
+  const fetchProducts = async () => {
+    try {
+      const userDataString = localStorage.getItem('userData');
+
+      if (!userDataString) {
+        throw new Error('User data not found in localStorage.');
+      }
+
+      const userData = JSON.parse(userDataString);
+      const response = await axios.get(`http://localhost:5000/api/v1/note/${userData.shopId}/getNoteFromShop`);
+      setProducts(response.data.data);
+    } catch (error) {
+      console.error('Error fetching warehouse data:', error);
+      toast.error('Error fetching warehouse data!');
+    } finally {
+      console.log('Warehouse data fetching completed.');
+    }
+  };
 
   useEffect(() => {
-    setProducts(Fakedata);
+    fetchProducts();
   }, []);
+
+  const exportToCSV = (csvData, fileName) => {
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
+
+    const ws = XLSX.utils.json_to_sheet(csvData);
+    const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+  };
 
   return (
     <>
       <CommonNavbar />
       <div className="flex">
-        <CommonSlider
-          handlePageChange={handlePageChange}
-          activePage={activePage}
-          totalPages={totalPages}
-          getPaginatedItems={paginatedItems}
-        />
-        <Container className="ml-72 ">
-          <Row className="title mb-0">
-            <Col md={4} className="text-white ">
-              <h2>Export Import note</h2>
-            </Col>
-            <Col md={4} />
-            <Col md={4} className="button-container">
-              <div className="d-flex gap-3">
-                <Button variant="primary" onClick={handleShowAddModal}>
-                  <i className="far fa-plus-square"></i> Thêm
-                </Button>
-                <Button variant="primary">
-                  <i className="far fa-plus-square"></i> Xuất ra file
-                </Button>
-              </div>
-            </Col>
-          </Row>
+        <Col md={2}>
+          <CommonSidebar />
+        </Col>
 
-          <Row>
-            <Col xs={12}>
-              <Row>
+        <Col md={10}>
+          <Container className="ml-72">
+            <ToastContainer position='top-right' />
+            <Row className="title mb-0">
+              <Col md={6} className="text-left text-white">
+                <h2>Quản lý Thu Chi</h2>
+              </Col>
+              <Col md={6} className="text-right">
+                <Button variant="primary" onClick={handleShowAddModal}>
+                  <i className="far fa-plus-square"></i> Thêm phiếu
+                </Button>
+                <Button variant="warning" onClick={() => exportToCSV(products, "phieu_thu_chi")}>Export</Button>
+              </Col>
+            </Row>
+            <Row className="mb-3">
+              <Col md={12}>
+              </Col>
+            </Row>
+
+            <Row className="container-table table">
+              <Col xs={12}>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Mã hàng hóa</th>
-                      <th>Tên hàng hóa</th>
-                      <th>Lý do</th>
+                      <th>Kho hàng</th>
+                      <th>User email</th>
+                      <th>Số lượng</th>
                       <th>Giá</th>
-                      <th>Số lượng</th>
-                      <th></th>
+                      <th>Tình trạng</th>
+                      <th>Ngày tạo</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedItems.map((item, index) => (
-                      <React.Fragment key={index}>
-                        <tr>
-                          <td>{item.machanghoa}</td>
-                          <td style={{ color: "#BB2649", fontWeight: "bold" }}>
-                            {item.tenhanghoa}
-                          </td>
-                          <td>{item.lydo}</td>
-                          <td>{item.gia}</td>
-                          <td>{item.soluong}</td>
-                          <td>
-                            <Button onClick={() => showDetails(item.machanghoa)}>
-                              Xem chi tiết
-                            </Button>
-                          </td>
+                    {paginatedItems.length === 0 ? (
+                      <tr>
+                        <td colSpan="8" className="text-center">
+                          Không có dữ liệu để hiển thị!
+                        </td>
+                      </tr>
+                    ) : (
+                      paginatedItems.map((item) => (
+                        <tr key={item._id}>
+                          <td>{item.warehouse ? item.warehouse.name : "N/A"}</td>
+                          <td>{item.userEmail}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.price}</td>
+                          <td>{item.status}</td>
+                          <td>{item.createdAt}</td>
                         </tr>
-                        {showDetailsTable && selectedProduct && selectedProduct.machanghoa === item.machanghoa && (
-                          <tr>
-                            <td colSpan="6">
-                              <div className="details-table-container">
-                                <Table bordered>
-                                  <tbody>
-                                    <tr>
-                                      <td className="field" >Tên hàng hóa:</td>
-                                      <td style={{ color: "#BB2649", fontWeight: "bold" }}>{selectedProduct.tenhanghoa}</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="field">Mã hàng hóa:</td>
-                                      <td>{selectedProduct.machanghoa}</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="field">Lý do:</td>
-                                      <td>{selectedProduct.lydo}</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="field">Ngày nhập:</td>
-                                      <td>{selectedProduct.dateImport}</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="field">Ngày xuất:</td>
-                                      <td>{selectedProduct.dateExport}</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="field">Số lượng:</td>
-                                      <td>{selectedProduct.soluong}</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="field">Giá cả:</td>
-                                      <td>{selectedProduct.gia}</td>
-                                    </tr>
-                                    <tr>
-                                      <td className="field w-40">Miêu tả:</td>
-                                      <td className="w-60">{selectedProduct.mieuta}</td>
-                                    </tr>
-                                  </tbody>
-                                </Table>
-                              </div>
-                            </td>
-                          </tr>
-                        )}
-                      </React.Fragment>
-                    ))}
+                      ))
+                    )}
                   </tbody>
                 </Table>
-              </Row>
-              <Row>
-                <Col>
-                  <Pagination className="pagination">
-                    <Pagination.Prev
-                      onClick={() => handlePageChange(activePage - 1)}
-                      disabled={activePage === 1}
-                    />
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <Pagination.Item
-                        key={i + 1}
-                        active={i + 1 === activePage}
-                        onClick={() => handlePageChange(i + 1)}
-                      >
-                        {i + 1}
-                      </Pagination.Item>
-                    ))}
-                    <Pagination.Next
-                      onClick={() => handlePageChange(activePage + 1)}
-                      disabled={activePage === totalPages}
-                    />
-                  </Pagination>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+                <Pagination className="pagination justify-content-center">
+                  <Pagination.Prev onClick={() => handlePageChange(activePage - 1)} disabled={activePage === 1} />
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <Pagination.Item
+                      key={i + 1}
+                      active={i + 1 === activePage}
+                      onClick={() => handlePageChange(i + 1)}
+                    >
+                      {i + 1}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next onClick={() => handlePageChange(activePage + 1)} disabled={activePage === totalPages} />
+                </Pagination>
+              </Col>
+            </Row>
+            <AddModal
+              show={showAddModal}
+              handleClose={handleCloseAddModal}
+              onAddSuccess={handleAddSuccess}
+              setProducts={setProducts}
+            />
+          </Container>
+        </Col>
       </div>
-      <AddModal
-        show={showAddModal}
-        handleClose={handleCloseAddModal}
-        onAddSuccess={handleAddSuccess}
-        setProducts={setProducts} // Pass setProducts here
-      />
-
     </>
   );
 }
-export default ExportImportNote;
+export default PhieuThuChi;
