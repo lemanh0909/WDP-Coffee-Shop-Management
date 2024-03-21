@@ -199,7 +199,7 @@ function ProductManage() {
                     onClick={handleShowModal}
                   >
                     <i className="fa-solid fa-plus"></i> Add Product
-                  </Button>
+                  </Button>}
                 </div>
               </Col>
             </Row>
