@@ -23,7 +23,6 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess, warehous
     const handleSave = async () => {
         try {
             if (name === "" || !name) {
-            if (name === "" || !name) {
                 return console.log("Name cannot be empty!");
             }
             const productUrls = [];
@@ -60,7 +59,6 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess, warehous
             // Gọi API tạo sản phẩm
             const updateProductResponse = await axios.post("http://localhost:5000/api/v1/product/create", productData);
 
-
             // Xử lý kết quả từ việc tạo sản phẩm
             console.log("Created product:", updateProductResponse.data);
             setCategory("");
@@ -74,7 +72,6 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess, warehous
         } catch (error) {
             console.error('Error uploading file:', error);
         }
-
 
         handleClose();
     };
