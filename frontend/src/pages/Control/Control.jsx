@@ -31,7 +31,7 @@ function Control() {
           <Col md={12}>
             <Row className="justify-content-center">
               <Col md={6} className="d-flex flex-column align-items-center">
-                <Button variant="/exportimportnote" size="lg" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Export-Import note</Button>
+                <Link to="/exportimportnote" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Export-Import note</Link>
                 <Link to="/warehouse" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Warehouse</Link>
                 {role !== "Staff" && <Link to="/employee-management" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Staff management</Link>}
                 <Link to="/Thuchi" className="btn btn-outline-primary btn-lg mb-3 btn-zoom">Receipt</Link>
