@@ -46,7 +46,7 @@ function CategoryTable({
                     </td>
                     <td>{item.description}</td>
                     <td>
-                    <Button onClick={() => showDetails(item.products)}>
+                      <Button onClick={() => showDetails(item, index)}>
                         Xem chi tiết
                       </Button>
                     </td>
@@ -72,15 +72,11 @@ function CategoryTable({
                             <tbody>
                               <tr>
                                 <td className="field w-2/5">Mã category</td>
-
                                 <td>{selectedProduct._id}</td>
                               </tr>
                               <tr>
-                                <td className="field w-2/5">
-                                  Tên loại hàng hoá
-                                </td>
-
-                                <td>{selectedProduct.name}</td>
+                                <td className="field w-2/5">Tên loại hàng hoá</td>
+                                <td>{item.name}</td>
                               </tr>
                               <tr>
                                 <td className="field w-2/5">Mô tả</td>
@@ -88,42 +84,32 @@ function CategoryTable({
                               </tr>
                               <tr>
                                 <td className="field w-2/5">Ngày tạo</td>
-                                <td>{selectedProduct.createdAt}</td>
+
+                                <td>{item.createdAt}</td>
                               </tr>
                               <tr>
-                                <td className="field w-2/5">Sản phẩm</td>
-                                <td key={`${selectedProduct._id}`}>
-                                  {selectedRowId === index && showDetailsTable && (
-
-                                      <Table bordered>
-                                        <thead>
-                                          <tr>
-                                            <th>Mã sản phẩm</th>
-                                            <th>Tên hàng hoá:</th>
-                                            <th>Miêu tả:</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {selectedProduct ? (
-                                            <tr>
-
-                                              <td>{selectedProduct._id}</td>
-                                              <td>{selectedProduct.name}</td>
-                                              <td>
-                                                {selectedProduct.description}
-
-                                              </td>
-                                            </tr>
-                                          ) : (
-                                            <tr>
-                                              <td colSpan="3">
-                                                Không có sản phẩm nào
-                                              </td>
-                                            </tr>
-                                          )}
-                                        </tbody>
-                                      </Table>
-                                    )}
+                                <td className="field w-2/5">
+                                  Sản phẩm
+                                </td>
+                                <td key={`${item._id}-details`}>
+                                  <Table bordered>
+                                    <thead>
+                                      <tr>
+                                        <th>Mã sản phẩm</th>
+                                        <th>Tên hàng hoá:</th>
+                                        <th>Miêu tả:</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {item.products.map((product, idx) => (
+                                        <tr key={idx}>
+                                          <td>{product._id}</td>
+                                          <td>{product.name}</td>
+                                          <td>{product.description}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </Table>
                                 </td>
                               </tr>
                             </tbody>
