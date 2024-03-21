@@ -28,10 +28,6 @@ function Category() {
   const itemsPerPage = 5;
   const [activePage, setActivePage] = useState(1);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const userDataString = localStorage.getItem('userData');
@@ -39,7 +35,13 @@ function Category() {
         throw new Error('User data not found in localStorage.');
       }
       const userData = JSON.parse(userDataString);
-      const response = await axios.get(`http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`);
+
+      const shopId = userData.shopId;
+      const userId = userData.userID;
+      const response = await axios.get(
+        `http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`
+      );
+
       setItems(response.data.data.data);
     } catch (error) {
       console.error('Error fetching category data:', error);
@@ -58,6 +60,31 @@ function Category() {
     }
     setSelectedRowId(rowId);
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      throw new Error("User data not found in localStorage.");
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    axios
+      .get(
+        `http://localhost:5000/api/v1/category/${shopId}/getAllCategoriesInShop`
+      )
+      .then((response) => {
+        setCategories(response.data.data.data);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+  
+  
 
   const handleDelete = () => {
     axios
@@ -137,7 +164,7 @@ function Category() {
 
   return (
     <>
-      <CommonNavbar />
+
       <div className="flex">
         <Col md={2}> <CommonSlider />
         </Col>

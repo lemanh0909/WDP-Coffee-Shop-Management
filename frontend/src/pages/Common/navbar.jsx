@@ -10,7 +10,7 @@ import logoImage from "../images/logo.png";
 import { useNavigate, Link } from "react-router-dom";
 import "./navbar.css";
 
-const CommonNavbar = () => {
+const CommonNavbar = ({ latestFullName }) => {
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -118,7 +118,9 @@ const CommonNavbar = () => {
                     >
                         <AccountCircleIcon style={{ fontSize: 24 }} />
                         <span style={{ fontSize: 16, marginLeft: 8 }}>
-                            {localStorage.getItem('userData') ? JSON.parse(localStorage.getItem('userData')).fullName : 'Welcome'}
+
+                            <span style={{ fontSize: 16, marginLeft: 8 }}>{latestFullName || 'Hello'}</span>
+
                         </span>
                     </IconButton>
 

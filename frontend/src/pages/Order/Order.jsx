@@ -226,7 +226,7 @@ const Order = () => {
 
   return (
     <>
-      <CommonNavbar />
+
       {isLowQuantityNotificationVisible && lowQuantityItems.length > 0 && (
         <div className="alert alert-warning position-relative">
           <CloseButton onClick={handleCloseLowQuantityNotification} className="position-absolute top-0 end-0 m-2" />

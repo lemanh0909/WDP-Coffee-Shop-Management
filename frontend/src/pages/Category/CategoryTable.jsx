@@ -63,13 +63,11 @@ function CategoryTable({
                       </Button>
                     </td>
                   </tr>
-                  {selectedRowId === index && showDetailsTable && (
-                    <tr key={`${item._id}-details`}>
+
+                  {showDetailsTable && selectedProduct && selectedProduct._id === item._id && (
+                    <tr>
                       <td colSpan="9">
                         <div className="details-table-container">
-                          {console.log(
-                            `Rendering details for item ${item._id}`
-                          )}
                           <Table bordered>
                             <tbody>
                               <tr>
@@ -82,10 +80,11 @@ function CategoryTable({
                               </tr>
                               <tr>
                                 <td className="field w-2/5">Mô tả</td>
-                                <td>{item.description}</td>
+                                <td>{selectedProduct.description}</td>
                               </tr>
                               <tr>
                                 <td className="field w-2/5">Ngày tạo</td>
+
                                 <td>{item.createdAt}</td>
                               </tr>
                               <tr>
@@ -115,9 +114,9 @@ function CategoryTable({
                               </tr>
                             </tbody>
                           </Table>
-                          <Button onClick={handleCloseModal}>
-                            Close
-                          </Button>
+
+                          <Button onClick={handleCloseModal}>Close</Button>
+
                         </div>
                       </td>
                     </tr>
