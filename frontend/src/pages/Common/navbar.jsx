@@ -47,7 +47,7 @@ const CommonNavbar = () => {
     };
 
     const navigateToProfile = () => {
-        navigate("/update");
+        navigate("/profileNew");
     };
 
     return (

@@ -12,14 +12,14 @@ function ViewDetail() {
             <Container fluid className="ml-72">
                 <Row className="mb-3">
                     <Col>
-                        <h2>Chi tiết đơn hàng</h2>
+                        <h2>Order Details</h2>
                     </Col>
                     <Col className="text-right">
                         <Button variant="primary" className="mr-2">
-                            <i className="fa-solid fa-plus"></i> Thêm danh mục
+                            <i className="fa-solid fa-plus"></i> Add category
                         </Button>
                         <Button variant="secondary">
-                            <i className="fa-solid fa-file-export"></i> Xuất ra file
+                            <i className="fa-solid fa-file-export"></i> Export to file
                         </Button>
                     </Col>
                 </Row>
@@ -27,33 +27,33 @@ function ViewDetail() {
                 <Row className="justify-content-center mb-4">
                     <Col md={9}>
                         <Card>
-                            <Card.Header as="h5">Mã đơn hàng: HD123456</Card.Header>
+                            <Card.Header as="h5">Order ID: HD123456</Card.Header>
                             <Card.Body>
                                 <Row>
                                     <Col md={6}>
-                                        <p><strong>Ngày bán:</strong> 15 Mar 2023, 12:47 PM</p>
-                                        <p><strong>Người bán:</strong> Nguyen Van A</p>
+                                        <p><strong>Order Date:</strong> 15 Mar 2023, 12:47 PM</p>
+                                        <p><strong>Seller:</strong> Nguyen Van A</p>
                                     </Col>
                                     <Col md={6}>
-                                        <p><strong>Tổng giá:</strong> 100,000</p>
-                                        <p><strong>Khách trả:</strong> 100,000</p>
-                                        <p className="status-paid">Đã thanh toán</p>
+                                        <p><strong>Total Price:</strong> 100,000</p>
+                                        <p><strong>Customer Pay:</strong> 100,000</p>
+                                        <p className="status-paid">Paid</p>
                                     </Col>
                                 </Row>
                                 <Table striped bordered hover responsive="sm">
                                     <thead>
                                         <tr>
-                                            <th>Mã hàng hóa</th>
-                                            <th>Tên hàng hóa</th>
-                                            <th>Số lượng</th>
-                                            <th>Đơn giá</th>
-                                            <th>Thành tiền</th>
+                                            <th>Product ID</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Total Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>HH123</td>
-                                            <td>Cà phê đen</td>
+                                            <td>Black Coffee</td>
                                             <td>4</td>
                                             <td>25,000</td>
                                             <td>100,000</td>
@@ -61,15 +61,15 @@ function ViewDetail() {
                                     </tbody>
                                 </Table>
                                 <div className="total-info">
-                                    <p>Voucher: <strong>Không</strong></p>
-                                    <p><strong>Tổng cộng:</strong> 100,000</p>
-                                    <p><strong>Tổng thanh toán:</strong> 100,000</p>
+                                    <p>Voucher: <strong>No</strong></p>
+                                    <p><strong>Total:</strong> 100,000</p>
+                                    <p><strong>Total Paid:</strong> 100,000</p>
                                 </div>
                                 <div className="invoice-actions text-right">
                                     <Button variant="primary" className="mr-2">Export to excel</Button>
-                                    <Button variant="secondary" className="mr-2">In</Button>
-                                    <Button variant="success" className="mr-2">Cập nhật</Button>
-                                    <Button variant="danger">Hủy</Button>
+                                    <Button variant="secondary" className="mr-2">Print</Button>
+                                    <Button variant="success" className="mr-2">Update</Button>
+                                    <Button variant="danger">Cancel</Button>
                                 </div>
                             </Card.Body>
                         </Card>

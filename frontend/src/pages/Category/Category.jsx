@@ -122,7 +122,7 @@ function Category() {
   const handleUpdateSuccess = () => {
     fetchData();
     setShowUpdateModal(false);
-    toast.success('Cập nhật the loai thành công!');
+    toast.success('Update category successful!');
   };
 
   const handleSortByQuantity = () => {
@@ -166,7 +166,7 @@ function Category() {
             <ToastContainer position="top-right" />
             <Row className="title mb-0">
               <Col md={4} className="text-white">
-                <h2>Quản lý thể loai</h2>
+                <h2>Category management</h2>
               </Col>
               <Col md={4} />
               <Col md={4} className="button-container">
@@ -176,11 +176,11 @@ function Category() {
                   style={{ marginRight: "10px" }}
                   onClick={() => setShowAddModal(true)}
                 >
-                  <i className="fa-solid fa-plus"></i> Thêm loại sản phẩm
+                  <i className="fa-solid fa-plus"></i> Add category
                 </button>
                 <button type="button" className="btn btn-primary btn-color">
                   <i className="fa-solid fa-file-export"></i>
-                  Xuất ra file
+                  Export to excel
                 </button>
               </Col>
             </Row>
@@ -218,15 +218,15 @@ function Category() {
 
       <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>
+          <Modal.Title>Confirm delete</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Bạn có chắc chắn muốn xoá sản phẩm này không?</Modal.Body>
+        <Modal.Body>Are you sure?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseConfirmationModal}>
-            Hủy
+            Cancel
           </Button>
           <Button variant="danger" onClick={handleDelete}>
-            Xoá
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>

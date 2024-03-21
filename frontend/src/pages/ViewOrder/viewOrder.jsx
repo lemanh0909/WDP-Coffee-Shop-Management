@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
-import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSidebar from "../Common/sidebar.jsx";
@@ -17,7 +16,6 @@ function ViewOrder() {
   const [selectedIndex, setSelectedIndex] = useState([]);
 
   const fetchOrders = () => {
-    // Lấy userId và shopId từ local storage
     const userDataString = localStorage.getItem('userData');
     if (!userDataString) {
       throw new Error('User data not found in localStorage.');
@@ -38,7 +36,7 @@ function ViewOrder() {
 
   useEffect(() => {
     fetchOrders();
-  }, [searchOrderId, searchDate]); // Trigger fetching when search parameters change
+  }, [searchOrderId, searchDate]);
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -57,8 +55,6 @@ function ViewOrder() {
     }).then(response => {
       console.log("Success");
       fetchOrders();
-      // Handle success
-      // You might want to update the state here to reflect the changes immediately
     }).catch(error => {
       console.error("Error updating order state:", error);
     });
@@ -68,17 +64,13 @@ function ViewOrder() {
     const order = paginatedItems[index];
     setSelectedOrder(order);
 
-    // Nếu index đã tồn tại trong selectedIndex, loại bỏ nó
     if (selectedIndex.includes(index)) {
       const newSelectedIndex = selectedIndex.filter((i) => i !== index);
       setSelectedIndex(newSelectedIndex);
     } else {
-      // Nếu index chưa tồn tại trong selectedIndex, thêm vào selectedIndex
       setSelectedIndex([...selectedIndex, index]);
     }
   };
-
-
 
   return (
     <>
@@ -89,10 +81,10 @@ function ViewOrder() {
         </Col>
 
         <Col md={10}>
-          <Container className="ml-72 ">
+          <Container className="ml-72">
             <Row className="title mb-0">
               <Col md={4} className="text-white">
-                <h2>Danh sách đơn hàng</h2>
+                <h2>Order List</h2>
               </Col>
             </Row>
             <Row className="container-table table">
@@ -101,15 +93,15 @@ function ViewOrder() {
                   <Table striped bordered hover>
                     <thead>
                       <tr>
-                        <th>STT</th>
-                        <th>Mã đơn hàng</th>
-                        <th>Ngày bán</th>
-                        <th>Người bán</th>
-                        <th>Tổng sản phẩm</th>
-                        <th>Tổng giá</th>
-                        <th>Hình thức thanh toán</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
+                        <th>Index</th>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Seller</th>
+                        <th>Total Products</th>
+                        <th>Total Price</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -135,7 +127,7 @@ function ViewOrder() {
                             </td>
 
                             <td>
-                              <Button onClick={() => handleDetailClick(index)}>Xem chi tiết</Button>
+                              <Button onClick={() => handleDetailClick(index)}>View Details</Button>
                             </td>
                           </tr>
                           {selectedOrder && selectedIndex.includes(index) && (
@@ -145,44 +137,40 @@ function ViewOrder() {
                                   <Table bordered>
                                     <tbody>
                                       <tr>
-                                        <td className="field">Mã đơn hàng:</td>
+                                        <td className="field">Order ID:</td>
                                         <td>{selectedOrder._id}</td>
                                       </tr>
                                       <tr>
-                                        <td className="field">Người bán:</td>
+                                        <td className="field">Seller:</td>
                                         <td>{selectedOrder.userId}</td>
                                       </tr>
                                       <tr>
-                                        <td className="field">Ngày bán:</td>
+                                        <td className="field">Order Date:</td>
                                         <td>{formatDate(selectedOrder.createdAt)}</td>
                                       </tr>
                                       <tr>
-                                        <td className="field">Số lượng sản phẩm:</td>
-                                        <td>{selectedOrder.totalProducts}</td>
-                                      </tr>
-                                      <tr>
-                                        <td className="field">Tổng giá:</td>
+                                        <td className="field">Total:</td>
                                         <td>{selectedOrder.totalPrice}</td>
                                       </tr>
                                       <tr>
-                                        <td className="field">Khách trả:</td>
+                                        <td className="field">Customer Paid:</td>
                                         <td>{selectedOrder.customerPay}</td>
                                       </tr>
                                       <tr>
-                                        <td className="field">Trả lại:</td>
+                                        <td className="field">Refund:</td>
                                         <td>{selectedOrder.refund}</td>
                                       </tr>
                                       <tr>
-                                        <td className="field">Sản phẩm:</td>
+                                        <td className="field">Products:</td>
                                         <td>
                                           <Table bordered>
                                             <thead>
                                               <tr>
-                                                <th>STT</th>
-                                                <th>Tên sản phẩm</th>
-                                                <th>Kích thước</th>
-                                                <th>Giá</th>
-                                                <th>Số lượng</th>
+                                                <th>No.</th>
+                                                <th>Product Name</th>
+                                                <th>Size</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
                                               </tr>
                                             </thead>
                                             <tbody>
@@ -204,6 +192,7 @@ function ViewOrder() {
                                 </div>
                               </td>
                             </tr>
+
                           )}
                         </React.Fragment>
                       ))}

@@ -29,36 +29,36 @@ const UpdateProductModal = ({ show, handleClose, productId, onUpdate }) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Cập Nhật Sản Phẩm</Modal.Title>
+                <Modal.Title>Update Product</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group controlId="formName">
-                        <Form.Label>Tên sản phẩm</Form.Label>
+                        <Form.Label>Product Name</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Nhập tên sản phẩm"
+                            placeholder="Enter product name"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
                         />
                     </Form.Group>
                     <Form.Group controlId="formDescription">
-                        <Form.Label>Mô tả</Form.Label>
+                        <Form.Label>Description</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
-                            placeholder="Nhập mô tả"
+                            placeholder="Enter description"
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
                         />
                     </Form.Group>
                     <Form.Group controlId="formImage">
-                        <Form.Label>Link hình ảnh</Form.Label>
+                        <Form.Label>Image Link</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Nhập link hình ảnh"
+                            placeholder="Enter image link"
                             name="image"
                             value={formData.image}
                             onChange={handleChange}
@@ -68,10 +68,10 @@ const UpdateProductModal = ({ show, handleClose, productId, onUpdate }) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                    Đóng
+                    Close
                 </Button>
                 <Button variant="primary" onClick={handleUpdate}>
-                    Cập Nhật
+                    Update
                 </Button>
             </Modal.Footer>
         </Modal>

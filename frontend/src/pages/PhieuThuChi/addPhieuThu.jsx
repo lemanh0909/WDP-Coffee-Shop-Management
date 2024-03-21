@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 
-const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
+const AddReceiptModal = ({ userId, show, onHide, handleAddReceipt }) => {
     const [formData, setFormData] = useState({
         managerId: userId,
         name: "",
@@ -26,14 +26,21 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
         e.preventDefault();
 
         try {
+            console.log("Submitting form data:", formData);
+            const nameCreate = JSON.parse(localStorage.getItem('userData')).fullName;;
+
+            const { name, date, price, status, description } = formData;
+            const requestData = { managerId: userId, nameCreate, name, date, price, status, description };
+
             const response = await axios.post(
                 "http://localhost:5000/api/v1/receipt/create",
-                formData
+                requestData
             );
+            console.log("Response data:", response.data);
 
             if (response.data.isSuccess) {
                 onHide();
-                handleAddThu(response.data.data);
+                handleAddReceipt(response.data.data);
                 setFormData({
                     managerId: userId,
                     name: "",
@@ -42,6 +49,7 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
                     status: "",
                     description: "",
                 });
+                console.log("Receipt added successfully!");
             } else {
                 console.error("Error:", response.data.message);
             }
@@ -53,12 +61,12 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
     return (
         <Modal show={show} onHide={onHide} animation={false}>
             <Modal.Header closeButton>
-                <Modal.Title>Thêm phiếu thu</Modal.Title>
+                <Modal.Title>Add Receipt</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formName">
-                        <Form.Label>Tên:</Form.Label>
+                        <Form.Label>Name:</Form.Label>
                         <Form.Control
                             type="text"
                             name="name"
@@ -66,11 +74,11 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
                             onChange={handleChange}
                             pattern="[a-zA-Z\s]+"
                             required
-                            title="Tên sản phẩm chỉ được chứa các ký tự chữ cái và khoảng trắng."
+                            title="Name should contain only alphabetic characters and spaces."
                         />
                     </Form.Group>
                     <Form.Group controlId="formDate">
-                        <Form.Label>Ngày:</Form.Label>
+                        <Form.Label>Date:</Form.Label>
                         <Form.Control
                             type="date"
                             name="date"
@@ -80,7 +88,7 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
                         />
                     </Form.Group>
                     <Form.Group controlId="formPrice">
-                        <Form.Label>Giá:</Form.Label>
+                        <Form.Label>Price:</Form.Label>
                         <Form.Control
                             type="number"
                             name="price"
@@ -89,11 +97,11 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
                             min="0"
                             step="1"
                             required
-                            title="Giá phải là số nguyên dương!"
+                            title="Price must be a positive integer!"
                         />
                     </Form.Group>
                     <Form.Group controlId="formStatus">
-                        <Form.Label>Trạng thái:</Form.Label>
+                        <Form.Label>Status:</Form.Label>
                         <Form.Control
                             as="select"
                             name="status"
@@ -101,13 +109,13 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
                             onChange={handleChange}
                             required
                         >
-                            <option value="">-- Chọn trạng thái --</option>
-                            <option value="Income">Thu</option>
-                            <option value="Expense">Chi</option>
+                            <option value="">-- Select status --</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
                         </Form.Control>
                     </Form.Group>
                     <Form.Group controlId="formDescription">
-                        <Form.Label>Mô tả:</Form.Label>
+                        <Form.Label>Description:</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
@@ -117,7 +125,7 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
                         />
                     </Form.Group>
                     <Button variant="primary" type="submit">
-                        Thêm phiếu
+                        Add Receipt
                     </Button>
                 </Form>
             </Modal.Body>
@@ -125,4 +133,4 @@ const AddThuModal = ({ userId, show, onHide, handleAddThu }) => {
     );
 };
 
-export default AddThuModal;
+export default AddReceiptModal;

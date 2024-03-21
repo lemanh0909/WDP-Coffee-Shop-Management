@@ -3,15 +3,15 @@ import React from 'react';
 import { Card, Button, Form } from 'react-bootstrap';
 import { ArrowLeft } from 'react-bootstrap-icons';
 
-// Import các thư viện và biểu tượng cần thiết
+// Import necessary libraries and icons
 
-const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymentMethod, setPaymentMethod, customerPayment, refundAmount, handlePaymentChange, handleConfirmOrder, orderErrorVisible, creatOrderError }) => {
+const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymentMethod, setPaymentMethod, customerPayment, refundAmount, handlePaymentChange, handleConfirmOrder, orderErrorVisible, createOrderError }) => {
   return (
     <Card className='w-1/2'>
       <Button variant="link" onClick={handleGoBack}>
         <ArrowLeft size={20} />
       </Button>
-      <h3>Thông tin đơn hàng</h3>
+      <h3>Order Information</h3>
       <table className="table">
         <tbody>
           <tr>
@@ -23,7 +23,7 @@ const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymen
             <td colSpan="2">{calculateTotalPrice()}</td>
           </tr>
           <tr>
-            <td colSpan="3">Phương thức thanh toán:</td>
+            <td colSpan="3">Payment method:</td>
             <td colSpan="2">
               <Form.Control
                 className='text-center'
@@ -50,19 +50,19 @@ const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymen
             </td>
           </tr>
           <tr>
-            <td colSpan="3">Trả lại:</td>
+            <td colSpan="3">Refund:</td>
             <td colSpan="2">{refundAmount}</td>
           </tr>
         </tbody>
       </table>
       <div className='flex justify-center'>
         <Button variant="success" onClick={handleConfirmOrder}>
-          Xác nhận Đơn hàng
+          Confirm Order
         </Button>
       </div>
       {orderErrorVisible && (
         <div className="mt-2">
-          <p>{creatOrderError}</p>
+          <p>{createOrderError}</p>
         </div>
       )}
       <div className='mb-4'></div>
@@ -71,4 +71,3 @@ const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymen
 };
 
 export default OrderSummary;
-

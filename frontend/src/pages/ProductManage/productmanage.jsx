@@ -8,8 +8,16 @@ import CommonNavbar from "../Common/navbar.jsx";
 import CommonSidebar from "../Common/sidebar.jsx";
 import AddProductModal from "./addProduct.jsx";
 import UpdateProductModal from "./updateProduct.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../Common/Authorization.js";
 
 function ProductManage() {
+
+  const [role] = useAuth();
+  const navigate = useNavigate();
+  if (role == "Admin") {
+    navigate("/AdminManagement");
+  }
   const itemsPerPage = 7;
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -138,20 +146,20 @@ function ProductManage() {
           <Container className="ml-72 ">
             <Row className="title mb-0">
               <Col md={4} className="text-white "  >
-                <h2>Quản lý sản phẩm</h2>
+                <h2>Product Management</h2>
               </Col>
               <Col md={4} />
               <Col md={4} className="button-container">
                 <div className="">
-                  <Button
+                  {role !== "Staff" && <Button
                     variant="primary"
                     className="add-btn btn-danger"
                     onClick={handleShowModal}
                   >
-                    <i className="fa-solid fa-plus"></i> Thêm sản phẩm
-                  </Button>
+                    <i className="fa-solid fa-plus"></i> Add product
+                  </Button>}
                   <Button variant="primary" className="btn-secondary">
-                    <i className="fa-solid fa-file-export"></i> Biến thể
+                    <i className="fa-solid fa-file-export"></i> Variant
                   </Button>
                 </div>
               </Col>
@@ -163,10 +171,10 @@ function ProductManage() {
                     <thead>
                       <tr>
                         <th>
-                          Mã hàng hóa
+                          Product code
                         </th>
                         <th>
-                          Tên hàng hóa
+                          Product name
                         </th>
                         <th>Category</th>
                         <th></th>
@@ -208,15 +216,15 @@ function ProductManage() {
                                         <Table bordered>
                                           <tbody>
                                             <tr>
-                                              <td className="field w-2/5">Tên:</td>
+                                              <td className="field w-2/5">Name:</td>
                                               <td>{selectedProduct.name}</td>
                                             </tr>
                                             <tr>
-                                              <td className="field">Mô tả:</td>
+                                              <td className="field">Description:</td>
                                               <td>{selectedProduct.description}</td>
                                             </tr>
                                             <tr>
-                                              <td className="field">Hình ảnh:</td>
+                                              <td className="field">Image:</td>
                                               <td>
                                                 <div className="flex flex-wrap gap-3 justify-center">
                                                   {selectedProduct.image.map((imageUrl, index) => (
@@ -231,7 +239,7 @@ function ProductManage() {
                                               </td>
                                             </tr>
                                             <tr>
-                                              <td className="field">Số lượng biến thể:</td>
+                                              <td className="field">Quantity variant:</td>
                                               <td>
                                                 {selectedProduct.productVariant}
                                               </td>

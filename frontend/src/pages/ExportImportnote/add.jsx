@@ -40,7 +40,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
 
   const handleSave = async () => {
     try {
-      console.log("Selected warehouse:", selectedWarehouse); // Thêm log này để kiểm tra giá trị của selectedWarehouse
+      console.log("Selected warehouse:", selectedWarehouse);
 
       const userDataString = localStorage.getItem('userData');
       if (!userDataString) {
@@ -79,12 +79,12 @@ function AddModal({ show, handleClose, onAddSuccess }) {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Thêm hàng hóa</Modal.Title>
+        <Modal.Title>Add note</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="warehouseId">
-            <Form.Label>Chọn Warehouse</Form.Label>
+            <Form.Label>Warehouse name</Form.Label>
             <Form.Control
               as="select"
               value={selectedWarehouse}

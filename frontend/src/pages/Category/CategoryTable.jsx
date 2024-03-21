@@ -21,12 +21,12 @@ function WarehouseTable({
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Mã Category</th>
-              <th>Tên loai hàng</th>
-              <th>Mô tả</th>
+              <th>Category code</th>
+              <th>Category name</th>
+              <th>Description</th>
               <th>Products</th>
-              <th>Ngày tạo</th>
-              <th>Thao tác</th>
+              <th>Create date</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
