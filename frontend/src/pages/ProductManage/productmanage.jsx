@@ -8,8 +8,16 @@ import CommonNavbar from "../Common/navbar.jsx";
 import CommonSidebar from "../Common/sidebar.jsx";
 import AddProductModal from "./addProduct.jsx";
 import UpdateProductModal from "./updateProduct.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../Common/Authorization.js";
 
 function ProductManage() {
+
+  const [role] = useAuth();
+  const navigate = useNavigate();
+  if (role == "Admin") {
+    navigate("/AdminManagement");
+  }
   const itemsPerPage = 7;
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -25,24 +33,24 @@ function ProductManage() {
   const [warehouse, setWarehouse] = useState([]);
   const [selectedProductToUpdate, setSelectedProductToUpdate] = useState(null);
 
-const getWarehouse = () => {
-      // Lấy userId và shopId từ local storage
-      const userDataString = localStorage.getItem('userData');
-      if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
-      }
-      const userData = JSON.parse(userDataString);
-      const shopId = userData.shopId;
-      const userId = userData.userID;
-      axios
-        .get(`http://localhost:5000/api/v1/warehouse/${shopId}/getAllWarehousesInShop`)
-        .then((response) => {
-          setWarehouse(response.data.data);
-        })
-        .catch((error) => {
-          console.error("Error getting warehouse:", error);
-        });
-}
+  const getWarehouse = () => {
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
+    axios
+      .get(`http://localhost:5000/api/v1/warehouse/${shopId}/getAllWarehousesInShop`)
+      .then((response) => {
+        setWarehouse(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error getting warehouse:", error);
+      });
+  }
 
   const handleShowModal = () => {
     getWarehouse();
@@ -180,18 +188,18 @@ const getWarehouse = () => {
           <Container className="ml-72 ">
             <Row className="title mb-0">
               <Col md={4} className="text-white "  >
-                <h2>Quản lý sản phẩm</h2>
+                <h2>Product Management</h2>
               </Col>
               <Col md={4} />
               <Col md={4} className="button-container">
                 <div className="">
-                  <Button
+                  {role !== "Staff" && <Button
                     variant="primary"
                     className="add-btn btn-danger"
                     onClick={handleShowModal}
                   >
                     <i className="fa-solid fa-plus"></i> Add Product
-                  </Button>
+                  </Button>}
                 </div>
               </Col>
             </Row>

@@ -48,7 +48,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
     return (
         <Modal show={show} onHide={onHide} animation={false}>
             <Modal.Header closeButton>
-                <Modal.Title>Thêm tài khoản nhân viên</Modal.Title>
+                <Modal.Title>Addition account staff</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>

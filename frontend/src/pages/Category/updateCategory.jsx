@@ -48,13 +48,13 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                                 if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
                                     setUpdatedData({ ...updatedData, name: inputValue });
                                 } else {
-                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                    alert("The name must contain only alphabetic characters and spaces!");
                                 }
                             }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formDes">
-                        <Form.Label>Mo ta</Form.Label>
+                        <Form.Label>Description</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter mo ta"
@@ -64,13 +64,13 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                                 if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
                                     setUpdatedData({ ...updatedData, description: inputValue });
                                 } else {
-                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                    alert("The name must contain only alphabetic characters and spaces!");
                                 }
                             }}
                         />
                     </Form.Group>
                     <Form.Group controlId="formProducts">
-                        <Form.Label>Ma san pham</Form.Label>
+                        <Form.Label>Code product</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter ma san pham"
@@ -80,7 +80,7 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                                 if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
                                     setUpdatedData({ ...updatedData, products: inputValue });
                                 } else {
-                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                    alert("The name must contain only alphabetic characters and spaces!");
                                 }
                             }}
                         />

@@ -72,13 +72,13 @@ function PhieuThuChi() {
             <ToastContainer position='top-right' />
             <Row className="title mb-0">
               <Col md={6} className="text-left text-white">
-                <h2>Quản lý Thu Chi</h2>
+                <h2>Note E-I Management</h2>
               </Col>
               <Col md={6} className="text-right">
                 <Button variant="primary" onClick={handleShowAddModal}>
-                  <i className="far fa-plus-square"></i> Thêm phiếu
+                  <i className="far fa-plus-square"></i> Add note
                 </Button>
-                <Button variant="warning" onClick={() => exportToCSV(products, "phieu_thu_chi")}>Export</Button>
+                <Button variant="warning" onClick={() => exportToCSV(products, "phieu_thu_chi")}>Export to excel</Button>
               </Col>
             </Row>
             <Row className="mb-3">
@@ -91,19 +91,19 @@ function PhieuThuChi() {
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Kho hàng</th>
+                      <th>Warehouse</th>
                       <th>User email</th>
-                      <th>Số lượng</th>
-                      <th>Giá</th>
-                      <th>Tình trạng</th>
-                      <th>Ngày tạo</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Status</th>
+                      <th>Create date</th>
                     </tr>
                   </thead>
                   <tbody>
                     {paginatedItems.length === 0 ? (
                       <tr>
                         <td colSpan="8" className="text-center">
-                          Không có dữ liệu để hiển thị!
+                          No data to present!
                         </td>
                       </tr>
                     ) : (
