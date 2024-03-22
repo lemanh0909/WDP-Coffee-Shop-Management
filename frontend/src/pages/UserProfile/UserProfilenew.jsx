@@ -57,6 +57,30 @@ const UserProfileCard = ({ updateLatestFullName }) => {
 };
 
 const handleSave = () => {
+  // Kiểm tra các trường bắt buộc
+  if (!fullName || !phoneNumber || !dob) {
+    toast.error("Vui lòng điền đầy đủ thông tin.");
+    return;
+  }
+
+  // Kiểm tra định dạng số điện thoại (+84)
+  if (phoneNumber.length < 10 || phoneNumber.length > 11) {
+    toast.error("Phone number is invalid. ");
+    return;
+  }
+
+  // Kiểm tra tuổi (phải đủ 16 tuổi)
+  const today = new Date();
+  const dobDate = new Date(dob);
+  const ageDiff = today.getFullYear() - dobDate.getFullYear();
+  const monthDiff = today.getMonth() - dobDate.getMonth();
+  const age = monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate()) ? ageDiff - 1 : ageDiff;
+  if (age < 16) {
+    toast.error("You must be 16 years or older.");
+    return;
+  }
+
+  // Nếu các kiểm tra đều thành công, thực hiện cập nhật dữ liệu
   setIsEditing(false);
   const userDataString = localStorage.getItem("userData");
   if (!userDataString) {
@@ -67,8 +91,8 @@ const handleSave = () => {
 
   const updatedUserData = {
     fullName: fullName,
-    email: email,
-    phoneNumber: fullName,
+    email: email, // Giữ nguyên giá trị email hiện tại
+    phoneNumber: phoneNumber,
     dob: dob,
   };
 
@@ -76,15 +100,16 @@ const handleSave = () => {
     .put(`http://localhost:5000/api/v1/user/${userId}/update`, updatedUserData)
     .then((response) => {
       console.log('User data updated successfully:', response.data);
-      setfullName(updatedUserData.fullName); // Cập nhật state fullName
-      updateLatestFullName(updatedUserData.fullName); // Gọi hàm cập nhật từ App.js
-      toast.success("Thông tin đã được cập nhật thành công!"); // Thêm thông báo thành công
+      setfullName(updatedUserData.fullName);
+      updateLatestFullName(updatedUserData.fullName);
+      toast.success("Thông tin đã được cập nhật thành công!");
     })
     .catch((error) => {
       console.error("Error updating user data:", error);
       // Xử lý lỗi nếu có
     });
 };
+
 
 
   const handleEdit = () => {
@@ -150,15 +175,9 @@ const handleSave = () => {
                         <h6 className="mb-0">Email</h6>
                       </div>
                       <div className="col-sm text-secondary">
-                        {isEditing ? (
-                          <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                          />
-                        ) : (
-                          <span className="info-value">{email}</span>
-                        )}
+                       
+                          <span className="info-value" disable>{email}</span>
+                        
                       </div>
                     </div>
                     <hr />
@@ -180,20 +199,20 @@ const handleSave = () => {
                     </div>
                     <hr />
                     <div className="row">
-                      <div className="col-sm-5">
-                        <h6 className="mb-0">DOB</h6>
-                      </div>
-                      <div className="col-sm text-secondary">
-                        {isEditing ? (
-                          <input
-                            type="date"
-                            value={dob}
-                            onChange={(e) => setDob(e.target.value)}
-                          />
-                        ) : (
-                          <span className="info-value">{dob}</span>
-                        )}
-                      </div>
+    <div className="col-sm-5">
+        <h6 className="mb-0">DOB</h6>
+    </div>
+    <div className="col-sm text-secondary">
+        {isEditing ? (
+            <input
+                type="date"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+            />
+        ) : (
+            <span className="info-value">{new Date(dob).toLocaleDateString('en-GB')}</span>
+        )}
+    </div>
                     </div>
                     <hr />
                     <div className="row">

@@ -15,11 +15,12 @@ function Login() {
     const [shopName, setShopName] = useState('');
     const [currentForm, setCurrentForm] = useState('login');
     const [phoneNumberError, setphoneNumberError] = useState('');
+    const [DoBError, setDoBError] = useState('');
     const [emailError, setEmailError] = useState('');
     const [nameError, setNameError] = useState('');
 
     const validateEmail = (email) => {
-        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+        const regex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/
         return regex.test(email);
     };
 
@@ -87,8 +88,31 @@ function Login() {
         } else {
             setNameError('');
         }
-
-
+         // Kiểm tra tính hợp lệ của email
+         if (!validateEmail(email)) {
+            setEmailError('Email is invalid');
+            return;
+        } else {
+            setEmailError('');
+        }
+ // Kiểm tra các trường bắt buộc và các điều kiện khác
+ if (fullName.length === 0 || email.length === 0 || password.length === 0 || dob.length === 0 || shopName.length === 0) {
+    // Xử lý khi không điền đầy đủ thông tin bắt buộc
+    toast.error("Please complete all information.");
+    return;
+}
+     // Kiểm tra độ tuổi (phải đủ 16 tuổi trở lên)
+     const today = new Date();
+     const dobDate = new Date(dob);
+     const ageDiff = today.getFullYear() - dobDate.getFullYear();
+     const monthDiff = today.getMonth() - dobDate.getMonth();
+     const age = monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate()) ? ageDiff - 1 : ageDiff;
+     if (age < 16) {
+         setDoBError("You must be 16 years or older to register.");
+         return;
+     } else {
+         setDoBError("");
+     }
 
         const data = {
             fullName: fullName,
@@ -114,6 +138,7 @@ function Login() {
             })
             .catch(error => {
                 console.error('Registration error:', error);
+                toast.error("Registration failed. Please try again later.");
             });
     };
 
@@ -191,7 +216,9 @@ function Login() {
                                         <input type="password" placeholder="Password" className="forms_field-input" required onChange={(e) => setPassword(e.target.value)} value={password} />
                                     </div>
                                     <div className="forms_field">
-                                        <input type="date" id="dob" placeholder="DD/MM/YYYY" className="forms_field-input" required onChange={(e) => setDoB(e.target.value)} value={dob} />
+                                        <input type="date" id="dob" placeholder="DD/MM/YYYY" className="forms_field-input" required onChange={(e) => setDoB(e.target.value)} 
+                                        value={dob} />
+                                        {DoBError && <p className="error-message">{DoBError}</p>}
                                     </div>
                                     <div className="forms_field">
                                         <input type="text" id="phoneNumber" placeholder="Phone Number" className="forms_field-input" required onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} />
