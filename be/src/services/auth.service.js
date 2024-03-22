@@ -39,6 +39,7 @@ export const authService = {
       role: "Manager",
       description: "",
       salary: 0,
+      status:"Inactive"
       
     });
     if (newUser) {
