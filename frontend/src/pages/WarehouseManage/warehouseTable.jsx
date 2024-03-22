@@ -1,6 +1,9 @@
-import React from "react";
+import React ,{ useState, useEffect } from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
 import "./tableWarehouse.css";
+import Popup from './Popup.jsx'; 
+
+
 
 function WarehouseTable({
     currentItems,
@@ -11,9 +14,33 @@ function WarehouseTable({
     handleUpdateWarehouse,
     sortByQuantity,
     handleSortByQuantity,
+    
 }) {
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupItem, setPopupItem] = useState(null);
+    useEffect(() => {
+        // Kiểm tra xem có mặt hàng nào gần đến ngày hết hạn không
+        currentItems.forEach(item => {
+            const expiryDate = new Date(item.expiry);
+            const currentDate = new Date();
+            const daysUntilExpiry = Math.floor((expiryDate - currentDate) / (1000 * 60 * 60 * 24)); // Số ngày còn lại cho đến ngày hết hạn
+            if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) { // Nếu còn dưới 7 ngày đến hạn
+                setPopupItem(item);
+                setShowPopup(true); // Hiển thị popup nếu có thông báo
+            }
+        });
+    }, [currentItems]);
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+    };
+   
     return (
+        
         <Row className="container-table" style={{ marginRight: "20px" }}>
+              <Row className="Popup-expiry" style={{ marginRight: "20px",backgroundColor: "rosybrown" }}>
+              {showPopup && <Popup item={popupItem} onClose={handleClosePopup} />}
+        </Row>
             <Col>
                 <Table striped bordered hover>
                     <thead>
@@ -31,6 +58,7 @@ function WarehouseTable({
                             </th>
                             <th>Ngày tạo</th>
                             <th>Ảnh</th>
+                            <th>Hạn sử dụng</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -62,6 +90,7 @@ function WarehouseTable({
                                             }}
                                         />
                                     </td>
+                                    <td>{item.expiry}</td>
                                     <td>
                                         <Button
                                             className="custom-btn-edit"

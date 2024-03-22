@@ -1,4 +1,5 @@
 import './App.css';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Import Routes
 import Login from './pages/login/login.jsx';
 import EmployeeManagement from './pages/ManagerStaff/managerStaff.jsx';
@@ -25,37 +26,43 @@ import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
 import UploadImage from './pages/ImgUp/UploadImage.jsx';
 import UserProfile from './pages/UserProfile/UserProfile.jsx';
 import UserProfilenew from './pages/UserProfile/UserProfilenew.jsx';
-
+import Statistic from './pages/Statistic/Statistic.jsx';
 
 function App() {
+
+  const [latestFullName, setLatestFullName] = useState('');
+
+  const updateLatestFullName = (newFullName) => {
+    setLatestFullName(newFullName);
+  };
+
   return (
     <Router>
       <div className="App">
+        <Navbar updateLatestFullName={updateLatestFullName} latestFullName={latestFullName} />
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/employee-management" element={<EmployeeManagement />} />
+          <Route path="/employee-management" element={<EmployeeManagement />} /> {/* Manager and staff author done */}
           <Route path="/warehouse" element={<Warehouse />} />
           <Route path="/productmanage" element={< ProductManage />} />
           <Route path="/order" element={< Order />} />
-          <Route path="/control" element={< Control />} />
+          <Route path="/control" element={< Control />} />{/* Manager and staff author done */}
           <Route path="/category" element={< Category />} />
           <Route path="/categorynew" element={< Categorynew />} />
           <Route path="/addcategory" element={< AddCategory />} />
           <Route path="/Sidebar" element={< Sidebar />} />
           <Route path="/navbar" element={< Navbar />} />
           <Route path="/Thuchi" element={< Thuchi />} />
-          <Route path="/AdminManagement" element={<AdminManagement />} />
+          <Route path="/AdminManagement" element={<AdminManagement />} />   {/* Admin author done */}
           <Route path="/exportimportnote" element={< ExportImportNOte />} />
           <Route path="/view-order" element={<ViewOrder />} />
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail />} />
           <Route path="/upImg" element={<UploadImage />} />
           <Route path="/profile" element={<UserProfile />} />
-          <Route path="/profilenew" element={<UserProfilenew />} />
+          <Route path="/profilenew" element={<UserProfilenew updateLatestFullName={updateLatestFullName} />} />
           <Route path='/verify/:id/:uniqueString' element={<AuthenPage></AuthenPage>}></Route>
           <Route path="/table" element={<Tables />} />
-
-
-
+          <Route path="/statistic" element={<Statistic />} />
         </Routes>
       </div>
     </Router>

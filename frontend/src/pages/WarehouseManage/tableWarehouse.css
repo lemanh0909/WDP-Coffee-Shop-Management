@@ -1,6 +1,6 @@
 .container-table {
     font-family: 'Roboto', sans-serif;
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 .container-table .table {
@@ -85,6 +85,7 @@
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    align-items: center;
 }
 
 .pagination {

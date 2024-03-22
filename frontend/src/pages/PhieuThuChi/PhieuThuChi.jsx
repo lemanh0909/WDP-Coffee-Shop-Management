@@ -4,47 +4,56 @@ import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
 import CommonNavbar from "../Common/navbar.jsx";
 import CommonSidebar from "../Common/sidebar.jsx";
-import AddThuModal from "./addPhieuThu.jsx";
+import AddReceiptModal from "./addPhieuThu.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../Common/Authorization.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 
-function PhieuThuChi() {
+function Receipts() {
   const itemsPerPage = 7;
-  const [products, setProducts] = useState([]);
-  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
+  const [receipts, setReceipts] = useState([]);
+  const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(receipts, itemsPerPage);
 
-  const [showAddThuModal, setShowAddThuModal] = useState(false);
-  const handleShowAddThuModal = () => setShowAddThuModal(true);
-  const handleCloseAddThuModal = () => setShowAddThuModal(false);
+  const [showAddReceiptModal, setShowAddReceiptModal] = useState(false);
+  const handleShowAddReceiptModal = () => setShowAddReceiptModal(true);
+  const handleCloseAddReceiptModal = () => setShowAddReceiptModal(false);
 
-  const handleAddThuSuccess = () => {
-    toast.success('Thêm kho thành công!');
-    fetchProducts();
-    handleCloseAddThuModal();
+
+  const [role] = useAuth();
+  const navigate = useNavigate();
+  if (role === "Admin") {
+    navigate("/AdminManagement");
+  }
+
+
+  const handleAddReceiptSuccess = () => {
+    toast.success('Receipt added successfully!');
+    fetchReceipts();
+    handleCloseAddReceiptModal();
   };
 
-  const fetchProducts = async () => {
+  const fetchReceipts = async () => {
     try {
       const userDataString = localStorage.getItem('userData');
 
       if (!userDataString) {
         throw new Error('User data not found in localStorage.');
       }
-
       const userData = JSON.parse(userDataString);
       const response = await axios.get(`http://localhost:5000/api/v1/receipt/${userData.shopId}/getAllReceiptsInShop`);
-      setProducts(response.data.data);
+      setReceipts(response.data.data);
     } catch (error) {
-      console.error('Error fetching warehouse data:', error);
+      console.error('Error fetching receipt data:', error);
     } finally {
-      console.log('Warehouse data fetching completed.');
+      console.log('Receipt data fetching completed.');
     }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchReceipts();
   }, []);
 
   const exportToCSV = (csvData, fileName) => {
@@ -60,7 +69,7 @@ function PhieuThuChi() {
 
   return (
     <>
-      <CommonNavbar />
+
       <div className="flex">
         <Col md={2}>
           <CommonSidebar />
@@ -71,30 +80,30 @@ function PhieuThuChi() {
             <ToastContainer position='top-right' />
             <Row className="title mb-0">
               <Col md={6} className="text-left text-white">
-                <h2>Quản lý Thu Chi</h2>
+                <h2>Receipt Management</h2>
               </Col>
               <Col md={6} className="text-right">
-                <Button variant="primary" onClick={handleShowAddThuModal}>
-                  <i className="far fa-plus-square"></i> Thêm phiếu
-                </Button>
-                <Button variant="warning" onClick={() => exportToCSV(products, "phieu_thu_chi")}>Export</Button>
+                {role !== "Staff" && <Button variant="primary" onClick={handleShowAddReceiptModal}>
+                  <i className="far fa-plus-square"></i> Add Receipt
+                </Button>}
+                <Button variant="warning" onClick={() => exportToCSV(receipts, "receipts")}>Export</Button>
               </Col>
             </Row>
             <Row className="mb-3">
               <Col md={12}>
               </Col>
             </Row>
-            <Row>
+            <Row className="container-table table">
               <Col xs={12}>
-                <Table striped bordered hover className="custom-table">
-                  <thead className="custom-table-header">
+                <Table striped bordered hover >
+                  <thead>
                     <tr>
-                      <th>ID Phiếu</th>
-                      <th>Tên Phiếu</th>
-                      <th>Ngày tạo</th>
-                      <th>Giá trị</th>
-                      <th>Loại Phiếu</th>
-                      <th>Mô tả</th>
+                      <th>Receipt ID</th>
+                      <th>Receipt Name</th>
+                      <th>Creation Date</th>
+                      <th>Value</th>
+                      <th>Receipt Type</th>
+                      <th>Description</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -112,7 +121,7 @@ function PhieuThuChi() {
                     ))}
                   </tbody>
                 </Table>
-                <Pagination className="pagination justify-content-center">
+                <Pagination className="pagination justify-center">
                   <Pagination.Prev onClick={() => handlePageChange(activePage - 1)} disabled={activePage === 1} />
                   {Array.from({ length: totalPages }, (_, i) => (
                     <Pagination.Item
@@ -130,13 +139,14 @@ function PhieuThuChi() {
           </Container>
         </Col>
       </div>
-      <AddThuModal
+      <AddReceiptModal
         userId={JSON.parse(localStorage.getItem('userData'))?.userID}
-        show={showAddThuModal}
-        onHide={handleCloseAddThuModal}
-        handleAddThu={handleAddThuSuccess}
+        show={showAddReceiptModal}
+        onHide={handleCloseAddReceiptModal}
+        handleAddReceipt={handleAddReceiptSuccess}
       />
     </>
   );
 }
-export default PhieuThuChi;
+
+export default Receipts;

@@ -7,13 +7,18 @@ import PaginationBar from './paginationBar';
 import { usePagination } from '../Common/hooks.js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '../Common/Authorization.js';
+import { useNavigate } from 'react-router-dom';
 
 function AdminManagement() {
+    const [role] = useAuth();
+    const navigate = useNavigate();
+    if (role != "Admin") { navigate("/control"); }
     const [employeeData, setEmployeeData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const itemsPerPage = 5;
+    const itemsPerPage = 7;
     const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(employeeData, itemsPerPage);
 
     useEffect(() => {
@@ -55,8 +60,9 @@ function AdminManagement() {
 
 
     return (
+
         <>
-            <CommonNavbar />
+
             <Container className="mt-4">
                 <ToastContainer position='top-right' />
                 <Row className="justify-content-between align-items-center mb-4">
@@ -87,6 +93,7 @@ function AdminManagement() {
                 )}
             </Container>
         </>
+
     );
 }
 

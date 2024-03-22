@@ -3,11 +3,12 @@ import Warehouse from "../models/warehouse.js"
 import Shop from '../models/shop.js'
 import ImportExportNote from '../models/exportimportNote.js';
 const LIMIT_WAREHOUSE = 10;
+import moment from 'moment';
 
 export const warehouseService = {
     createWarehouse: async (data) => {
         return new Promise(async (resolve, reject) => {
-            const { managerId, name, quantity, image, unit } = data;
+            const { managerId, name, quantity, image, unit, expiry } = data;
             try {
                 const checkWarehouseExists = await Warehouse.findOne({
                     name: name
@@ -24,7 +25,9 @@ export const warehouseService = {
                     name,
                     quantity,
                     image,
-                    unit
+                    unit,
+                    expiry,
+
                 });
                 const shop = await Shop.findOne({ managerId });
                 if (shop) {
@@ -46,6 +49,18 @@ export const warehouseService = {
             }
         });
     },
+
+    calculateNotification: async (expiryDate) => {
+        const today = moment();
+        const expiry = moment(expiryDate);
+        const daysUntilExpiry = expiry.diff(today, 'days');
+        if (daysUntilExpiry <= 7) {
+            return `Expiry in ${daysUntilExpiry} days`;
+        } else {
+            return null;
+        }
+    },
+
 
     updateWarehouseBasis: async (id, { name, image, unit }) => {
         try {
@@ -147,7 +162,10 @@ export const warehouseService = {
 
             return {
                 status: 'OK',
-                data: allWarehouses,
+                data: allWarehouses.map(warehouse => ({
+                    ...warehouse.toObject(),
+                    notification: calculateNotification(warehouse.expiry) // Tính toán thông báo cho mỗi mặt hàng
+                })),
                 totalWarehouses,
                 currentPage: parseInt(page),
                 limit: parseInt(limit)
