@@ -105,6 +105,15 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                             onChange={handleChange}
                         />
                     </Form.Group>
+                    <Form.Group controlId="expiry">
+                        <Form.Label>Hạn sử dụng:</Form.Label>
+                        <Form.Control
+                            type="date"
+                            name="expiry"
+                            value={formData.expiry}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
                     <Form.Group controlId="formImage">
                         <Form.Label>Đường dẫn ảnh:</Form.Label>
                         <Form.Control
