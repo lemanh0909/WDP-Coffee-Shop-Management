@@ -17,9 +17,9 @@ const AuthenPage = () => {
   }, []);
   return (
     <section className="flex items-center p-8 dark:bg-gray-900 dark:text-gray-100">
-		{data &&  <div className="container flex flex-col items-center justify-center px-5 mx-auto my-8">
+      {data && <div className="container flex flex-col items-center justify-center px-5 mx-auto my-8">
         <div className="max-w-md container flex flex-col items-center justify-center mx-auto my-8 text-center">
-          {data?.status == "Success" ? (
+          {data?.status === "Success" ? (
             <>
               <FaCheckCircle color="green" size={200} className="mx-100" />
               <p className="text-2xl font-semibold md:text-3xl">
@@ -37,7 +37,7 @@ const AuthenPage = () => {
                 Your account is not verified
               </p>
               <p className="mt-4 mb-8 dark:text-gray-400">
-              {data?.message}
+                {data?.message}
               </p>
             </>
           )}
@@ -49,10 +49,10 @@ const AuthenPage = () => {
           >
             Back to homepage
           </Link>
-          
+
         </div>
       </div>}
-    
+
     </section>
   );
 };

@@ -10,8 +10,6 @@ import {
   Modal,
 } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSlider from "../Common/sidebar.jsx";
 import AddCategoryModal from "./addCategory.jsx";
 import UpdateCategoryModal from "./updateCategory.jsx";
 import { ToastContainer, toast } from "react-toastify";
@@ -136,13 +134,7 @@ function Category() {
 
   return (
     <>
-      <CommonNavbar />
       <div className="flex">
-        <CommonSlider
-          handlePageChange={handlePageChange}
-          activePage={activePage}
-          totalPages={totalPages}
-        />
         <Container className="ml-72">
           <ToastContainer position="top-right" />
           <Row className="title mb-0">
@@ -276,14 +268,14 @@ function Category() {
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                 <tr>
-                                                 <td>{index + 1}</td>
+                                                  <tr>
+                                                    <td>{index + 1}</td>
                                                     <td>
                                                       {selectedProduct.name}
-                                                      
+
                                                     </td>
                                                     <td>
-                                                      
+
                                                       {selectedProduct.description}
                                                     </td>
                                                   </tr>
