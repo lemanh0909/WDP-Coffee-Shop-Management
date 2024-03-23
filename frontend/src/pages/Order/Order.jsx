@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container } from 'react-bootstrap';
-import CommonNavbar from '../Common/navbar';
 import CloseButton from 'react-bootstrap/CloseButton';
 import OrderSummary from './OrderSummary';
 import OrderDisplay from './OrderDisplay';
@@ -43,14 +42,14 @@ const Order = () => {
   }, []);
 
   useEffect(() => {
-  // Lấy userId và shopId từ local storage
-  const userDataString = localStorage.getItem('userData');
-  if (!userDataString) {
-    throw new Error('User data not found in localStorage.');
-  }
-  const userData = JSON.parse(userDataString);
-  const shopId = userData.shopId;
-  const userId = userData.userID;
+    // Lấy userId và shopId từ local storage
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) {
+      throw new Error('User data not found in localStorage.');
+    }
+    const userData = JSON.parse(userDataString);
+    const shopId = userData.shopId;
+    const userId = userData.userID;
     axios.get(`http://localhost:5000/api/v1/product/${shopId}/getAllProductVariantsInShop`)
       .then(response => {
         setProductVariant(response.data.data.allProductVariants);
@@ -226,7 +225,6 @@ const Order = () => {
 
   return (
     <>
-
       {isLowQuantityNotificationVisible && lowQuantityItems.length > 0 && (
         <div className="alert alert-warning position-relative">
           <CloseButton onClick={handleCloseLowQuantityNotification} className="position-absolute top-0 end-0 m-2" />

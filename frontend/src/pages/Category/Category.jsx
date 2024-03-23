@@ -4,8 +4,6 @@ import axios from "axios";
 import { Container, Row, Col, Button, Modal, } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSlider from "../Common/sidebar.jsx";
 import AddCategoryModal from "./addCategory.jsx";
 import UpdateCategoryModal from "./updateCategory.jsx";
 import CategoryTable from "./CategoryTable.jsx";
@@ -25,7 +23,7 @@ function Category() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortByQuantity, setSortByQuantity] = useState(null);
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
   const [activePage, setActivePage] = useState(1);
 
   const fetchData = async () => {
@@ -83,8 +81,8 @@ function Category() {
       })
       .catch((error) => console.error("Error fetching categories:", error));
   }, []);
-  
-  
+
+
 
   const handleDelete = () => {
     axios
@@ -120,7 +118,7 @@ function Category() {
     setShowConfirmationModal(true);
     setCategoryIdToDelete(categoryId);
   };
-  
+
   const handleCloseConfirmationModal = () => {
     setShowConfirmationModal(false);
     setCategoryIdToDelete(null);
@@ -164,11 +162,8 @@ function Category() {
 
   return (
     <>
-
       <div className="flex">
-        <Col md={2}> <CommonSlider />
-        </Col>
-        <Col md={10}>
+        <Col md={12}>
           <Container className="ml-72">
             <ToastContainer position="top-right" />
             <Row className="title mb-0">
@@ -204,8 +199,8 @@ function Category() {
               selectedProduct={selectedProduct}
               handleCloseModal={handleCloseModal}
             />
-          </Container></Col>
-
+          </Container>
+        </Col>
       </div>
       <AddCategoryModal
         userId={JSON.parse(localStorage.getItem('userData'))?.userID}

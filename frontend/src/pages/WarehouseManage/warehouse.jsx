@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Col, Row, Button } from "react-bootstrap";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSidebar from "../Common/sidebar.jsx";
 import AddWarehouseModal from "./addWarehouse.jsx";
 import UpdateWarehouseModal from "./updateWarehouse.jsx";
 import { ToastContainer, toast } from "react-toastify";
@@ -97,13 +95,8 @@ function Warehouse() {
 
   return (
     <>
-
       <div className="flex">
-        <Col md={2}>
-          <CommonSidebar />
-        </Col>
-
-        <Col md={10}>
+        <Col md={12}>
           <Container>
             <ToastContainer position="top-right" />
             <Row

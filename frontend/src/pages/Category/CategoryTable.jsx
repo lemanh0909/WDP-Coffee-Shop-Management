@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
 import "../WarehouseManage/tableWarehouse.css";
+import { format } from 'date-fns';
 
 function CategoryTable({
   currentItems,
@@ -15,6 +16,10 @@ function CategoryTable({
   selectedProduct,
   handleCloseModal,
 }) {
+  const formatDate1 = (isoDate) => {
+    if (!isoDate) return "";
+    return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
+  };
   return (
     <Row className="container-table" style={{ marginRight: "20px" }}>
       <Col>
@@ -24,7 +29,7 @@ function CategoryTable({
               <th>Category code</th>
               <th>Category name</th>
               <th>Description</th>
-              <th>Products</th>
+
               <th>Create date</th>
               <th>Action</th>
             </tr>
@@ -45,12 +50,8 @@ function CategoryTable({
                       {item.name}
                     </td>
                     <td>{item.description}</td>
-                    <td>
-                      <Button onClick={() => showDetails(item, index)}>
-                        Xem chi tiết
-                      </Button>
-                    </td>
-                    <td>{item.createdAt}</td>
+
+                    <td>{formatDate1(item.createdAt)}</td>
                     <td>
                       <Button
                         className="custom-btn-edit"

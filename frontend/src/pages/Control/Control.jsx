@@ -8,7 +8,6 @@ import {
 } from "react-bootstrap";
 import "./Control.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import CommonNavbar from "../Common/navbar.jsx";
 import useAuth from "../Common/Authorization.js";
 
 function Control() {
@@ -19,7 +18,6 @@ function Control() {
   }
   return (
     <>
-
       <Container fluid>
         <Row className="title justify-content-center">
           <Col md={8} className="text-center">

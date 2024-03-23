@@ -55,7 +55,7 @@ function Login() {
                         if (userData.role === 'Admin') {
                             navigate("/AdminManagement");
                         } else {
-                            navigate("/control");
+                            navigate("/MiniDrawer");
                         }
                     }, 800);
                 } else {

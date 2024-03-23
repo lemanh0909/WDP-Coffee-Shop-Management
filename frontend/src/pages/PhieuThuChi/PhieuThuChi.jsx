@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSidebar from "../Common/sidebar.jsx";
 import AddReceiptModal from "./addPhieuThu.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../Common/Authorization.js";
@@ -11,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import { format } from 'date-fns';
 
 function Receipts() {
   const itemsPerPage = 7;
@@ -21,6 +20,10 @@ function Receipts() {
   const handleShowAddReceiptModal = () => setShowAddReceiptModal(true);
   const handleCloseAddReceiptModal = () => setShowAddReceiptModal(false);
 
+  const formatDate1 = (isoDate) => {
+    if (!isoDate) return "";
+    return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
+  };
 
   const [role] = useAuth();
   const navigate = useNavigate();
@@ -70,75 +73,71 @@ function Receipts() {
   return (
     <>
 
-      <div className="flex">
-        <Col md={2}>
-          <CommonSidebar />
-        </Col>
 
-        <Col md={10}>
-          <Container className="ml-72 ">
-            <ToastContainer position='top-right' />
-            <Row className="title mb-0">
-              <Col md={6} className="text-left text-white">
-                <h2>Receipt Management</h2>
-              </Col>
-              <Col md={6} className="text-right">
-                {role !== "Staff" && <Button variant="primary" onClick={handleShowAddReceiptModal}>
-                  <i className="far fa-plus-square"></i> Add Receipt
-                </Button>}
-                <Button variant="warning" onClick={() => exportToCSV(receipts, "receipts")}>Export</Button>
-              </Col>
-            </Row>
-            <Row className="mb-3">
-              <Col md={12}>
-              </Col>
-            </Row>
-            <Row className="container-table table">
-              <Col xs={12}>
-                <Table striped bordered hover >
-                  <thead>
-                    <tr>
-                      <th>Receipt ID</th>
-                      <th>Receipt Name</th>
-                      <th>Creation Date</th>
-                      <th>Value</th>
-                      <th>Receipt Type</th>
-                      <th>Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedItems.map((item, index) => (
-                      <React.Fragment key={index}>
-                        <tr className="custom-table-row">
-                          <td>{item._id}</td>
-                          <td>{item.name}</td>
-                          <td>{item.date}</td>
-                          <td>{item.status === 'Expense' ? '-' + item.price : item.price}</td>
-                          <td>{item.status}</td>
-                          <td>{item.description}</td>
-                        </tr>
-                      </React.Fragment>
-                    ))}
-                  </tbody>
-                </Table>
-                <Pagination className="pagination justify-center">
-                  <Pagination.Prev onClick={() => handlePageChange(activePage - 1)} disabled={activePage === 1} />
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <Pagination.Item
-                      key={i + 1}
-                      active={i + 1 === activePage}
-                      onClick={() => handlePageChange(i + 1)}
-                    >
-                      {i + 1}
-                    </Pagination.Item>
+      <Col md={12}>
+        <Container className="ml-72 ">
+          <ToastContainer position='top-right' />
+          <Row className="title mb-0">
+            <Col md={6} className="text-left text-white">
+              <h2>Receipt Management</h2>
+            </Col>
+            <Col md={6} className="text-right">
+              {role !== "Staff" && <Button variant="primary" onClick={handleShowAddReceiptModal}>
+                <i className="far fa-plus-square"></i> Add Receipt
+              </Button>}
+              <Button variant="warning" onClick={() => exportToCSV(receipts, "receipts")}>Export</Button>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col md={12}>
+            </Col>
+          </Row>
+          <Row className="container-table table">
+            <Col xs={12}>
+              <Table striped bordered hover >
+                <thead>
+                  <tr>
+                    <th>Receipt ID</th>
+                    <th>Receipt Name</th>
+                    <th>Creation Date</th>
+                    <th>Value</th>
+                    <th>Receipt Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedItems.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <tr className="custom-table-row">
+                        <td>{item._id}</td>
+                        <td>{item.name}</td>
+                        <td>{formatDate1(item.date)}</td>
+                        <td>{item.status === 'Expense' ? '-' + item.price : item.price}</td>
+                        <td>{item.status}</td>
+                        <td>{item.description}</td>
+                      </tr>
+                    </React.Fragment>
                   ))}
-                  <Pagination.Next onClick={() => handlePageChange(activePage + 1)} disabled={activePage === totalPages} />
-                </Pagination>
-              </Col>
-            </Row>
-          </Container>
-        </Col>
-      </div>
+                </tbody>
+              </Table>
+              <Pagination className="pagination justify-center">
+                <Pagination.Prev onClick={() => handlePageChange(activePage - 1)} disabled={activePage === 1} />
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <Pagination.Item
+                    key={i + 1}
+                    active={i + 1 === activePage}
+                    onClick={() => handlePageChange(i + 1)}
+                  >
+                    {i + 1}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next onClick={() => handlePageChange(activePage + 1)} disabled={activePage === totalPages} />
+              </Pagination>
+            </Col>
+          </Row>
+        </Container>
+      </Col>
+
       <AddReceiptModal
         userId={JSON.parse(localStorage.getItem('userData'))?.userID}
         show={showAddReceiptModal}

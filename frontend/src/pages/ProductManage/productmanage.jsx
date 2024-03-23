@@ -4,8 +4,6 @@ import "./productmanage.css";
 import { usePagination } from "../Common/hooks.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSidebar from "../Common/sidebar.jsx";
 import AddProductModal from "./addProduct.jsx";
 import UpdateProductModal from "./updateProduct.jsx";
 import { Link, useNavigate } from "react-router-dom";
@@ -178,13 +176,8 @@ function ProductManage() {
 
   return (
     <>
-  
       <div className="flex">
-        <Col md={2}>
-          <CommonSidebar />
-        </Col>
-
-        <Col md={10}>
+        <Col md={12}>
           <Container className="ml-72 ">
             <Row className="title mb-0">
               <Col md={4} className="text-white "  >
@@ -337,31 +330,29 @@ function ProductManage() {
                     </tbody>
                   </Table>
                 </Row>
-                <Row>
-                  <Col>
-                    <Pagination className="justify-center">
-                      <Pagination.Prev
-                        onClick={() => handlePageChange(activePage - 1)}
-                        disabled={activePage === 1}
-                      />
-                      {Array.from({ length: totalPages }, (_, i) => (
-                        <Pagination.Item
-                          key={i + 1}
-                          active={i + 1 === activePage}
-                          onClick={() => handlePageChange(i + 1)}
-                        >
-                          {i + 1}
-                        </Pagination.Item>
-                      ))}
-                      <Pagination.Next
-                        onClick={() => handlePageChange(activePage + 1)}
-                        disabled={activePage === totalPages}
-                      />
-                    </Pagination>
-                  </Col>
-                </Row>
+
+                <Pagination className="justify-center">
+                  <Pagination.Prev
+                    onClick={() => handlePageChange(activePage - 1)}
+                    disabled={activePage === 1}
+                  />
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <Pagination.Item
+                      key={i + 1}
+                      active={i + 1 === activePage}
+                      onClick={() => handlePageChange(i + 1)}
+                    >
+                      {i + 1}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next
+                    onClick={() => handlePageChange(activePage + 1)}
+                    disabled={activePage === totalPages}
+                  />
+                </Pagination>
               </Col>
             </Row>
+
           </Container>
         </Col>
       </div>

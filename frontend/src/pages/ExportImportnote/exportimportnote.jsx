@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSidebar from "../Common/sidebar.jsx";
 import { ToastContainer, toast } from 'react-toastify';
 import AddModal from "./add.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import { format } from 'date-fns';
 
 function PhieuThuChi() {
   const itemsPerPage = 8;
@@ -16,6 +15,10 @@ function PhieuThuChi() {
   const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const formatDate1 = (isoDate) => {
+    if (!isoDate) return "";
+    return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
+  };
 
   const handleCloseAddModal = () => setShowAddModal(false);
   const handleShowAddModal = () => setShowAddModal(true);
@@ -61,13 +64,9 @@ function PhieuThuChi() {
 
   return (
     <>
-
       <div className="flex">
-        <Col md={2}>
-          <CommonSidebar />
-        </Col>
 
-        <Col md={10}>
+        <Col md={12}>
           <Container className="ml-72">
             <ToastContainer position='top-right' />
             <Row className="title mb-0">
@@ -114,7 +113,7 @@ function PhieuThuChi() {
                           <td>{item.quantity}</td>
                           <td>{item.price}</td>
                           <td>{item.status}</td>
-                          <td>{item.createdAt}</td>
+                          <td>{formatDate1(item.createdAt)}</td>
                         </tr>
                       ))
                     )}

@@ -1,8 +1,8 @@
-import React ,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
 import "./tableWarehouse.css";
-import Popup from './Popup.jsx'; 
-
+import Popup from './Popup.jsx';
+import { format } from 'date-fns';
 
 
 function WarehouseTable({
@@ -14,19 +14,26 @@ function WarehouseTable({
     handleUpdateWarehouse,
     sortByQuantity,
     handleSortByQuantity,
-    
+
 }) {
     const [showPopup, setShowPopup] = useState(false);
     const [popupItem, setPopupItem] = useState(null);
+    const formatDate1 = (isoDate) => {
+        if (!isoDate) return "";
+        return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
+    };
+    const formatDate2 = (isoDate) => {
+        if (!isoDate) return "";
+        return format(new Date(isoDate), 'dd/MM/yyyy');
+    };
     useEffect(() => {
-        // Kiểm tra xem có mặt hàng nào gần đến ngày hết hạn không
         currentItems.forEach(item => {
             const expiryDate = new Date(item.expiry);
             const currentDate = new Date();
-            const daysUntilExpiry = Math.floor((expiryDate - currentDate) / (1000 * 60 * 60 * 24)); // Số ngày còn lại cho đến ngày hết hạn
-            if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) { // Nếu còn dưới 7 ngày đến hạn
+            const daysUntilExpiry = Math.floor((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
+            if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) {
                 setPopupItem(item);
-                setShowPopup(true); // Hiển thị popup nếu có thông báo
+                setShowPopup(true);
             }
         });
     }, [currentItems]);
@@ -34,13 +41,12 @@ function WarehouseTable({
     const handleClosePopup = () => {
         setShowPopup(false);
     };
-   
+
     return (
-        
         <Row className="container-table" style={{ marginRight: "20px" }}>
-              <Row className="Popup-expiry" style={{ marginRight: "20px",backgroundColor: "rosybrown" }}>
-              {showPopup && <Popup item={popupItem} onClose={handleClosePopup} />}
-        </Row>
+            <Row style={{ marginRight: "0px", backgroundColor: "rosybrown" }}>
+                {showPopup && <Popup item={popupItem} onClose={handleClosePopup} />}
+            </Row>
             <Col>
                 <Table striped bordered hover>
                     <thead>
@@ -57,7 +63,6 @@ function WarehouseTable({
                                 ></i>
                             </th>
                             <th>Ngày tạo</th>
-                            <th>Ảnh</th>
                             <th>Hạn sử dụng</th>
                             <th>Thao tác</th>
                         </tr>
@@ -78,19 +83,8 @@ function WarehouseTable({
                                     </td>
                                     <td>{item.unit}</td>
                                     <td>{item.quantity}</td>
-                                    <td>{item.createdAt}</td>
-                                    <td>
-                                        <img
-                                            src={item.image}
-                                            alt={`Ảnh của ${item.name}`}
-                                            style={{
-                                                width: "50px",
-                                                height: "50px",
-                                                objectFit: "cover",
-                                            }}
-                                        />
-                                    </td>
-                                    <td>{item.expiry}</td>
+                                    <td>{formatDate1(item.createdAt)}</td>
+                                    <td>{formatDate2(item.expiry)}</td>
                                     <td>
                                         <Button
                                             className="custom-btn-edit"

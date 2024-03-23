@@ -4,8 +4,6 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
-
 const UserProfileCard = ({ updateLatestFullName }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [fullName, setfullName] = useState("");
@@ -27,64 +25,64 @@ const UserProfileCard = ({ updateLatestFullName }) => {
     const userData = JSON.parse(userDataString);
     const userId = userData.userID;
     axios
-    .get(`http://localhost:5000/api/v1/user/${userId}/getDetail`)
-    .then((response) => {
-      const userData = response.data.data;
-      if (userData) {
-        setfullName(userData.fullName || ""); // Thay đổi tên thuộc tính
-        setEmail(userData.email || "");
-        setphoneNumber(userData.phoneNumber || ""); // Thay đổi tên thuộc tính
-        setDob(userData.dob || "");
-        setRole(userData.role || "");
-      } else {
+      .get(`http://localhost:5000/api/v1/user/${userId}/getDetail`)
+      .then((response) => {
+        const userData = response.data.data;
+        if (userData) {
+          setfullName(userData.fullName || ""); // Thay đổi tên thuộc tính
+          setEmail(userData.email || "");
+          setphoneNumber(userData.phoneNumber || ""); // Thay đổi tên thuộc tính
+          setDob(userData.dob || "");
+          setRole(userData.role || "");
+        } else {
+          setfullName("");
+          setEmail("");
+          setphoneNumber("");
+          setDob("");
+          setRole("");
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching user detail:", error);
         setfullName("");
         setEmail("");
         setphoneNumber("");
         setDob("");
         setRole("");
-      }
-      setIsLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching user detail:", error);
-      setfullName("");
-      setEmail("");
-      setphoneNumber("");
-      setDob("");
-      setRole("");
-      setIsLoading(false);
-    });
-};
-
-const handleSave = () => {
-  setIsEditing(false);
-  const userDataString = localStorage.getItem("userData");
-  if (!userDataString) {
-    throw new Error("User data not found in localStorage.");
-  }
-  const userData = JSON.parse(userDataString);
-  const userId = userData.userID;
-
-  const updatedUserData = {
-    fullName: fullName,
-    email: email,
-    phoneNumber: fullName,
-    dob: dob,
+        setIsLoading(false);
+      });
   };
 
-  axios
-    .put(`http://localhost:5000/api/v1/user/${userId}/update`, updatedUserData)
-    .then((response) => {
-      console.log('User data updated successfully:', response.data);
-      setfullName(updatedUserData.fullName); // Cập nhật state fullName
-      updateLatestFullName(updatedUserData.fullName); // Gọi hàm cập nhật từ App.js
-      toast.success("Thông tin đã được cập nhật thành công!"); // Thêm thông báo thành công
-    })
-    .catch((error) => {
-      console.error("Error updating user data:", error);
-      // Xử lý lỗi nếu có
-    });
-};
+  const handleSave = () => {
+    setIsEditing(false);
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      throw new Error("User data not found in localStorage.");
+    }
+    const userData = JSON.parse(userDataString);
+    const userId = userData.userID;
+
+    const updatedUserData = {
+      fullName: fullName,
+      email: email,
+      phoneNumber: fullName,
+      dob: dob,
+    };
+
+    axios
+      .put(`http://localhost:5000/api/v1/user/${userId}/update`, updatedUserData)
+      .then((response) => {
+        console.log('User data updated successfully:', response.data);
+        setfullName(updatedUserData.fullName); // Cập nhật state fullName
+        updateLatestFullName(updatedUserData.fullName); // Gọi hàm cập nhật từ App.js
+        toast.success("Thông tin đã được cập nhật thành công!"); // Thêm thông báo thành công
+      })
+      .catch((error) => {
+        console.error("Error updating user data:", error);
+        // Xử lý lỗi nếu có
+      });
+  };
 
 
   const handleEdit = () => {
@@ -99,12 +97,12 @@ const handleSave = () => {
 
   return (
     <>
-    <ToastContainer position="top-right" />
-     {/* <CommonNavbar latestFullName={latestFullName} /> */}
+      <ToastContainer position="top-right" />
+      {/* <CommonNavbar latestFullName={latestFullName} /> */}
       {isLoading ? ( // Nếu đang loading dữ liệu thì hiển thị một số thông báo hoặc loading spinner
         <div>Loading...</div>
       ) : (
-        <div className="container-fluid d-flex justify-content-center align-items-center vh-100">
+        <div className="container-fluid d-flex justify-content-center align-items-center vh-90">
           <div className="container snippet -mt-40">
             <div className="row">
               <div className="col-md-12">

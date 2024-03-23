@@ -1,14 +1,11 @@
 import { Container, Row, Col, Card, Button, Table } from "react-bootstrap";
 import "./viewOrderDetail.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import CommonNavbar from "../Common/navbar.jsx";
-import Sidebar from "../Common/sidebar.jsx";
 import React from "react";
 
 function ViewDetail() {
     return (
         <>
-            <CommonNavbar />
             <Container fluid className="ml-72">
                 <Row className="mb-3">
                     <Col>
@@ -75,7 +72,6 @@ function ViewDetail() {
                         </Card>
                     </Col>
                 </Row>
-                <Sidebar />
             </Container>
         </>
     );

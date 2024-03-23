@@ -11,8 +11,6 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from "react-chartjs-2";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSidebar from "../Common/sidebar.jsx";
 
 ChartJS.register(
     CategoryScale,
@@ -157,12 +155,7 @@ export default function Statistic() {
 
     return (
         <div className="statistic bg-white">
-            <CommonNavbar />
             <div className="flex statistic">
-                <Col md={2}>
-                    <CommonSidebar />
-                </Col>
-
                 <Col md={10} className="statistic">
                     <Container className="ml-72 flex flex-col items-center">
                         <h3>Product Statistics</h3>

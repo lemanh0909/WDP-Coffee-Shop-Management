@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap";
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
-import CommonNavbar from "../Common/navbar.jsx";
-import CommonSidebar from "../Common/sidebar.jsx";
 
 function ViewOrder() {
   const itemsPerPage = 7;
@@ -74,13 +72,8 @@ function ViewOrder() {
 
   return (
     <>
-
       <div className="flex">
-        <Col md={2}>
-          <CommonSidebar />
-        </Col>
-
-        <Col md={10}>
+        <Col md={12}>
           <Container className="ml-72">
             <Row className="title mb-0">
               <Col md={4} className="text-white">
@@ -200,29 +193,25 @@ function ViewOrder() {
 
                   </Table>
                 </Row>
-                <Row>
-                  <Col>
-                    <Pagination className="pagination justify-center">
-                      <Pagination.Prev
-                        onClick={() => handlePageChange(activePage - 1)}
-                        disabled={activePage === 1}
-                      />
-                      {Array.from({ length: totalPages }, (_, i) => (
-                        <Pagination.Item
-                          key={i + 1}
-                          active={i + 1 === activePage}
-                          onClick={() => handlePageChange(i + 1)}
-                        >
-                          {i + 1}
-                        </Pagination.Item>
-                      ))}
-                      <Pagination.Next
-                        onClick={() => handlePageChange(activePage + 1)}
-                        disabled={activePage === totalPages}
-                      />
-                    </Pagination>
-                  </Col>
-                </Row>
+                <Pagination className="pagination justify-center">
+                  <Pagination.Prev
+                    onClick={() => handlePageChange(activePage - 1)}
+                    disabled={activePage === 1}
+                  />
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <Pagination.Item
+                      key={i + 1}
+                      active={i + 1 === activePage}
+                      onClick={() => handlePageChange(i + 1)}
+                    >
+                      {i + 1}
+                    </Pagination.Item>
+                  ))}
+                  <Pagination.Next
+                    onClick={() => handlePageChange(activePage + 1)}
+                    disabled={activePage === totalPages}
+                  />
+                </Pagination>
               </Col>
             </Row>
           </Container>

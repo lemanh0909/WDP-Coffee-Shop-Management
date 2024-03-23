@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Spinner, Alert, Row, Col } from 'react-bootstrap';
-import CommonNavbar from '../Common/navbar.jsx';
 import EmployeeTable from './staffTable.jsx';
 import PaginationBar from './paginationBar';
 import { usePagination } from '../Common/hooks.js';
@@ -62,7 +61,7 @@ function AdminManagement() {
     return (
 
         <>
-
+            <CommonNavbar />
             <Container className="mt-4">
                 <ToastContainer position='top-right' />
                 <Row className="justify-content-between align-items-center mb-4">

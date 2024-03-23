@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Spinner, Alert, Button, Row, Col } from 'react-bootstrap';
-import CommonNavbar from '../Common/navbar.jsx';
 import EmployeeTable from './staffTable.jsx';
 import PaginationBar from './paginationBar';
 import { usePagination } from '../Common/hooks.js';
