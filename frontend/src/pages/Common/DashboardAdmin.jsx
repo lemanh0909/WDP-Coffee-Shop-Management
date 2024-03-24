@@ -13,6 +13,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import UserProfile from "../UserProfile/UserProfilenew.jsx"
 import {
     AccountCircle as AccountCircleIcon,
     ChevronLeft as ChevronLeftIcon,
@@ -125,6 +126,10 @@ export default function MiniDrawerAdmin() {
         navigate("/");
     };
 
+    const handleProfileClick = () => {
+        setSelectedComponent(<UserProfile />);
+    };
+
     const navigateToProfile = () => {
         navigate("/profileNew");
     };
@@ -180,7 +185,7 @@ export default function MiniDrawerAdmin() {
                             }}
                             className="user-menu"
                         >
-                            <MenuItem onClick={navigateToProfile}>My Profile</MenuItem>
+                            <MenuItem onClick={handleProfileClick}>My Profile</MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
 

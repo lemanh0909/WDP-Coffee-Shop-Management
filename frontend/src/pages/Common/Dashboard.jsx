@@ -238,7 +238,7 @@ export default function MiniDrawer() {
                         { text: 'Staff', icon: <PersonIcon />, component: <Staff /> },
 
                     ].map((item) => {
-                        if ((item.text === 'Staff' || item.text === 'Statistic') && (role === 'Admin' || role === 'Staff')) {
+                        if ((item.text === 'Staff' || item.text === 'Statistic' || item.text === 'Category') && (role === 'Admin' || role === 'Staff')) {
                             return null;
                         }
                         return (

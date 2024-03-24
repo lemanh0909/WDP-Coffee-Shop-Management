@@ -28,7 +28,7 @@ function Receipts() {
   const [role] = useAuth();
   const navigate = useNavigate();
   if (role === "Admin") {
-    navigate("/AdminManagement");
+    navigate("/miniDrawerAdmin");
   }
 
 
@@ -82,9 +82,9 @@ function Receipts() {
               <h2>Receipt Management</h2>
             </Col>
             <Col md={6} className="text-right">
-              {role !== "Staff" && <Button variant="primary" onClick={handleShowAddReceiptModal}>
+              <Button variant="primary" onClick={handleShowAddReceiptModal}>
                 <i className="far fa-plus-square"></i> Add Receipt
-              </Button>}
+              </Button>
               <Button variant="warning" onClick={() => exportToCSV(receipts, "receipts")}>Export</Button>
             </Col>
           </Row>
