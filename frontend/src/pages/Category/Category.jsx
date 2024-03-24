@@ -1,7 +1,6 @@
-// Category.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Row, Col, Button, Modal, } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddCategoryModal from "./addCategory.jsx";
@@ -28,24 +27,24 @@ function Category() {
 
   const fetchData = async () => {
     try {
-      const userDataString = localStorage.getItem('userData');
+      const userDataString = localStorage.getItem("userData");
       if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
+        throw new Error("User data not found in localStorage.");
       }
       const userData = JSON.parse(userDataString);
 
       const shopId = userData.shopId;
       const userId = userData.userID;
       const response = await axios.get(
-        `http://localhost:5000/api/v1/category/${userData.userID}/getAllCategoriesInShop`
+        `http://localhost:5000/api/v1/category/${userId}/getAllCategoriesInShop`
       );
 
       setItems(response.data.data.data);
     } catch (error) {
-      console.error('Error fetching category data:', error);
-      setError('An error occurred while fetching category data.');
+      console.error("Error fetching category data:", error);
+      setError("An error occurred while fetching category data.");
     } finally {
-      console.log('category data fetching completed.');
+      console.log("category data fetching completed.");
     }
   };
 
@@ -58,54 +57,39 @@ function Category() {
     }
     setSelectedRowId(rowId);
   };
+
   useEffect(() => {
     fetchData();
   }, []);
 
-  const [categories, setCategories] = useState([]);
-  useEffect(() => {
-    const userDataString = localStorage.getItem("userData");
-    if (!userDataString) {
-      throw new Error("User data not found in localStorage.");
-    }
-    const userData = JSON.parse(userDataString);
-    const shopId = userData.shopId;
-    const userId = userData.userID;
+  const handleDeleteCategory = (categoryId) => {
+    setShowConfirmationModal(true);
+    setCategoryIdToDelete(categoryId);
+  };
+
+  // Xác nhận xóa
+  const confirmDelete = () => {
     axios
-      .get(
-        `http://localhost:5000/api/v1/category/${shopId}/getAllCategoriesInShop`
-      )
+      .delete(`http://localhost:5000/api/v1/category/${categoryIdToDelete}/delete`)
       .then((response) => {
-        setCategories(response.data.data.data);
-      })
-      .catch((error) => console.error("Error fetching categories:", error));
-  }, []);
-
-
-
-  const handleDelete = () => {
-    axios
-      .delete("http://localhost:5000/api/v1/category/delete", {
-        data: { categoryId: categoryIdToDelete },
-      })
-      .then((response) => {
-        console.log("category deleted successfully");
+        console.log("Category deleted successfully");
         fetchData();
         setShowConfirmationModal(false);
+        toast.success("Delete Category successfully!");
       })
       .catch((error) => {
-        console.error("Error deleting product:", error);
+        console.error("Error deleting category:", error);
       });
   };
 
   const handleUpdateCategory = (categoryId) => {
-    const selected = items.find(item => item._id === categoryId);
+    const selected = items.find((item) => item._id === categoryId);
     setSelectedCategory(selected);
     setShowUpdateModal(true);
   };
 
   const handleAddCategory = () => {
-    toast.success('Add Category Successfully!');
+    toast.success("Add Category Successfully!");
     fetchData();
   };
 
@@ -118,15 +102,10 @@ function Category() {
     setCategoryIdToDelete(categoryId);
   };
 
-  const handleCloseConfirmationModal = () => {
-    setShowConfirmationModal(false);
-    setCategoryIdToDelete(null);
-  };
-
   const handleUpdateSuccess = () => {
     fetchData();
     setShowUpdateModal(false);
-    toast.success('Update category successful!');
+    toast.success("Update category successful!");
   };
 
   const handleSortByQuantity = () => {
@@ -164,7 +143,7 @@ function Category() {
       <div className="flex">
         <Col md={12}>
           <Container className="ml-72">
-            <ToastContainer position="top-right" />
+            <ToastContainer position="bottom-right" />
             <Row className="title mb-0">
               <Col md={4} className="text-white">
                 <h2>Category management</h2>
@@ -193,12 +172,13 @@ function Category() {
               showDetailsTable={showDetailsTable}
               selectedProduct={selectedProduct}
               handleCloseModal={handleCloseModal}
+              handleDeleteCategory={handleDeleteCategory}
             />
           </Container>
         </Col>
       </div>
       <AddCategoryModal
-        userId={JSON.parse(localStorage.getItem('userData'))?.userID}
+        userId={JSON.parse(localStorage.getItem("userData"))?.userID}
         show={showAddModal}
         onHide={() => setShowAddModal(false)}
         handleClose={handleCloseModal}
@@ -212,16 +192,16 @@ function Category() {
         />
       )}
 
-      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+      <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm delete</Modal.Title>
+          <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure?</Modal.Body>
+        <Modal.Body>Are you sure you want to delete this category?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseConfirmationModal}>
+          <Button variant="secondary" onClick={() => setShowConfirmationModal(false)}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleDelete}>
+          <Button variant="danger" onClick={confirmDelete}>
             Delete
           </Button>
         </Modal.Footer>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
 import "./tableWarehouse.css";
-import Popup from './Popup.jsx';
+// import Popup from './Popup.jsx';
 import { format } from 'date-fns';
 
 
@@ -12,12 +12,13 @@ function WarehouseTable({
     activePage,
     itemsPerPage,
     handleUpdateWarehouse,
+    handleDeleteWarehouse,
     sortByQuantity,
     handleSortByQuantity,
 
 }) {
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupItem, setPopupItem] = useState(null);
+    // const [showPopup, setShowPopup] = useState(false);
+    // const [popupItem, setPopupItem] = useState(null);
     const formatDate1 = (isoDate) => {
         if (!isoDate) return "";
         return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
@@ -92,8 +93,11 @@ function WarehouseTable({
                                         >
                                             <i className="fa-solid fa-pen-to-square"></i>Update
                                         </Button>
-                                        <Button type="button" className="custom-btn-delete">
-                                            <i className="fa-solid fa-trash"></i>Delete
+                                        <Button
+                                            className="custom-btn-delete"
+                                            onClick={() => handleDeleteWarehouse(item._id)}
+                                        >
+                                            <i className="fa-solid fa-trash"></i> Delete
                                         </Button>
                                     </td>
                                 </tr>

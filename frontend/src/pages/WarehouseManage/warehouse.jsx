@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../WarehouseManage/warehouse.css";
 import WarehouseTable from "./warehouseTable.jsx";
+import ConfirmationModal from "./deleteWarehouse.jsx";
 
 function Warehouse() {
   const [items, setItems] = useState([]);
@@ -20,6 +21,8 @@ function Warehouse() {
   const [sortByQuantity, setSortByQuantity] = useState(null);
   const itemsPerPage = 5;
   const [activePage, setActivePage] = useState(1);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [selectedWarehouseIdToDelete, setSelectedWarehouseIdToDelete] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -53,14 +56,34 @@ function Warehouse() {
   };
 
   const handleAddWarehouse = () => {
-    toast.success("Thêm kho thành công!");
+    toast.success("Add warehouse successfully!");
     fetchData();
   };
 
   const handleUpdateSuccess = () => {
     fetchData();
     setShowUpdateModal(false);
-    toast.success("Cập nhật kho thành công!");
+    toast.success("Update warehouse successfully!");
+  };
+
+  const handleDeleteWarehouse = (warehouseId) => {
+    setSelectedWarehouseIdToDelete(warehouseId);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleConfirmDelete = () => {
+    axios
+      .delete(`http://localhost:5000/api/v1/warehouse/${selectedWarehouseIdToDelete}/delete`)
+      .then((response) => {
+        console.log("Warehouse deleted successfully");
+        fetchData();
+        setShowDeleteConfirmation(false);
+        toast.success("Delete warehouse successfully!");
+      })
+      .catch((error) => {
+        console.error("Error deleting warehouse:", error);
+        setShowDeleteConfirmation(false);
+      });
   };
 
   const handleSortByQuantity = () => {
@@ -98,13 +121,13 @@ function Warehouse() {
       <div className="flex">
         <Col md={12}>
           <Container>
-            <ToastContainer position="top-right" />
+            <ToastContainer position="bottom-right" />
             <Row
               className="title"
               style={{ marginTop: "20px", marginRight: "20px" }}
             >
               <Col md={4} className="text-white">
-                <h2>Warehouse</h2>
+                <h2>Warehouse Management</h2>
               </Col>
               <Col md={4}>
                 <div className="wrap">
@@ -134,6 +157,10 @@ function Warehouse() {
                 >
                   <i className="fa-solid fa-plus"></i> Add Product
                 </Button>
+                <Button type="button" className="btn btn-success btn-color">
+                  <i className="fa-solid fa-file-export"></i>
+                  Export to excel
+                </Button>
               </Col>
             </Row>
 
@@ -146,6 +173,7 @@ function Warehouse() {
               handleSortByQuantity={handleSortByQuantity}
               handleUpdateWarehouse={handleUpdateWarehouse}
               sortByQuantity={sortByQuantity}
+              handleDeleteWarehouse={handleDeleteWarehouse}
             />
           </Container>
         </Col>
@@ -155,6 +183,11 @@ function Warehouse() {
         show={showAddModal}
         onHide={() => setShowAddModal(false)}
         handleAddWarehouse={handleAddWarehouse}
+      />
+      <ConfirmationModal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        onConfirm={handleConfirmDelete}
       />
       {showUpdateModal && (
         <UpdateWarehouseModal

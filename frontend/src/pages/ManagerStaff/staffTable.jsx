@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { StyledTable } from "./managerStaffStyles.jsx";
 
-const EmployeeTable = ({ employeeData, toggleStatus }) => (
+const EmployeeTable = ({ employeeData, toggleStatus, handleButtonClick }) => (
     <StyledTable className="text-center align-middle table-hover">
         <thead>
             <tr>
@@ -11,12 +11,13 @@ const EmployeeTable = ({ employeeData, toggleStatus }) => (
                 <th>Phone Number</th>
                 <th>Salary</th>
                 <th>Status</th>
+                <th>Action</th> {/* Thêm cột mới */}
             </tr>
         </thead>
         <tbody>
             {employeeData.length === 0 ? (
                 <tr>
-                    <td colSpan="5" className="text-center">No data to present</td>
+                    <td colSpan="6" className="text-center">No data to present</td> {/* Cập nhật số cột */}
                 </tr>
             ) : (
                 employeeData.map(employee => (
@@ -24,7 +25,7 @@ const EmployeeTable = ({ employeeData, toggleStatus }) => (
                         <td>{employee.fullName}</td>
                         <td>{employee.email}</td>
                         <td>{employee.phoneNumber}</td>
-                        <td>{employee.salary}</td>
+                        <td>{employee.salary ? new Intl.NumberFormat('vi-VN').format(employee.salary) : "0"}</td>
                         <td>
                             <Form.Check
                                 type="switch"
@@ -32,6 +33,9 @@ const EmployeeTable = ({ employeeData, toggleStatus }) => (
                                 onChange={() => toggleStatus(employee._id, employee.status)}
                                 checked={employee.status === 'Active'}
                             />
+                        </td>
+                        <td>
+                            <Button onClick={() => handleButtonClick(employee._id)}>Action</Button>
                         </td>
                     </tr>
                 ))
