@@ -10,6 +10,7 @@ function CategoryTable({
   activePage,
   itemsPerPage,
   handleUpdateCategory,
+  handleDeleteCategory,
   showDetails,
   selectedRowId,
   showDetailsTable,
@@ -29,7 +30,6 @@ function CategoryTable({
               <th>Category code</th>
               <th>Category name</th>
               <th>Description</th>
-
               <th>Create date</th>
               <th>Action</th>
             </tr>
@@ -59,7 +59,11 @@ function CategoryTable({
                       >
                         <i className="fa-solid fa-pen-to-square"></i>Update
                       </Button>
-                      <Button type="button" className="custom-btn-delete">
+                      <Button
+                        type="button"
+                        className="custom-btn-delete"
+                        onClick={() => handleDeleteCategory(item._id)}
+                      >
                         <i className="fa-solid fa-trash"></i>Delete
                       </Button>
                     </td>

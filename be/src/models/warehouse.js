@@ -19,7 +19,7 @@ const Warehouse = mongoose.model(
         required: true,
       },
       image: {
-        type: String, // You might want to use a different type if storing images, like Buffer or another library specific to handling images
+        type: String,
       },
       expiry: {
         type: Date,

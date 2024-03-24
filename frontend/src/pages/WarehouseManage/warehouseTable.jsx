@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Col, Row, Table, Pagination, Button, Modal } from "react-bootstrap";
 import "./tableWarehouse.css";
-import Popup from './Popup.jsx';
+// import Popup from './Popup.jsx';
 import { format } from 'date-fns';
 
 
@@ -12,12 +12,13 @@ function WarehouseTable({
     activePage,
     itemsPerPage,
     handleUpdateWarehouse,
+    handleDeleteWarehouse,
     sortByQuantity,
     handleSortByQuantity,
 
 }) {
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupItem, setPopupItem] = useState(null);
+    // const [showPopup, setShowPopup] = useState(false);
+    // const [popupItem, setPopupItem] = useState(null);
     const formatDate1 = (isoDate) => {
         if (!isoDate) return "";
         return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
@@ -50,24 +51,24 @@ function WarehouseTable({
         });
     }, [currentItems]);
 
-    const handleClosePopup = () => {
-        setShowPopup(false);
-    };
+    // const handleClosePopup = () => {
+    //     setShowPopup(false);
+    // };
 
     return (
         <Row className="container-table" style={{ marginRight: "20px" }}>
-            <Row style={{ marginRight: "0px", backgroundColor: "rosybrown" }}>
+            {/* <Row style={{ marginRight: "0px", backgroundColor: "rosybrown" }}>
                 {showPopup && <Popup item={popupItem} onClose={handleClosePopup} />}
-            </Row>
+            </Row> */}
             <Col>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>Mã hàng hoá</th>
-                            <th>Tên hàng hoá</th>
-                            <th>Đơn vị</th>
+                            <th>Product Code</th>
+                            <th>Product Name</th>
+                            <th>Unit</th>
                             <th>
-                                Số lượng{" "}
+                                Quantity{" "}
                                 <i
                                     className={`fas fa-sort-${sortByQuantity === "asc" ? "up" : "down"}`}
                                     onClick={handleSortByQuantity}
@@ -117,8 +118,11 @@ function WarehouseTable({
                                         >
                                             <i className="fa-solid fa-pen-to-square"></i>Update
                                         </Button>
-                                        <Button type="button" className="custom-btn-delete">
-                                            <i className="fa-solid fa-trash"></i>Delete
+                                        <Button
+                                            className="custom-btn-delete"
+                                            onClick={() => handleDeleteWarehouse(item._id)}
+                                        >
+                                            <i className="fa-solid fa-trash"></i> Delete
                                         </Button>
                                     </td>
                                 </tr>

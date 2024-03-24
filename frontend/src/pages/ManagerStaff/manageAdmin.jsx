@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Spinner, Alert, Row, Col } from 'react-bootstrap';
-import EmployeeTable from './staffTable.jsx';
+import EmployeeTable from './manageTable.jsx';
 import PaginationBar from './paginationBar';
 import { usePagination } from '../Common/hooks.js';
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 function AdminManagement() {
     const [role] = useAuth();
     const navigate = useNavigate();
-    if (role != "Admin") { navigate("/control"); }
+    if (role != "Admin") { navigate("/"); }
     const [employeeData, setEmployeeData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

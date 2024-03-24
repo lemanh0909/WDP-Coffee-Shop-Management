@@ -3,6 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 function AddModal({ show, handleClose, onAddSuccess }) {
   const [warehouseOptions, setWarehouseOptions] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
@@ -40,13 +41,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
   }, []);
 
   const handleSave = async () => {
-    // if (price < 0) {
-    //   toast.error("Giá không được nhập số âm");
-    //   return;
-    // }
     try {
-      console.log("Selected warehouse:", selectedWarehouse);
-
       const userDataString = localStorage.getItem("userData");
       if (!userDataString) {
         throw new Error("User data not found in localStorage.");
@@ -58,7 +53,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
         warehouseId: selectedWarehouse,
         userId: userData.userID,
         quantity: quantity,
-        price: price,
+        price: parseFloat(price.replaceAll('.', '')), // Chuyển đổi giá trị price thành số trước khi lưu
         status: status,
         description: description,
       };
@@ -84,6 +79,26 @@ function AddModal({ show, handleClose, onAddSuccess }) {
       console.error("Error creating note:", error);
     }
   };
+
+  const handlePriceChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '');
+    const formattedValue = new Intl.NumberFormat('vi-VN').format(value);
+    setPrice(formattedValue);
+  };
+
+  const resetForm = () => {
+    setSelectedWarehouse("");
+    setQuantity("");
+    setPrice("");
+    setStatus("Imported");
+    setDescription("");
+  };
+
+  useEffect(() => {
+    if (show) {
+      resetForm();
+    }
+  }, [show]);
 
   return (
     <Modal show={show} onHide={handleClose} className="mt-10">
@@ -124,15 +139,9 @@ function AddModal({ show, handleClose, onAddSuccess }) {
           <Form.Group controlId="price">
             <Form.Label>Price</Form.Label>
             <Form.Control
-              type="number"
+              type="text"
               value={price}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (!isNaN(value) && value >= 0) {
-                  // Kiểm tra nếu giá trị là số và lớn hơn hoặc bằng 0
-                  setPrice(value);
-                }
-              }}
+              onChange={handlePriceChange}
             />
           </Form.Group>
 
@@ -144,6 +153,8 @@ function AddModal({ show, handleClose, onAddSuccess }) {
               onChange={(e) => setStatus(e.target.value)}
               disabled
             />
+            <option value="Imported" disabled>
+            </option>
           </Form.Group>
 
           <Form.Group controlId="description">

@@ -52,7 +52,7 @@ function AddExportModal({ show, handleClose, onAddSuccess }) {
         warehouseId: selectedWarehouse,
         userId: userData.userID,
         quantity: quantity,
-        price: 0, // Giá trị mặc định là 0
+        price: 0,
         status: status,
         description: description,
       };
@@ -124,6 +124,8 @@ function AddExportModal({ show, handleClose, onAddSuccess }) {
               onChange={(e) => setStatus(e.target.value)}
               disabled
             />
+            <option value="Exported" disabled>
+            </option>
           </Form.Group>
           <Form.Group controlId="description">
             <Form.Label>Description</Form.Label>

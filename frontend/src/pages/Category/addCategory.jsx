@@ -85,7 +85,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                                 if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
                                     setFormData({ ...formData, description: inputValue });
                                 } else {
-                                    alert("Product names must only contain alphabetic characters and spaces!");
+                                    alert("Description must only contain alphabetic characters and spaces!");
                                 }
                             }}
                         />

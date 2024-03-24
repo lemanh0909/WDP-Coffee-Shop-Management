@@ -15,30 +15,14 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {
     AccountCircle as AccountCircleIcon,
-    Category as FolderIcon,
     ChevronLeft as ChevronLeftIcon,
     ChevronRight as ChevronRightIcon,
-    Description as DescriptionIcon,
     Menu as MenuIcon,
     Person as PersonIcon,
-    ReceiptLong as ReceiptLongIcon,
-    ShoppingCart as ShoppingCartIcon,
-    ShowChart as ShowChartIcon,
-    Storage as StorageIcon,
-    StoreMallDirectory as StoreMallDirectoryIcon,
 } from '@mui/icons-material';
 
-import PhieuThuChi from '../ExportImportnote/exportimportnote';
-import Receipts from '../Receipt/PhieuThuChi.jsx';
-import Warehouse from '../WarehouseManage/warehouse';
-import ProductManage from '../ProductManage/productmanage';
-import Order from '../Order/Order';
-import ViewOrder from '../ViewOrder/viewOrder';
-import Statistic from '../Statistic/Statistic';
-import Category from '../Category/Category.jsx';
-import Staff from "../ManagerStaff/managerStaff";
+import Manager from "../ManagerStaff/manageAdmin.jsx";
 import useAuth from "../Common/Authorization.js";
-import UserProfile from "../UserProfile/UserProfilenew.jsx"
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -107,12 +91,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function MiniDrawer() {
+export default function MiniDrawerAdmin() {
     const [role] = useAuth();
     const navigate = useNavigate();
     useEffect(() => {
-        if (role === "Manager" || role === "Staff") {
-            navigate("/MiniDrawer");
+        if (role === "Admin") {
+            navigate("/miniDrawerAdmin");
         }
     }, [role, navigate]);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -132,10 +116,6 @@ export default function MiniDrawer() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleProfileClick = () => {
-        setSelectedComponent(<UserProfile />);
-    };
-
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
@@ -151,7 +131,7 @@ export default function MiniDrawer() {
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [selectedComponent, setSelectedComponent] = useState(<Warehouse />);
+    const [selectedComponent, setSelectedComponent] = useState(<Manager />);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -200,7 +180,7 @@ export default function MiniDrawer() {
                             }}
                             className="user-menu"
                         >
-                            <MenuItem onClick={handleProfileClick}>My Profile</MenuItem>
+                            <MenuItem onClick={navigateToProfile}>My Profile</MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
 
@@ -227,44 +207,29 @@ export default function MiniDrawer() {
                 <Divider />
                 <List>
                     {[
-                        { text: 'Category', icon: <FolderIcon />, component: <Category /> },
-                        { text: 'Product', icon: <StoreMallDirectoryIcon />, component: <ProductManage /> },
-                        { text: 'Warehouse', icon: <StorageIcon />, component: <Warehouse /> },
-                        { text: 'Order', icon: <ShoppingCartIcon />, component: <Order /> },
-                        { text: 'E-Import Note', icon: <DescriptionIcon />, component: <PhieuThuChi /> },
-                        { text: 'Receipts Note', icon: <ReceiptLongIcon />, component: <Receipts /> },
-                        { text: 'View Order', icon: <ShoppingCartIcon />, component: <ViewOrder /> },
-                        { text: 'Statistic', icon: <ShowChartIcon />, component: <Statistic /> },
-                        { text: 'Staff', icon: <PersonIcon />, component: <Staff /> },
-
-                    ].map((item) => {
-                        if ((item.text === 'Staff' || item.text === 'Statistic') && (role === 'Admin' || role === 'Staff')) {
-                            return null;
-                        }
-                        return (
-                            <ListItem key={item.text} disablePadding sx={{ display: 'block' }} onClick={() => handleSidebarItemClick(item.component)}>
-                                <ListItemButton
+                        { text: 'Manager', icon: <PersonIcon />, component: <Manager /> },
+                    ].map((item, index) => (
+                        <ListItem key={item.text} disablePadding sx={{ display: 'block' }} onClick={() => handleSidebarItemClick(item.component)}>
+                            <ListItemButton
+                                sx={{
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
+                                }}
+                            >
+                                <ListItemIcon
                                     sx={{
-                                        minHeight: 48,
-                                        justifyContent: open ? 'initial' : 'center',
-                                        px: 2.5,
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
                                     }}
                                 >
-                                    <ListItemIcon
-                                        sx={{
-                                            minWidth: 0,
-                                            mr: open ? 3 : 'auto',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        );
-                    })}
-
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
                 </List>
             </Drawer>
 

@@ -15,15 +15,14 @@ export const StyledTable = styled.table`
   overflow: hidden;
 
   td {
-    padding: 15px;
-    text-align: left;
+    padding: 10px;
     border: 1px solid #dee2e6;
   }
 
   th {
     background-color: #8b5a2b;
     color: #fff;
-    padding: 15px;
+    padding: 10px;
     text-align: center;
     border: 1px solid #dee2e6;
   }
@@ -42,8 +41,6 @@ export const StyledTable = styled.table`
 export const StyledPagination = styled(Pagination)`
   justify-content: center;
   padding:0;
-  margin-top: 20px;
-  position: fixed;
   bottom: 10px;
   left: 0;
   right: 0;

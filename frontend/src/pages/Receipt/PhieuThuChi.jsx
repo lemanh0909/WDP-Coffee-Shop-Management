@@ -100,7 +100,7 @@ function Receipts() {
                     <th>Receipt ID</th>
                     <th>Receipt Name</th>
                     <th>Creation Date</th>
-                    <th>Value</th>
+                    <th>Value (VND)</th>
                     <th>Receipt Type</th>
                     <th>Description</th>
                   </tr>
@@ -112,7 +112,7 @@ function Receipts() {
                         <td>{item._id}</td>
                         <td>{item.name}</td>
                         <td>{formatDate1(item.date)}</td>
-                        <td>{item.status === 'Expense' ? '-' + item.price : item.price}</td>
+                        <td>{item.status === 'Expense' ? '-' + (item.price ? new Intl.NumberFormat('vi-VN').format(item.price) : "none") : (item.price ? new Intl.NumberFormat('vi-VN').format(item.price) : "none")}</td>
                         <td>{item.status}</td>
                         <td>{item.description}</td>
                       </tr>
