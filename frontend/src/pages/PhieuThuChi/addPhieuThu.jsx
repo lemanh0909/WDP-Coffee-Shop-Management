@@ -59,7 +59,7 @@ const AddReceiptModal = ({ userId, show, onHide, handleAddReceipt }) => {
     };
 
     return (
-        <Modal show={show} onHide={onHide} animation={false}>
+        <Modal show={show} onHide={onHide} animation={false} className="mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Add Receipt</Modal.Title>
             </Modal.Header>

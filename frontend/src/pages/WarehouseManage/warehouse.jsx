@@ -128,15 +128,15 @@ function Warehouse() {
               >
                 <Button
                   type="button"
-                  className="btn btn-danger btn-color"
+                  className="btn btn-primary btn-color"
                   style={{ marginRight: "10px" }}
                   onClick={() => setShowAddModal(true)}
                 >
-                  <i className="fa-solid fa-plus"></i> Thêm sản phẩm
+                  <i className="fa-solid fa-plus"></i> Add Product
                 </Button>
-                <Button type="button" className="btn btn-primary btn-color">
-                  <i className="fa-solid fa-file-export"></i>
-                  Xuất ra file
+                <Button type="button" className="btn btn-success btn-color">
+                <i className="fa-solid fa-file-export"></i>
+                  Export to excel
                 </Button>
               </Col>
             </Row>

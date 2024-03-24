@@ -188,7 +188,7 @@ function ProductManage() {
                 <div className="">
                   {role !== "Staff" && <Button
                     variant="primary"
-                    className="add-btn btn-danger"
+                    className="add-btn btn-primary"
                     onClick={handleShowModal}
                   >
                     <i className="fa-solid fa-plus"></i> Add Product
@@ -230,7 +230,7 @@ function ProductManage() {
                               <td className="text-center">{item.size}</td>
                               <td className="text-center">{item.price}</td>
                               <td className="text-center justify-center">
-                                <Button onClick={() => showDetails(item._id)}>
+                                <Button variant="success" onClick={() => showDetails(item._id)}>
                                   View Details
                                 </Button>
                               </td>

@@ -99,7 +99,7 @@ function AddProductModal({ categories, show, handleClose, onAddSuccess, warehous
         handleClose();
     };
     return (
-        <Modal show={show} onHide={handleModalHide}>
+        <Modal show={show} onHide={handleModalHide} className="mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Add Product</Modal.Title>
             </Modal.Header>

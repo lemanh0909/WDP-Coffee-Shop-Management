@@ -174,13 +174,13 @@ function Category() {
               <Col md={4} className="button-container">
                 <button
                   type="button"
-                  className="btn btn-danger btn-color"
+                  className="btn btn-primary btn-color"
                   style={{ marginRight: "10px" }}
                   onClick={() => setShowAddModal(true)}
                 >
                   <i className="fa-solid fa-plus"></i> Add category
                 </button>
-                <button type="button" className="btn btn-primary btn-color">
+                <button type="button" className="btn btn-success btn-color">
                   <i className="fa-solid fa-file-export"></i>
                   Export to excel
                 </button>

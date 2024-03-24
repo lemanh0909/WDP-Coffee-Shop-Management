@@ -102,7 +102,7 @@ function UpdateProductModal({ categories, show, handleClose, onUpdate, productIn
     };
 
     return (
-        <Modal show={show} onHide={handleModalClose}>
+        <Modal show={show} onHide={handleModalClose} className="mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Update Product</Modal.Title>
             </Modal.Header>
