@@ -15,6 +15,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
         e.persist();
         try {
             const { name, value } = e.target;
+
             setFormData((prevData) => ({ ...prevData, [name]: value }));
         } catch (error) {
             console.error("Error handling change:", error);
@@ -23,12 +24,16 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const response = await axios.post(
                 "http://localhost:5000/api/v1/category/create",
                 formData
             );
-            if (response.data.isSuccess) {
+
+
+            if (response.data.success) {
+
                 onHide();
                 handleAddCategory(response.data.data);
                 setFormData({
@@ -58,6 +63,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             type="text"
                             name="name"
                             value={formData.name}
+
                             onChange={handleChange}
                         />
                     </Form.Group>

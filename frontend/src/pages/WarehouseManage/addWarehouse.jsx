@@ -78,15 +78,11 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
               type="text"
               name="name"
               value={formData.name}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (/^[a-zA-Z\s]*$/.test(inputValue)) {
-                  setFormData({ ...formData, name: inputValue });
-                } else {
-                  
-                  toast.error( "Product names must contain only alphabetic characters and spaces!");
-                }
-              }}
+              pattern="[a-zA-Z\s]+"
+              required
+              title="Name should contain only alphabetic characters and spaces."
+              onChange={handleChange}
+              
             />
           </Form.Group>
           <Form.Group controlId="formQuantity">

@@ -53,7 +53,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
         warehouseId: selectedWarehouse,
         userId: userData.userID,
         quantity: quantity,
-        price: parseFloat(price.replaceAll('.', '')), // Chuyển đổi giá trị price thành số trước khi lưu
+        price: parseFloat(price.replaceAll('.', '')),
         status: status,
         description: description,
       };

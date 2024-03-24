@@ -23,5 +23,4 @@ categoryRouter.post('/create', CategoryController.createCategory);
 categoryRouter.delete('/:categoryId/delete', CategoryController.deleteCategory);
 categoryRouter.get('/:managerId/getAllCategoriesInShop', CategoryController.getAllCategoriesInShop);
 
-
 export default categoryRouter;

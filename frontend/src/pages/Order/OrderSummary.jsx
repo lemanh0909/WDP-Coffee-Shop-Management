@@ -5,7 +5,9 @@ import { ArrowLeft } from 'react-bootstrap-icons';
 
 // Import necessary libraries and icons
 
-const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymentMethod, setPaymentMethod, customerPayment, refundAmount, handlePaymentChange, handleConfirmOrder, orderErrorVisible, createOrderError }) => {
+const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymentMethod, 
+  setPaymentMethod, customerPayment, refundAmount, handlePaymentChange, handleConfirmOrder,
+   orderErrorVisible, creatOrderError }) => {
   return (
     <Card className='w-1/2'>
       <Button variant="link" onClick={handleGoBack}>
@@ -62,7 +64,7 @@ const OrderSummary = ({ handleGoBack, totalQuantity, calculateTotalPrice, paymen
       </div>
       {orderErrorVisible && (
         <div className="mt-2">
-          <p>{createOrderError}</p>
+          <p>{creatOrderError}</p>
         </div>
       )}
       <div className='mb-4'></div>

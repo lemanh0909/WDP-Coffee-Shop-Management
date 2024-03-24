@@ -4,7 +4,7 @@ import { httpConstant } from "../constant/index.js";
 import { validation } from "../utils/validation.js";
 
 export const CategoryController = {
-  createCategory: async (req, res) => {
+ createCategory: async (req, res) => {
     try {
         const data = req.body;
 
