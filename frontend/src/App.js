@@ -7,7 +7,6 @@ import Warehouse from './pages/WarehouseManage/warehouse.jsx';
 import ProductManage from './pages/ProductManage/productmanage.jsx';
 import Order from './pages/Order/Order.jsx';
 import Category from './pages/Category/Category.jsx';
-import Categorynew from './pages/Category/Categorynew.jsx';
 import AddCategory from './pages/Category/addCategory.jsx';
 import Control from './pages/Control/Control.jsx';
 import Thuchi from './pages/Receipt/PhieuThuChi.jsx';
@@ -22,7 +21,6 @@ import ExportImportNOte from './pages/ExportImportnote/exportimportnote.jsx';
 import ViewOrder from './pages/ViewOrder/viewOrder.jsx';
 import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
 import UploadImage from './pages/ImgUp/UploadImage.jsx';
-import UserProfile from './pages/UserProfile/UserProfile.jsx';
 import UserProfilenew from './pages/UserProfile/UserProfilenew.jsx';
 import Statistic from './pages/Statistic/Statistic.jsx';
 
@@ -45,7 +43,6 @@ function App() {
           <Route path="/order" element={< Order />} />
           <Route path="/control" element={< Control />} />
           <Route path="/category" element={< Category />} />
-          <Route path="/categorynew" element={< Categorynew />} />
           <Route path="/addcategory" element={< AddCategory />} />
           <Route path="/Thuchi" element={< Thuchi />} />
           <Route path="/AdminManagement" element={<AdminManagement />} />
@@ -53,7 +50,6 @@ function App() {
           <Route path="/view-order" element={<ViewOrder />} />
           <Route path="{`/view-order/${order.id}`}" element={<ViewOrderDetail />} />
           <Route path="/upImg" element={<UploadImage />} />
-          <Route path="/profile" element={<UserProfile />} />
           <Route path="/profilenew" element={<UserProfilenew updateLatestFullName={updateLatestFullName} />} />
           <Route path='/verify/:id/:uniqueString' element={<AuthenPage></AuthenPage>}></Route>
           <Route path="/miniDrawer" element={<MiniDrawer />} />
