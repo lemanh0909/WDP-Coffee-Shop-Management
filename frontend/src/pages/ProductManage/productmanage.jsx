@@ -8,6 +8,7 @@ import AddProductModal from "./addProduct.jsx";
 import UpdateProductModal from "./updateProduct.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../Common/Authorization.js";
+import { ToastContainer, toast } from "react-toastify";
 
 function ProductManage() {
 
@@ -16,7 +17,7 @@ function ProductManage() {
   if (role == "Admin") {
     navigate("/AdminManagement");
   }
-  const itemsPerPage = 7;
+  const itemsPerPage = 5;
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [paginatedItems, activePage, totalPages, handlePageChange] =
@@ -64,6 +65,7 @@ function ProductManage() {
   };
 
   const handleAddSuccess = () => {
+    toast.success("Add Product successfully!");
     fetchProducts();
   };
   const handleCloseUpdateModal = () => {
@@ -72,6 +74,8 @@ function ProductManage() {
   };
   const handleUpdateSuccess = () => {
     fetchProducts(); 
+    toast.success("Update Product successfully!");
+
     console.log("fetch");// Cập nhật danh sách sản phẩm sau khi cập nhật thành công
     handleCloseUpdateModal(); // Đóng modal cập nhật sản phẩm
   };
@@ -95,6 +99,7 @@ function ProductManage() {
       .then((response) => {
         console.log("Product deleted successfully");
         fetchProducts();
+        toast.success("Delete Product successfully!");
         setShowConfirmationModal(false);
       })
       .catch((error) => {
@@ -180,6 +185,7 @@ function ProductManage() {
       <div className="flex">
         <Col md={12}>
           <Container className="ml-72 ">
+          <ToastContainer position="top-right" />
             <Row className="title mb-0">
               <Col md={4} className="text-white "  >
                 <h2>Product Management</h2>

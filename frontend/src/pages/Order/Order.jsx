@@ -5,6 +5,7 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import OrderSummary from './OrderSummary';
 import OrderDisplay from './OrderDisplay';
 import ProductVariantDisplay from './ProductVariantDisplay';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Order = () => {
   const [productVariant, setProductVariant] = useState([]);
@@ -52,6 +53,7 @@ const Order = () => {
     const userId = userData.userID;
     axios.get(`http://localhost:5000/api/v1/product/${shopId}/getAllProductVariantsInShop`)
       .then(response => {
+        console.log("shop:" + shopId);
         setProductVariant(response.data.data.allProductVariants);
       })
       .catch(error => console.error('Error fetching categories:', error));
@@ -131,7 +133,7 @@ const Order = () => {
     const warehouseCopy = warehouse.map(item => ({ ...item }));
     setOrderMessage(null)
     if (selectedProducts.length === 0) {
-      setOrderMessage('Hóa đơn trống!');
+      setOrderMessage('Empty order!');
       return;
     }
     for (const product of selectedProducts) {
@@ -144,7 +146,7 @@ const Order = () => {
           matchingWarehouseItem.quantity = matchingWarehouseItem.quantity - item.require * product.quantity;
           if (matchingWarehouseItem.quantity < 0) {
             console.log(matchingWarehouseItem.name, 'not enough:');
-            setOrderMessage(`Không đủ nguyên liệu để tạo ${product.quantity} ${product.name}.`)
+            setOrderMessage(`Not enough item in warehouse to create ${product.quantity} ${product.name}.`)
             return;
           }
         }
@@ -189,6 +191,19 @@ const Order = () => {
     }
   }, [refundAmountChange, calculateRefundAmount]);
 
+  const resetOrderState = () => {
+    setSelectedProducts([]);
+    setTotalQuantity(0);
+    setOrderMessage(null);
+    setCustomerPayment(0);
+    setPaymentMethod('Cash');
+    setRefundAmount(0);
+    setRefundAmountChange(false);
+    setOrderErrorVisible(false);
+    setCreatOrderError(null);
+    setShowOrderSummary(false);
+  };
+
   const handleConfirmOrder = () => {
     const customerPayInt = parseInt(customerPayment);
     const totalPrice = calculateTotalPrice();
@@ -211,15 +226,15 @@ const Order = () => {
           setOrderErrorVisible(false);
           setCustomerPayment(0);
           setPaymentMethod('Cash');
-          alert('Đơn hàng đã được tạo thành công!');
-          window.location.reload();
+          toast.success('Create Order Successful!');
+          resetOrderState();
         })
         .catch(error => {
           console.error('Error creating order:', error);
         });
     } else {
       setOrderErrorVisible(true);
-      setCreatOrderError(`Tiền khách trả ít hơn tổng giá!`);
+      setCreatOrderError(`Customer pays less than total Price`);
     }
   };
 
@@ -237,6 +252,7 @@ const Order = () => {
         </div>
       )}
       <Container className="flex justify-center gap-2 mt-4">
+      <ToastContainer position='top-right' />
         {showOrderSummary ? (
           <OrderSummary
             handleGoBack={handleGoBack}

@@ -3,38 +3,38 @@ import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap"
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
 
-function ViewOrder() {
-  const itemsPerPage = 4;
-  const [orders, setOrders] = useState([]);
+function ViewPaycheck() {
+  const itemsPerPage = 7;
+  const [Paychecks, setPaychecks] = useState([]);
   const [paginatedItems, activePage, totalPages, handlePageChange] =
-    usePagination(orders, itemsPerPage);
-  const [searchOrderId, setSearchOrderId] = useState('');
+    usePagination(Paychecks, itemsPerPage);
+  const [searchPaycheckId, setSearchPaycheckId] = useState('');
   const [searchDate, setSearchDate] = useState('');
-  const [selectedOrder, setSelectedOrder] = useState([]);
+  const [selectedPaycheck, setSelectedPaycheck] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState([]);
 
-  const fetchOrders = () => {
+  const fetchPaychecks = () => {
     const userDataString = localStorage.getItem('userData');
     if (!userDataString) {
       throw new Error('User data not found in localStorage.');
     }
     const userData = JSON.parse(userDataString);
-    const shopId = userData.shopId;
+    const userID = userData.userID;
 
-    let url = `http://localhost:5000/api/v1/order/${shopId}/getAllOrdersInShop`;
+    let url = `http://localhost:5000/api/v1/paycheck/${userID}/getAllPaychecksInShop`;
     axios
       .get(url)
       .then((response) => {
-        setOrders(response.data.data);
+        setPaychecks(response.data.data);
       })
       .catch((error) => {
-        console.error("Error fetching orders:", error);
+        console.error("Error fetching Paychecks:", error);
       });
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, [searchOrderId, searchDate]);
+    fetchPaychecks();
+  }, [searchPaycheckId, searchDate]);
 
   const formatDate = (date) => {
     const d = new Date(date);
@@ -46,21 +46,21 @@ function ViewOrder() {
     return `${hours}:${minutes} ${day}/${month}/${year}`;
   };
 
-  const handleDropdownChange = (orderId, newState) => {
-    axios.put("http://localhost:5000/api/v1/order/changeState", {
-      orderId: orderId,
+  const handleDropdownChange = (PaycheckId, newState) => {
+    axios.put("http://localhost:5000/api/v1/paycheck/changeState", {
+      PaycheckId: PaycheckId,
       state: newState
     }).then(response => {
       console.log("Success");
-      fetchOrders();
+      fetchPaychecks();
     }).catch(error => {
-      console.error("Error updating order state:", error);
+      console.error("Error updating Paycheck state:", error);
     });
   };
 
   const handleDetailClick = (index) => {
-    const order = paginatedItems[index];
-    setSelectedOrder(order);
+    const Paycheck = paginatedItems[index];
+    setSelectedPaycheck(Paycheck);
 
     if (selectedIndex.includes(index)) {
       const newSelectedIndex = selectedIndex.filter((i) => i !== index);
@@ -77,86 +77,81 @@ function ViewOrder() {
           <Container className="ml-72">
             <Row className="title mb-0">
               <Col md={4} className="text-white">
-                <h2>Order List</h2>
+                <h2>Paycheck List</h2>
               </Col>
             </Row>
             <Row className="container-table table">
               <Col xs={12} style={{ marginRight: "20px" }}>
                 <Row>
-                  <Table striped bordered hover>
+                  <Table striped bPaychecked hover>
                     <thead>
                       <tr>
                         <th>Index</th>
-                        <th>Order ID</th>
-                        <th>Order Date</th>
-                        <th>Seller</th>
-                        <th>Total Products</th>
-                        <th>Total Price</th>
-                        <th>Payment Method</th>
+                        <th>Paycheck ID</th>
+                        <th>Created Date</th>
+                        <th>Month</th>
+                        <th>Staff Email</th>
+                        <th>Price</th>
+                        <th>Extra</th>
                         <th>Status</th>
-                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {paginatedItems.map((order, index) => (
-                        <React.Fragment key={order._id}>
-                          <tr key={order.id}>
+                      {paginatedItems.map((Paycheck, index) => (
+                        <React.Fragment key={Paycheck._id}>
+                          <tr key={Paycheck.id}>
                             <td>{index + 1}</td>
-                            <td>{order._id}</td>
-                            <td>{formatDate(order.createdAt)}</td>
-                            <td>{order.userId}</td>
-                            <td>{order.totalProducts}</td>
-                            <td>{order.totalPrice}</td>
-                            <td>{order.paymentMethod}</td>
+                            <td>{Paycheck._id}</td>
+                            <td>{formatDate(Paycheck.createdAt)}</td>
+                            <td>{Paycheck.month}</td>
+                            <td>{Paycheck.staffEmail}</td>
+                            <td>{Paycheck.price}</td>
+                            <td>{Paycheck.extra ? "True" : "False"}</td>
                             <td>
                               <select
                                 className="form-select"
-                                value={order.state}
-                                onChange={(e) => handleDropdownChange(order._id, e.target.value)}
+                                value={Paycheck.state}
+                                onChange={(e) => handleDropdownChange(Paycheck._id, e.target.value)}
                               >
                                 <option value="Pending">Pending</option>
                                 <option value="Completed">Completed</option>
                               </select>
                             </td>
-
-                            <td>
-                              <Button onClick={() => handleDetailClick(index)}>View Details</Button>
-                            </td>
                           </tr>
-                          {selectedOrder && selectedIndex.includes(index) && (
+                          {selectedPaycheck && selectedIndex.includes(index) && (
                             <tr>
                               <td colSpan="9">
                                 <div className="details-table-container">
-                                  <Table bordered>
+                                  <Table bPaychecked>
                                     <tbody>
                                       <tr>
-                                        <td className="field">Order ID:</td>
-                                        <td>{selectedOrder._id}</td>
+                                        <td className="field">Paycheck ID:</td>
+                                        <td>{selectedPaycheck._id}</td>
                                       </tr>
                                       <tr>
                                         <td className="field">Seller:</td>
-                                        <td>{selectedOrder.userId}</td>
+                                        <td>{selectedPaycheck.userId}</td>
                                       </tr>
                                       <tr>
-                                        <td className="field">Order Date:</td>
-                                        <td>{formatDate(selectedOrder.createdAt)}</td>
+                                        <td className="field">Paycheck Date:</td>
+                                        <td>{formatDate(selectedPaycheck.createdAt)}</td>
                                       </tr>
                                       <tr>
                                         <td className="field">Total:</td>
-                                        <td>{selectedOrder.totalPrice}</td>
+                                        <td>{selectedPaycheck.totalPrice}</td>
                                       </tr>
                                       <tr>
                                         <td className="field">Customer Paid:</td>
-                                        <td>{selectedOrder.customerPay}</td>
+                                        <td>{selectedPaycheck.customerPay}</td>
                                       </tr>
                                       <tr>
                                         <td className="field">Refund:</td>
-                                        <td>{selectedOrder.refund}</td>
+                                        <td>{selectedPaycheck.refund}</td>
                                       </tr>
                                       <tr>
                                         <td className="field">Products:</td>
                                         <td>
-                                          <Table bordered>
+                                          <Table bPaychecked>
                                             <thead>
                                               <tr>
                                                 <th>No.</th>
@@ -167,7 +162,7 @@ function ViewOrder() {
                                               </tr>
                                             </thead>
                                             <tbody>
-                                              {selectedOrder.products.map((product, idx) => (
+                                              {selectedPaycheck.products.map((product, idx) => (
                                                 <tr key={idx}>
                                                   <td>{idx + 1}</td>
                                                   <td>{product.name}</td>
@@ -221,4 +216,4 @@ function ViewOrder() {
   );
 }
 
-export default ViewOrder;
+export default ViewPaycheck;

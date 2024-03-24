@@ -103,11 +103,11 @@ export const productService = {
             // Lấy tất cả các ProductVariant từ database
             const shop = await Shop.findById(shopId);;
             if (shop) {
-                const categoryIds = shop.categoryId.map(category => category.$oid);
-
-                const products = await Product.find({ categoryId: { $in: categoryIds } });
-
-
+                const categoryIds = shop.categoryId.map(category => category);
+                
+                const categories = await Category.find({ _id: { $in: categoryIds } });
+                const allProductIds = categories.map(category => category.products).flat();
+                const products = await Product.find({ _id: { $in: allProductIds } });
                 return products;
             } else {
                 throw new Error("Shop not found with id: " + shopId);
@@ -213,10 +213,12 @@ export const productService = {
             const categoryIds = shop.categoryId.map(category => category.$oid);
     
             // Lấy tất cả sản phẩm thuộc các danh mục của cửa hàng
-            const products = await Product.find({ categoryId: { $in: categoryIds } });
+
     
             // Lấy thông tin chi tiết của từng danh mục
             const categories = await Category.find({ _id: { $in: shop.categoryId } });
+            const allProductIds = categories.map(category => category.products).flat();
+            const products = await Product.find({ _id: { $in: allProductIds } });
             // Ghép cặp sản phẩm với danh mục tương ứng
             const productsWithCategory = products.map(product => {
                 // Tìm danh mục tương ứng cho sản phẩm
