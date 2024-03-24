@@ -12,6 +12,7 @@ export const warehouseController = {
 
     const data = req.body;
     try {
+      console.log(data);
       const warehouse = await warehouseService.createWarehouse(data);
       res.status(200).json(
         response.success({

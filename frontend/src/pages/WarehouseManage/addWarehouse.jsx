@@ -8,13 +8,13 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
     name: "",
     quantity: "",
     unit: "",
-    image: "",
+    image: null,
   });
 
   const handleChange = async (e) => {
     e.persist();
     try {
-      const { name, value } = e.target;
+      const { name, value, files } = e.target;
 
       if (
         name === "quantity" &&
@@ -23,7 +23,11 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
         return;
       }
 
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+      if (files && files.length > 0) {
+        setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
+      } else {
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+      }
     } catch (error) {
       console.error("Error handling change:", error);
     }
@@ -40,9 +44,35 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
     }
 
     try {
+      const formDataImg = new FormData();
+      let newData = {
+        managerId: formData.managerId,
+        name: formData.name,
+        quantity: formData.quantity,
+        unit: formData.unit,
+        image: '',
+      }
+      if (formData.image) {
+        formDataImg.append("file", formData.image);
+        formDataImg.append("upload_preset", "c1xbmqbk");
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/dvusaqmma/image/upload",
+          formDataImg
+        );
+        const imageUrl = response.data.url;
+        setFormData((prevData) => ({ ...prevData, image: imageUrl }));
+        newData = {
+          managerId: formData.managerId,
+          name: formData.name,
+          quantity: formData.quantity,
+          unit: formData.unit,
+          image: imageUrl,
+        }
+      }
+
       const response = await axios.post(
         "http://localhost:5000/api/v1/warehouse/create",
-        formData
+        newData
       );
 
       if (response.data.isSuccess) {
@@ -53,7 +83,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
           name: "",
           quantity: "",
           unit: "",
-          image: "",
+          image: null,
         });
       } else {
         console.error("Error:", response.data.message);
@@ -88,14 +118,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
               type="number"
               name="quantity"
               value={formData.quantity}
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (/^[1-9]\d*$/.test(inputValue)) {
-                  setFormData({ ...formData, quantity: inputValue });
-                } else {
-                  alert("The quantity must be a positive integer!");
-                }
-              }}
+              onChange={handleChange}
             />
           </Form.Group>
           <Form.Group controlId="formUnit">
@@ -109,26 +132,15 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
               <option value="">Choose Unit</option>
               <option value="gam">gam</option>
               <option value="ml">ml</option>
-              <option value="cái">piece</option>
-              <option value="chiếc">pcs</option>
+              <option value="piece">piece</option>
+              <option value="pcs">pcs</option>
             </Form.Control>
           </Form.Group>
-
-          {/* <Form.Group controlId="expiry">
-            <Form.Label>Product's shelf life:</Form.Label>
-            <Form.Control
-              type="date"
-              name="expiry"
-              value={formData.expiry}
-              onChange={handleChange}
-            />
-          </Form.Group> */}
           <Form.Group controlId="formImage">
-            <Form.Label>Image Link:</Form.Label>
+            <Form.Label>Image:</Form.Label>
             <Form.Control
-              type="text"
+              type="file"
               name="image"
-              value={formData.image}
               onChange={handleChange}
             />
           </Form.Group>

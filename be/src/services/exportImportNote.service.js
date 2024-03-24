@@ -44,6 +44,18 @@ export const exportImportNoteService = {
             const warehouse = await Warehouse.findById(warehouseId);
             if (!warehouse) throw new Error(`Warehouse not found with Id ${warehouseId}`);
 
+            // Tăng hoặc giảm quantity của warehouse tùy thuộc vào status
+            if (status === "Imported") {
+                warehouse.quantity += quantity;
+            } else if (status === "Exported") {
+                if (warehouse.quantity < quantity) {
+                    throw new Error("Not enough quantity in the warehouse to export");
+                }
+                warehouse.quantity -= quantity;
+                price = 0;
+            } else {
+                throw new Error(`Invalid status: ${status}`);
+            }
             // Tạo ghi chú xuất nhập mới
             const newNote = new ExportImportNote({
                 warehouse: { _id: warehouseId, name: warehouse.name },
@@ -53,19 +65,6 @@ export const exportImportNoteService = {
                 status,
                 description
             });
-
-            // Tăng hoặc giảm quantity của warehouse tùy thuộc vào status
-            if (status === "Imported") {
-                warehouse.quantity += quantity;
-            } else if (status === "Exported") {
-                if (warehouse.quantity < quantity) {
-                    throw new Error("Not enough quantity in the warehouse to export");
-                }
-                warehouse.quantity -= quantity;
-            } else {
-                throw new Error(`Invalid status: ${status}`);
-            }
-
             // Lưu cả ghi chú xuất nhập và thay đổi quantity vào cơ sở dữ liệu
             await newNote.save();
             await warehouse.save();

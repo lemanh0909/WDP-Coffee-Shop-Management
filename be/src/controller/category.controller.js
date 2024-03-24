@@ -5,18 +5,24 @@ import { validation } from "../utils/validation.js";
 
 export const CategoryController = {
   createCategory: async (req, res) => {
-    const error = validation.validationRequest(req, res);
-    if (error) return res.status(200).json(error);
-
-    const data = req.body;
     try {
-      const category = await categoryService.createCategory(data);
-      res.status(200).json(
-        response.success({
-          data: { category },
-        })
-      );
-    } catch (err) {
+        const data = req.body;
+
+        const result = await categoryService.createCategory(data);
+
+        if (result.status && result.status === 'ERR') {
+            return res.status(400).json({
+                success: false,
+                error: { message: result.message },
+            });
+        }
+
+       
+        res.status(201).json({
+            success: true,
+            data: { category: result.data },
+        });
+    } catch (error) {
       res.status(200).json(
         response.error({
           code: 500,
