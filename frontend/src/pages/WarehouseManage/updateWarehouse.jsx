@@ -73,7 +73,7 @@ function UpdateWarehouseModal({ warehouseId, warehouseData, onUpdateSuccess, onH
                                 if (/^[a-zA-Z\s]*$/.test(inputValue)) {
                                     setUpdatedData({ ...updatedData, name: inputValue });
                                 } else {
-                                    alert("Tên chỉ được chứa các ký tự chữ cái và khoảng trắng!");
+                                    alert("Names must contain only alphabetic characters and spaces!");
                                 }
                             }}
                         />

@@ -67,7 +67,7 @@ function WarehouseTable({
                             </th>
                             <th>Last Update</th>
                             <th>Image</th>
-                            <th>Thao tác</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
