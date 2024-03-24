@@ -9,7 +9,7 @@ const EmployeeTable = ({ employeeData, toggleStatus }) => (
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
-                <th>Role</th>
+                <th>Salary</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -24,7 +24,7 @@ const EmployeeTable = ({ employeeData, toggleStatus }) => (
                         <td>{employee.fullName}</td>
                         <td>{employee.email}</td>
                         <td>{employee.phoneNumber}</td>
-                        <td>{employee.role}</td>
+                        <td>{employee.salary}</td>
                         <td>
                             <Form.Check
                                 type="switch"

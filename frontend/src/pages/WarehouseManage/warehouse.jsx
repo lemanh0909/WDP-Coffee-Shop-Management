@@ -104,7 +104,7 @@ function Warehouse() {
               style={{ marginTop: "20px", marginRight: "20px" }}
             >
               <Col md={4} className="text-white">
-                <h2>Warehouse Management</h2>
+                <h2>Warehouse</h2>
               </Col>
               <Col md={4}>
                 <div className="wrap">

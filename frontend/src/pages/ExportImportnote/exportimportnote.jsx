@@ -70,7 +70,6 @@ function PhieuThuChi() {
   return (
     <>
       <div className="flex">
-
         <Col md={12}>
           <Container className="ml-72">
             <ToastContainer position='top-right' />
@@ -101,7 +100,7 @@ function PhieuThuChi() {
                       <th>Warehouse</th>
                       <th>User email</th>
                       <th>Quantity</th>
-                      <th>Price</th>
+                      <th>Price (VND)</th>
                       <th>Status</th>
                       <th>Create date</th>
                     </tr>
@@ -119,7 +118,7 @@ function PhieuThuChi() {
                           <td>{item.warehouse ? item.warehouse.name : "N/A"}</td>
                           <td>{item.userEmail}</td>
                           <td>{item.quantity}</td>
-                          <td>{item.price !== 0 ? item.price : "none"}</td>
+                          <td>{item.price ? new Intl.NumberFormat('vi-VN').format(item.price) : "none"}</td>
                           <td>{item.status}</td>
                           <td>{formatDate1(item.createdAt)}</td>
                         </tr>

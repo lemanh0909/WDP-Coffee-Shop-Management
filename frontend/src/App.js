@@ -10,7 +10,7 @@ import Category from './pages/Category/Category.jsx';
 import Categorynew from './pages/Category/Categorynew.jsx';
 import AddCategory from './pages/Category/addCategory.jsx';
 import Control from './pages/Control/Control.jsx';
-import Thuchi from './pages/PhieuThuChi/PhieuThuChi.jsx';
+import Thuchi from './pages/Receipt/PhieuThuChi.jsx';
 
 import AdminManagement from './pages/ManagerStaff/manageAdmin.jsx';
 import AuthenPage from './pages/authService/AuthenPage.jsx';

@@ -29,7 +29,7 @@ import {
 } from '@mui/icons-material';
 
 import PhieuThuChi from '../ExportImportnote/exportimportnote';
-import Receipts from '../PhieuThuChi/PhieuThuChi';
+import Receipts from '../Receipt/PhieuThuChi.jsx';
 import Warehouse from '../WarehouseManage/warehouse';
 import ProductManage from '../ProductManage/productmanage';
 import Order from '../Order/Order';
