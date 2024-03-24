@@ -144,9 +144,6 @@ function AddModal({ show, handleClose, onAddSuccess }) {
               onChange={(e) => setStatus(e.target.value)}
               disabled
             />
-            <option value="Imported" disabled>
-              Imported
-            </option>
           </Form.Group>
 
           <Form.Group controlId="description">

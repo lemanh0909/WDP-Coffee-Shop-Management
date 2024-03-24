@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Col, Row, Table, Pagination, Button } from "react-bootstrap";
+import { Col, Row, Table, Pagination, Button, Modal } from "react-bootstrap";
 import "./tableWarehouse.css";
 import Popup from './Popup.jsx';
 import { format } from 'date-fns';
@@ -25,6 +25,18 @@ function WarehouseTable({
     const formatDate2 = (isoDate) => {
         if (!isoDate) return "";
         return format(new Date(isoDate), 'dd/MM/yyyy');
+    };
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [showImageModal, setShowImageModal] = useState(false);
+
+    // Hàm để đóng modal ảnh
+    const handleCloseImageModal = () => {
+        setShowImageModal(false);
+    };
+    // Hàm để mở modal và hiển thị ảnh được click
+    const handleImageClick = (imageUrl) => {
+        setSelectedImage(imageUrl);
+        setShowImageModal(true);
     };
     useEffect(() => {
         currentItems.forEach(item => {
@@ -62,8 +74,8 @@ function WarehouseTable({
                                     style={{ cursor: "pointer" }}
                                 ></i>
                             </th>
-                            <th>Ngày tạo</th>
-                            <th>Hạn sử dụng</th>
+                            <th>Last Update</th>
+                            <th>Image</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -83,8 +95,21 @@ function WarehouseTable({
                                     </td>
                                     <td>{item.unit}</td>
                                     <td>{item.quantity}</td>
-                                    <td>{formatDate1(item.createdAt)}</td>
-                                    <td>{formatDate2(item.expiry)}</td>
+                                    <td>{formatDate1(item.updatedAt)}</td>
+                                    <td>
+                                        <div
+                                            onClick={() => handleImageClick(item.image)}>
+                                            <img
+                                                src={item.image}
+                                                alt={`Ảnh của ${item.name}`}
+                                                style={{
+                                                    width: "50px",
+                                                    height: "50px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                        </div>
+                                    </td>
                                     <td>
                                         <Button
                                             className="custom-btn-edit"
@@ -154,6 +179,20 @@ function WarehouseTable({
                     </Pagination>
                 )}
             </Col>
+            {/* Modal xem ảnh */}
+            <Modal show={showImageModal} onHide={handleCloseImageModal} className="mt-10">
+                <Modal.Header closeButton>
+                    <Modal.Title>Item Image</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <img src={selectedImage} alt="Product" className="w-full" />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseImageModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Row>
     );
 }

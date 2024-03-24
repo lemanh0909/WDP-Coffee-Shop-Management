@@ -6,7 +6,7 @@ function AddExportModal({ show, handleClose, onAddSuccess }) {
   const [warehouseOptions, setWarehouseOptions] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [status, setStatus] = useState("Imported");
+  const [status, setStatus] = useState("Exported");
   const [description, setDescription] = useState("");
 
   useEffect(() => {
@@ -124,9 +124,6 @@ function AddExportModal({ show, handleClose, onAddSuccess }) {
               onChange={(e) => setStatus(e.target.value)}
               disabled
             />
-            <option value="Imported" disabled>
-              Export
-            </option>
           </Form.Group>
           <Form.Group controlId="description">
             <Form.Label>Description</Form.Label>

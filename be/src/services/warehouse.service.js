@@ -38,7 +38,8 @@ export const warehouseService = {
                 } else {
                     throw new Error("Shop not found with managerId: " + managerId);
                 }
-
+                console.log(createdWarehouse);
+                await createdWarehouse.save();
                 resolve({
                     status: 'OK',
                     message: 'Warehouse created successfully',
@@ -62,17 +63,18 @@ export const warehouseService = {
     },
 
 
-    updateWarehouseBasis: async (id, { name, image, unit }) => {
+    updateWarehouse: async ( {_id, name, image, unit }) => {
         try {
-            const warehouse = await Warehouse.findById(id);
-
+            const warehouse = await Warehouse.findById(_id);
+            console.log(_id, name, image, unit);
             if (!warehouse) {
-                throw new Error(`Warehouse not found with id: ${id}`);
+                throw new Error(`Warehouse not found with id: ${_id}`);
             }
 
             warehouse.name = name !== undefined ? name : warehouse.name;
             warehouse.unit = unit !== undefined ? unit : warehouse.unit;
             warehouse.image = image !== undefined ? image : warehouse.image;
+
 
             await warehouse.save();
             return warehouse;
@@ -81,7 +83,7 @@ export const warehouseService = {
         }
     },
 
-    updateWarehouse: async (id, data) => {
+    updateWarehouseBasis: async (id, data) => {
         return new Promise(async (resolve, reject) => {
             try {
                 const checkWarehouseExists = await Warehouse.findOne({
