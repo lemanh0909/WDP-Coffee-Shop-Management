@@ -71,7 +71,8 @@ function ProductManage() {
     setProductIdToUpdate(null);
   };
   const handleUpdateSuccess = () => {
-    fetchProducts(); // Cập nhật danh sách sản phẩm sau khi cập nhật thành công
+    fetchProducts(); 
+    console.log("fetch");// Cập nhật danh sách sản phẩm sau khi cập nhật thành công
     handleCloseUpdateModal(); // Đóng modal cập nhật sản phẩm
   };
   const handleCloseModal = () => {
@@ -378,23 +379,23 @@ function ProductManage() {
       }
 
 
-      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal} className="mt-10">
         <Modal.Header closeButton>
-          <Modal.Title>Xác nhận xoá sản phẩm</Modal.Title>
+          <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Bạn có chắc chắn muốn xoá sản phẩm này không?</Modal.Body>
+        <Modal.Body>Do you want to delete this product</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseConfirmationModal}>
-            Hủy
+            Cancel
           </Button>
           <Button variant="danger" onClick={handleDelete}>
-            Xoá
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>
 
       {/* Modal xem ảnh */}
-      <Modal show={showImageModal} onHide={handleCloseImageModal}>
+      <Modal show={showImageModal} onHide={handleCloseImageModal} className="mt-10">
         <Modal.Header closeButton>
           <Modal.Title>Product Image</Modal.Title>
         </Modal.Header>
@@ -403,7 +404,7 @@ function ProductManage() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseImageModal}>
-            Đóng
+            Close
           </Button>
         </Modal.Footer>
       </Modal>

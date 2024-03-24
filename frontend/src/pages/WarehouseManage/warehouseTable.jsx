@@ -39,17 +39,7 @@ function WarehouseTable({
         setSelectedImage(imageUrl);
         setShowImageModal(true);
     };
-    useEffect(() => {
-        currentItems.forEach(item => {
-            const expiryDate = new Date(item.expiry);
-            const currentDate = new Date();
-            const daysUntilExpiry = Math.floor((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
-            if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) {
-                setPopupItem(item);
-                setShowPopup(true);
-            }
-        });
-    }, [currentItems]);
+
 
     // const handleClosePopup = () => {
     //     setShowPopup(false);
