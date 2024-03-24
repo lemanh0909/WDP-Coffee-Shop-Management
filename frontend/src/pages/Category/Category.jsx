@@ -84,6 +84,7 @@ function Category() {
 
   const handleUpdateCategory = (categoryId) => {
     const selected = items.find((item) => item._id === categoryId);
+    setSelectedCategoryId(categoryId);
     setSelectedCategory(selected);
     setShowUpdateModal(true);
   };
@@ -186,6 +187,7 @@ function Category() {
       />
       {showUpdateModal && (
         <UpdateCategoryModal
+          categoryId={selectedCategoryId}
           categoryData={selectedProduct}
           onUpdateSuccess={handleUpdateSuccess}
           onHide={() => setShowUpdateModal(false)}

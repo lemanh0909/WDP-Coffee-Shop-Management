@@ -15,8 +15,6 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
         try {
             const { name, value } = e.target;
 
-
-
             setFormData((prevData) => ({ ...prevData, [name]: value }));
         } catch (error) {
             console.error("Error handling change:", error);
@@ -64,14 +62,10 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             type="text"
                             name="name"
                             value={formData.name}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
-                                    setFormData({ ...formData, name: inputValue });
-                                } else {
-                                    alert("Product names must contain only alphabetic characters and spaces!");
-                                }
-                            }}
+                            pattern="[a-zA-Z\s]+"
+                            required
+                            title="Name should contain only alphabetic characters and spaces."
+                            onChange={handleChange}
                         />
                     </Form.Group>
                     <Form.Group controlId="formDes">
@@ -80,14 +74,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             type="text"
                             name="description"
                             value={formData.description}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
-                                    setFormData({ ...formData, description: inputValue });
-                                } else {
-                                    alert("Description must only contain alphabetic characters and spaces!");
-                                }
-                            }}
+                            onChange={handleChange}
                         />
                     </Form.Group>
                     <Button variant="primary" type="submit" className="mt-2">
