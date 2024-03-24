@@ -15,7 +15,7 @@ export const userService = {
     updateUser: async (_id, data) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const { email, phoneNumber, fullName, dob } = data
+                const { email, phoneNumber, fullName, dob,salary } = data
                 const user = await User.findOne({
                     _id
                 })
@@ -36,7 +36,7 @@ export const userService = {
                 const userUpdate = {
                     ...user._doc,
                     email,
-                    phoneNumber, fullName, dob
+                    phoneNumber, fullName, dob,salary
                 }
                 await User.findByIdAndUpdate(user._id, userUpdate, { new: true })
                 userUpdate._id.password = "****";
