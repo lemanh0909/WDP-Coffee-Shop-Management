@@ -36,7 +36,6 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                     fullName: "",
                 });
                 console.log("Successfully added");
-                nav("/employee-management")
             } else {
                 console.error("Error:", response.data.message);
             }
@@ -54,7 +53,14 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formEmail">
                         <Form.Label>Email:</Form.Label>
-                        <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
+                        <Form.Control
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            title="Please enter a valid email address."
+                        />
                     </Form.Group>
                     <Form.Group controlId="formPassword">
                         <Form.Label>Password:</Form.Label>
@@ -62,7 +68,15 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                     </Form.Group>
                     <Form.Group controlId="formFullName">
                         <Form.Label>Full Name:</Form.Label>
-                        <Form.Control type="text" name="fullName" value={formData.fullName} onChange={handleChange} required />
+                        <Form.Control
+                            type="text"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            required
+                            pattern="[a-zA-Z\s]+"
+                            title="Name should contain only alphabetic characters and spaces."
+                        />
                     </Form.Group>
                     <Button variant="primary" type="submit" style={{ marginTop: '30px' }}>
                         Create Staff

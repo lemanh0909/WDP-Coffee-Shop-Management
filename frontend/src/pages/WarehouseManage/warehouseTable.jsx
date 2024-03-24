@@ -3,6 +3,8 @@ import { Col, Row, Table, Pagination, Button, Modal } from "react-bootstrap";
 import "./tableWarehouse.css";
 // import Popup from './Popup.jsx';
 import { format } from 'date-fns';
+import useAuth from "../Common/Authorization.js";
+import { useNavigate } from "react-router-dom";
 
 
 function WarehouseTable({
@@ -19,6 +21,8 @@ function WarehouseTable({
 }) {
     // const [showPopup, setShowPopup] = useState(false);
     // const [popupItem, setPopupItem] = useState(null);
+    const [role] = useAuth();
+    const navigate = useNavigate();
     const formatDate1 = (isoDate) => {
         if (!isoDate) return "";
         return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
@@ -105,8 +109,9 @@ function WarehouseTable({
                                         <Button
                                             className="custom-btn-edit"
                                             onClick={() => handleUpdateWarehouse(item._id)}
+                                            style={{ display: role === 'Staff' ? 'none' : 'inline-block' }}
                                         >
-                                            <i className="fa-solid fa-pen-to-square"></i>Update
+                                            <i className="fa-solid fa-pen-to-square"></i> Update
                                         </Button>
                                         <Button
                                             className="custom-btn-delete"
