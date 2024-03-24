@@ -23,6 +23,7 @@ import ViewOrderDetail from './pages/ViewOrder/viewOrderDetail.jsx';
 import UploadImage from './pages/ImgUp/UploadImage.jsx';
 import UserProfilenew from './pages/UserProfile/UserProfilenew.jsx';
 import Statistic from './pages/Statistic/Statistic.jsx';
+import ViewPaycheck from './pages/Paycheck/viewPaycheck.jsx';
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
           <Route path="/miniDrawer" element={<MiniDrawer />} />
           <Route path="/miniDrawerAdmin" element={<MiniDrawerAdmin />} />
           <Route path="/statistic" element={<Statistic />} />
+          <Route path="/paycheck" element={<ViewPaycheck />} />
         </Routes>
       </div>
     </Router>

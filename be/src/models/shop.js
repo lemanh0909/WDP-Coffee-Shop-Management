@@ -37,6 +37,9 @@ const Shop = mongoose.model(
             receiptId: {
                 type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Receipt" }],
             },
+            paycheckId: {
+                type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Paycheck" }],
+            },
         },
         { timestamps: true },
     )

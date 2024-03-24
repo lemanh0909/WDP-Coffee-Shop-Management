@@ -16,6 +16,7 @@ import financeRouter from "./finance.routes.js";
 import staffNoteRouter from "./staffNote.routes.js";
 import statisticRouter from "./statistic.routes.js";
 import exportImportNoteRouter from "./exportImportNote.routes.js";
+import paycheckRouter from "./paycheck.routes.js";
 // import userRouter from "./User.routes";
 
 
@@ -37,6 +38,7 @@ export const mainRouter = (app) => {
   v1Router.use("/staffNote", staffNoteRouter);
   v1Router.use("/statistic", statisticRouter);
   v1Router.use("/note", exportImportNoteRouter);
+  v1Router.use("/paycheck", paycheckRouter);
   app.use("/api/v1", v1Router);
 };
 
