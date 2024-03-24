@@ -4,6 +4,7 @@ import axios from "axios";
 
 function UpdateWarehouseModal({ warehouseId, warehouseData, onUpdateSuccess, onHide }) {
     const [updatedData, setUpdatedData] = useState({
+        _id: warehouseId,
         name: "",
         unit: "",
         image: "",
@@ -11,21 +12,46 @@ function UpdateWarehouseModal({ warehouseId, warehouseData, onUpdateSuccess, onH
 
     useEffect(() => {
         if (warehouseData) {
-            setUpdatedData({
-                name: warehouseData.name,
-                unit: warehouseData.unit,
-                image: warehouseData.image,
-            });
+            setUpdatedData({ ...warehouseData });
         }
     }, [warehouseData]);
 
     const handleUpdate = async () => {
         try {
-            await axios.put(`http://localhost:5000/api/v1/warehouse/${warehouseId}/updateBasis`, updatedData);
+            let newData = { ...updatedData };
+            if (updatedData.image && typeof updatedData.image !== 'string') {
+                const formDataImg = new FormData();
+                formDataImg.append("file", updatedData.image);
+                formDataImg.append("upload_preset", "c1xbmqbk");
+                const response = await axios.post(
+                    "https://api.cloudinary.com/v1_1/dvusaqmma/image/upload",
+                    formDataImg
+                );
+                const imageUrl = response.data.url;
+                newData.image = imageUrl;
+            }
+
+            await axios.put(`http://localhost:5000/api/v1/warehouse/update`, newData);
             onUpdateSuccess();
             onHide();
         } catch (error) {
             console.error('Error updating warehouse data:', error);
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value, files } = e.target;
+
+        if (files && files.length > 0) {
+            setUpdatedData((prevData) => ({
+                ...prevData,
+                [name]: files[0]
+            }));
+        } else {
+            setUpdatedData((prevData) => ({
+                ...prevData,
+                [name]: value
+            }));
         }
     };
 
@@ -55,19 +81,24 @@ function UpdateWarehouseModal({ warehouseId, warehouseData, onUpdateSuccess, onH
                     <Form.Group controlId="formUnit">
                         <Form.Label>Unit</Form.Label>
                         <Form.Control
-                            type="text"
-                            placeholder="Enter unit"
+                            as="select"
+                            name="unit"
                             value={updatedData.unit}
-                            onChange={(e) => setUpdatedData({ ...updatedData, unit: e.target.value })}
-                        />
+                            onChange={handleChange}
+                        >
+                            <option value="">Choose Unit</option>
+                            <option value="gam">gam</option>
+                            <option value="ml">ml</option>
+                            <option value="piece">piece</option>
+                            <option value="pcs">pcs</option>
+                        </Form.Control>
                     </Form.Group>
                     <Form.Group controlId="formImage">
                         <Form.Label>Image</Form.Label>
                         <Form.Control
-                            type="text"
-                            placeholder="Enter image URL"
-                            value={updatedData.image}
-                            onChange={(e) => setUpdatedData({ ...updatedData, image: e.target.value })}
+                            type="file"
+                            name="image"
+                            onChange={handleChange}
                         />
                     </Form.Group>
                 </Form>

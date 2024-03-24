@@ -121,7 +121,7 @@ function Warehouse() {
       <div className="flex">
         <Col md={12}>
           <Container>
-            <ToastContainer position="bottom-right" />
+            <ToastContainer position="top-right" />
             <Row
               className="title"
               style={{ marginTop: "20px", marginRight: "20px" }}
