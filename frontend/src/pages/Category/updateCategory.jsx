@@ -30,7 +30,7 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
     };
 
     return (
-        <Modal show={true} onHide={onHide}>
+        <Modal show={true} onHide={onHide} className="mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Update Category</Modal.Title>
             </Modal.Header>
