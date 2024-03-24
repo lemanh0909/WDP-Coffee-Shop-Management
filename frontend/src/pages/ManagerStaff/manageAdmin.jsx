@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 function AdminManagement() {
     const [role] = useAuth();
     const navigate = useNavigate();
-    if (role != "Admin") { navigate("/control"); }
+    if (role != "Admin") { navigate("/"); }
     const [employeeData, setEmployeeData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

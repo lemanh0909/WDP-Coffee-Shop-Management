@@ -145,7 +145,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
               disabled
             />
             <option value="Imported" disabled>
-              Imported
+              {/* Imported */}
             </option>
           </Form.Group>
 

@@ -104,7 +104,7 @@ function Warehouse() {
               style={{ marginTop: "20px", marginRight: "20px" }}
             >
               <Col md={4} className="text-white">
-                <h2>Quản lý nhà kho</h2>
+                <h2>Warehouse Management</h2>
               </Col>
               <Col md={4}>
                 <div className="wrap">
@@ -135,7 +135,7 @@ function Warehouse() {
                   <i className="fa-solid fa-plus"></i> Add Product
                 </Button>
                 <Button type="button" className="btn btn-success btn-color">
-                <i className="fa-solid fa-file-export"></i>
+                  <i className="fa-solid fa-file-export"></i>
                   Export to excel
                 </Button>
               </Col>

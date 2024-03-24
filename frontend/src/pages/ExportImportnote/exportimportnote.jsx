@@ -119,7 +119,7 @@ function PhieuThuChi() {
                           <td>{item.warehouse ? item.warehouse.name : "N/A"}</td>
                           <td>{item.userEmail}</td>
                           <td>{item.quantity}</td>
-                          <td>{item.price}</td>
+                          <td>{item.price !== 0 ? item.price : "none"}</td>
                           <td>{item.status}</td>
                           <td>{formatDate1(item.createdAt)}</td>
                         </tr>
@@ -127,7 +127,7 @@ function PhieuThuChi() {
                     )}
                   </tbody>
                 </Table>
-                <Pagination className="pagination justify-content-center">
+                <Pagination className="pagination-bar justify-content-center">
                   <Pagination.Prev onClick={() => handlePageChange(activePage - 1)} disabled={activePage === 1} />
                   {Array.from({ length: totalPages }, (_, i) => (
                     <Pagination.Item

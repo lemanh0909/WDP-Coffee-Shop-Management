@@ -104,13 +104,6 @@ function EmployeeManagement() {
             )}
           </Col>
         </Row>
-
-        {loading && <Spinner animation="border" role="status">
-          <span className="sr-only">Loading...</span>
-        </Spinner>}
-
-        {error && <Alert variant="danger">{error}</Alert>}
-
         {!loading && !error && (
           <>
             <EmployeeTable
@@ -131,6 +124,14 @@ function EmployeeManagement() {
 
           </>
         )}
+
+        {loading && <Spinner animation="border" role="status">
+          <span className="sr-only">Loading...</span>
+        </Spinner>}
+
+        {error && <Alert variant="danger">{error}</Alert>}
+
+
       </Container>
     </>
   );

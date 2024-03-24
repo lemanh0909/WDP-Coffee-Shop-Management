@@ -1,5 +1,5 @@
 .container.snippet {
-    max-width: 800px;
+    max-width: 900px;
     /* Giới hạn chiều rộng tối đa của nội dung */
     background-color: #fff;
     /* Màu nền cho nội dung */
@@ -55,24 +55,24 @@
     padding-right: 8px;
     padding-left: 8px;
 }
+
 .card-body {
     flex: 1 1 auto;
     min-height: 1px;
-    padding: 0; /* Loại bỏ khoảng đệm mặc định */
+    padding: 1rem;
 }
 
 .card-body .row {
-    margin-bottom: 1rem; /* Khoảng cách giữa các hàng */
+    margin-bottom: 1rem;
 }
 
 .card-body .row .col-sm-5 {
-    text-align: right; /* Căn chỉnh nội dung của cột bên trái */
+    display: flex;
 }
 
 .card-body .row .col-sm {
-    text-align: left; /* Căn chỉnh nội dung của cột bên phải */
+    text-align: left;
 }
-
 
 .mb-3,
 .my-3 {
@@ -90,29 +90,32 @@
 .shadow-none {
     box-shadow: none !important;
 }
+
 /* UserProfilenew.css */
 
 .ChangePassword {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .ChangePassword form {
+}
+
+.ChangePassword form {
     display: flex;
     flex-direction: column;
-    width: 300px; /* Điều chỉnh độ rộng của form */
-  }
-  
-  .ChangePassword input {
-    margin-bottom: 10px; /* Khoảng cách giữa các input */
+    width: 300px;
+    /* Điều chỉnh độ rộng của form */
+}
+
+.ChangePassword input {
+    margin-bottom: 10px;
+    /* Khoảng cách giữa các input */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-  }
-  
-  .ChangePassword button {
+}
+
+.ChangePassword button {
     padding: 8px 16px;
     background-color: #007bff;
     color: #fff;
@@ -120,9 +123,8 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-  }
-  
-  .ChangePassword button:hover {
+}
+
+.ChangePassword button:hover {
     background-color: #0056b3;
-  }
-  
+}

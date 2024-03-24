@@ -13,15 +13,11 @@ const UserProfileCard = ({ updateLatestFullName }) => {
   const [dob, setDob] = useState("");
   const [role, setRole] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-<<<<<<< HEAD
-  const [latestFullName, setLatestFullName] = useState("");
-=======
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [userData, setUserData] = useState(null);
   const handleCloseChangePassword = () => {
     setShowChangePassword(false);
   };
->>>>>>> 30cab94704095b32865d9ac01ba934f4f8aa3155
   useEffect(() => {
     fetchData();
   }, []);
@@ -66,11 +62,6 @@ const UserProfileCard = ({ updateLatestFullName }) => {
   };
 
   const handleSave = () => {
-<<<<<<< HEAD
-    localStorage.clear();
-    // Kiểm tra các trường bắt buộc
-=======
->>>>>>> 30cab94704095b32865d9ac01ba934f4f8aa3155
     if (!fullName || !phoneNumber || !dob) {
       toast.error("Please complete all information.");
       return;
@@ -118,12 +109,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
         console.log("User data updated successfully:", response.data);
         setFullName(updatedUserData.fullName);
         updateLatestFullName(updatedUserData.fullName);
-<<<<<<< HEAD
-        toast.success("Thông tin đã được cập nhật thành công!");
-        localStorage.setItem('userData', JSON.stringify(userData));
-=======
         toast.success("Update profile success!");
->>>>>>> 30cab94704095b32865d9ac01ba934f4f8aa3155
       })
       .catch((error) => {
         console.error("Error updating user data:", error);

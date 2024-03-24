@@ -120,7 +120,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="expiry">
+          {/* <Form.Group controlId="expiry">
             <Form.Label>Product's shelf life:</Form.Label>
             <Form.Control
               type="date"
@@ -128,7 +128,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
               value={formData.expiry}
               onChange={handleChange}
             />
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group controlId="formImage">
             <Form.Label>Image Link:</Form.Label>
             <Form.Control

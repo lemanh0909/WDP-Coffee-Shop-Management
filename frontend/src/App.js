@@ -16,6 +16,7 @@ import AdminManagement from './pages/ManagerStaff/manageAdmin.jsx';
 import AuthenPage from './pages/authService/AuthenPage.jsx';
 
 import MiniDrawer from "./pages/Common/Dashboard.jsx"
+import MiniDrawerAdmin from './pages/Common/DashboardAdmin.jsx';
 import ExportImportNOte from './pages/ExportImportnote/exportimportnote.jsx';
 
 import ViewOrder from './pages/ViewOrder/viewOrder.jsx';
@@ -56,6 +57,7 @@ function App() {
           <Route path="/profilenew" element={<UserProfilenew updateLatestFullName={updateLatestFullName} />} />
           <Route path='/verify/:id/:uniqueString' element={<AuthenPage></AuthenPage>}></Route>
           <Route path="/miniDrawer" element={<MiniDrawer />} />
+          <Route path="/miniDrawerAdmin" element={<MiniDrawerAdmin />} />
           <Route path="/statistic" element={<Statistic />} />
         </Routes>
       </div>

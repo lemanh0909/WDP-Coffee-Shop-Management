@@ -26,45 +26,45 @@ function WarehouseTable({
         if (!isoDate) return "";
         return format(new Date(isoDate), 'dd/MM/yyyy');
     };
-    useEffect(() => {
-        currentItems.forEach(item => {
-            const expiryDate = new Date(item.expiry);
-            const currentDate = new Date();
-            const daysUntilExpiry = Math.floor((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
-            if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) {
-                setPopupItem(item);
-                setShowPopup(true);
-            }
-        });
-    }, [currentItems]);
+    // useEffect(() => {
+    //     currentItems.forEach(item => {
+    //         const expiryDate = new Date(item.expiry);
+    //         const currentDate = new Date();
+    //         const daysUntilExpiry = Math.floor((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
+    //         if (daysUntilExpiry <= 7 && daysUntilExpiry > 0) {
+    //             setPopupItem(item);
+    //             setShowPopup(true);
+    //         }
+    //     });
+    // }, [currentItems]);
 
-    const handleClosePopup = () => {
-        setShowPopup(false);
-    };
+    // const handleClosePopup = () => {
+    //     setShowPopup(false);
+    // };
 
     return (
         <Row className="container-table" style={{ marginRight: "20px" }}>
-            <Row style={{ marginRight: "0px", backgroundColor: "rosybrown" }}>
+            {/* <Row style={{ marginRight: "0px", backgroundColor: "rosybrown" }}>
                 {showPopup && <Popup item={popupItem} onClose={handleClosePopup} />}
-            </Row>
+            </Row> */}
             <Col>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>Mã hàng hoá</th>
-                            <th>Tên hàng hoá</th>
-                            <th>Đơn vị</th>
+                            <th>Product Code</th>
+                            <th>Product Name</th>
+                            <th>Unit</th>
                             <th>
-                                Số lượng{" "}
+                                Quantity{" "}
                                 <i
                                     className={`fas fa-sort-${sortByQuantity === "asc" ? "up" : "down"}`}
                                     onClick={handleSortByQuantity}
                                     style={{ cursor: "pointer" }}
                                 ></i>
                             </th>
-                            <th>Ngày tạo</th>
-                            <th>Hạn sử dụng</th>
-                            <th>Thao tác</th>
+                            <th>Creation Date</th>
+                            {/* <th>Expiration Date</th> */}
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,7 @@ function WarehouseTable({
                                     <td>{item.unit}</td>
                                     <td>{item.quantity}</td>
                                     <td>{formatDate1(item.createdAt)}</td>
-                                    <td>{formatDate2(item.expiry)}</td>
+                                    {/* <td>{formatDate2(item.expiry)}</td> */}
                                     <td>
                                         <Button
                                             className="custom-btn-edit"

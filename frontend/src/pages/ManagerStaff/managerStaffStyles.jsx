@@ -42,8 +42,6 @@ export const StyledTable = styled.table`
 export const StyledPagination = styled(Pagination)`
   justify-content: center;
   padding:0;
-  margin-top: 20px;
-  position: fixed;
   bottom: 10px;
   left: 0;
   right: 0;
