@@ -4,7 +4,7 @@ import { httpConstant } from "../constant/index.js";
 import { validation } from "../utils/validation.js";
 
 export const CategoryController = {
-  createCategory: async (req, res) => {
+ createCategory: async (req, res) => {
     try {
         const data = req.body;
 
@@ -17,20 +17,20 @@ export const CategoryController = {
             });
         }
 
-       
+        // Nếu không có lỗi, gửi response thành công
         res.status(201).json({
             success: true,
             data: { category: result.data },
         });
     } catch (error) {
-      res.status(200).json(
-        response.error({
-          code: 500,
-          message: httpConstant.SERVER_ERROR,
-        })
-      );
+        console.error("Error creating category:", error);
+        res.status(500).json({
+            success: false,
+            error: { message: error.message },
+        });
     }
-  },
+},
+
 
   updateCategoryBasis: async (req, res) => {
     try {

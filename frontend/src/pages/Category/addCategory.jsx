@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import { toast } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast css
 import axios from "axios";
 
 const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
@@ -7,7 +9,6 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
         managerId: userId,
         name: "",
         description: "",
-
     });
 
     const handleChange = async (e) => {
@@ -30,20 +31,22 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                 formData
             );
 
+
             if (response.data.success) {
+
                 onHide();
                 handleAddCategory(response.data.data);
                 setFormData({
                     managerId: userId,
                     name: "",
                     description: "",
-                    // products: [""],
                 });
             } else {
-                console.error("Error:", response.data.message);
+                toast.error("Tên category đã tồn tại. Vui lòng chọn tên khác."); // Use toast instead of alert
             }
         } catch (error) {
-            console.error("Unexpected error:", error);
+            console.error("Error:", error);
+            toast.error("Đã có lỗi xảy ra. Vui lòng thử lại sau."); // Use toast for general error
         }
     };
 
@@ -60,9 +63,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             type="text"
                             name="name"
                             value={formData.name}
-                            pattern="[a-zA-Z\s]+"
-                            required
-                            title="Name should contain only alphabetic characters and spaces."
+
                             onChange={handleChange}
                         />
                     </Form.Group>
