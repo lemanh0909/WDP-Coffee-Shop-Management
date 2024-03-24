@@ -24,15 +24,13 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
-
         try {
             const response = await axios.post(
                 "http://localhost:5000/api/v1/category/create",
                 formData
             );
 
-            if (response.data.isSuccess) {
+            if (response.data.success) {
                 onHide();
                 handleAddCategory(response.data.data);
                 setFormData({
