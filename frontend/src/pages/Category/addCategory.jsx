@@ -42,11 +42,11 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                     description: "",
                 });
             } else {
-                toast.error("Tên category đã tồn tại. Vui lòng chọn tên khác."); // Use toast instead of alert
+                toast.error("The category name already exists. Please choose another name."); // Use toast instead of alert
             }
         } catch (error) {
             console.error("Error:", error);
-            toast.error("Đã có lỗi xảy ra. Vui lòng thử lại sau."); // Use toast for general error
+            toast.error("The category name already exists. Please choose another name."); // Use toast for general error
         }
     };
 
@@ -63,7 +63,9 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             type="text"
                             name="name"
                             value={formData.name}
-
+                            pattern="[a-zA-Z\s]+"
+                            required
+                            title="Name should contain only alphabetic characters and spaces."
                             onChange={handleChange}
                         />
                     </Form.Group>

@@ -44,10 +44,10 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                             value={updatedData.name}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
+                                if (/^[a-zA-Z\s]*$/.test(inputValue)) {
                                     setUpdatedData({ ...updatedData, name: inputValue });
                                 } else {
-                                    alert("The name must contain only alphabetic characters and spaces!");
+                                    alert("Names must contain only alphabetic characters and spaces!");
                                 }
                             }}
                         />
