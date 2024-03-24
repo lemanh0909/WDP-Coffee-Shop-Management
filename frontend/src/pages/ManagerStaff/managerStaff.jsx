@@ -24,7 +24,7 @@ function EmployeeManagement() {
   const [error, setError] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
 
-  const itemsPerPage = 7;
+  const itemsPerPage = 6;
   const [getPaginatedItems, activePage, totalPages, handlePageChange] = usePagination(employeeData, itemsPerPage);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ function EmployeeManagement() {
 
   const handleAddWarehouse = () => {
     setShowAddModal(false);
-    toast.success('Thêm nhân viên thành công!');
+    toast.success('Created account successfully');
     fetchData();
   };
 
@@ -91,7 +91,7 @@ function EmployeeManagement() {
   return (
     <>
       <Container className="mt-4">
-        <ToastContainer position='top-right' />
+        <ToastContainer position='bottom-right' />
         <Row className="justify-content-between align-items-center mb-4">
           <Col xs={6}>
             <h1 className="text-center mb-0 text-white">Staff login rights</h1>
@@ -109,6 +109,7 @@ function EmployeeManagement() {
             <EmployeeTable
               employeeData={getPaginatedItems}
               toggleStatus={toggleStatus}
+              fetchData={fetchData}
             />
             <PaginationBar
               activePage={activePage}
