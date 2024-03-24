@@ -1,43 +1,54 @@
 import React, { useState, useEffect } from "react";
-import "./UserProfilenew.css";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./UserProfilenew.css";
+import ChangePassword from "./changepass.jsx"; // Import component ChangePassword
 
 const UserProfileCard = ({ updateLatestFullName }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [fullName, setfullName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setphoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [dob, setDob] = useState("");
   const [role, setRole] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+<<<<<<< HEAD
   const [latestFullName, setLatestFullName] = useState("");
+=======
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const handleCloseChangePassword = () => {
+    setShowChangePassword(false);
+  };
+>>>>>>> 30cab94704095b32865d9ac01ba934f4f8aa3155
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = () => {
     const userDataString = localStorage.getItem("userData");
+
     if (!userDataString) {
       throw new Error("User data not found in localStorage.");
     }
     const userData = JSON.parse(userDataString);
+    setUserData(userData); // Set userData state
     const userId = userData.userID;
     axios
       .get(`http://localhost:5000/api/v1/user/${userId}/getDetail`)
       .then((response) => {
         const userData = response.data.data;
         if (userData) {
-          setfullName(userData.fullName || ""); // Thay đổi tên thuộc tính
+          setFullName(userData.fullName || "");
           setEmail(userData.email || "");
-          setphoneNumber(userData.phoneNumber || ""); // Thay đổi tên thuộc tính
+          setPhoneNumber(userData.phoneNumber || "");
           setDob(userData.dob || "");
           setRole(userData.role || "");
         } else {
-          setfullName("");
+          setFullName("");
           setEmail("");
-          setphoneNumber("");
+          setPhoneNumber("");
           setDob("");
           setRole("");
         }
@@ -45,9 +56,9 @@ const UserProfileCard = ({ updateLatestFullName }) => {
       })
       .catch((error) => {
         console.error("Error fetching user detail:", error);
-        setfullName("");
+        setFullName("");
         setEmail("");
-        setphoneNumber("");
+        setPhoneNumber("");
         setDob("");
         setRole("");
         setIsLoading(false);
@@ -55,31 +66,34 @@ const UserProfileCard = ({ updateLatestFullName }) => {
   };
 
   const handleSave = () => {
+<<<<<<< HEAD
     localStorage.clear();
     // Kiểm tra các trường bắt buộc
+=======
+>>>>>>> 30cab94704095b32865d9ac01ba934f4f8aa3155
     if (!fullName || !phoneNumber || !dob) {
-      toast.error("Vui lòng điền đầy đủ thông tin.");
+      toast.error("Please complete all information.");
       return;
     }
 
-    // Kiểm tra định dạng số điện thoại (+84)
     if (phoneNumber.length < 10 || phoneNumber.length > 11) {
-      toast.error("Phone number is invalid. ");
+      toast.error("Invalid phone number.");
       return;
     }
 
-    // Kiểm tra tuổi (phải đủ 16 tuổi)
     const today = new Date();
     const dobDate = new Date(dob);
     const ageDiff = today.getFullYear() - dobDate.getFullYear();
     const monthDiff = today.getMonth() - dobDate.getMonth();
-    const age = monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate()) ? ageDiff - 1 : ageDiff;
+    const age =
+      monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())
+        ? ageDiff - 1
+        : ageDiff;
     if (age < 16) {
       toast.error("You must be 16 years or older.");
       return;
     }
 
-    // Nếu các kiểm tra đều thành công, thực hiện cập nhật dữ liệu
     setIsEditing(false);
     const userDataString = localStorage.getItem("userData");
     if (!userDataString) {
@@ -90,27 +104,31 @@ const UserProfileCard = ({ updateLatestFullName }) => {
 
     const updatedUserData = {
       fullName: fullName,
-      email: email, // Giữ nguyên giá trị email hiện tại
+      email: email,
       phoneNumber: phoneNumber,
       dob: dob,
     };
 
     axios
-      .put(`http://localhost:5000/api/v1/user/${userId}/update`, updatedUserData)
+      .put(
+        `http://localhost:5000/api/v1/user/${userId}/update`,
+        updatedUserData
+      )
       .then((response) => {
-        console.log('User data updated successfully:', response.data);
-        setfullName(updatedUserData.fullName);
+        console.log("User data updated successfully:", response.data);
+        setFullName(updatedUserData.fullName);
         updateLatestFullName(updatedUserData.fullName);
+<<<<<<< HEAD
         toast.success("Thông tin đã được cập nhật thành công!");
         localStorage.setItem('userData', JSON.stringify(userData));
+=======
+        toast.success("Update profile success!");
+>>>>>>> 30cab94704095b32865d9ac01ba934f4f8aa3155
       })
       .catch((error) => {
         console.error("Error updating user data:", error);
-        // Xử lý lỗi nếu có
       });
   };
-
-
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -119,14 +137,18 @@ const UserProfileCard = ({ updateLatestFullName }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsEditing(false);
-    // Gửi dữ liệu đã chỉnh sửa lên server thông qua API (nếu cần)
   };
 
+  const handleChangePasswordClick = () => {
+    setShowChangePassword(true);
+  };
+  const handleChangePasswordSuccess = () => {
+    toast.success("Change password success!");
+  };
   return (
     <>
       <ToastContainer position="top-right" />
-      {/* <CommonNavbar latestFullName={latestFullName} /> */}
-      {isLoading ? ( // Nếu đang loading dữ liệu thì hiển thị một số thông báo hoặc loading spinner
+      {isLoading ? (
         <div>Loading...</div>
       ) : (
         <div className="container-fluid d-flex justify-content-center align-items-center vh-90">
@@ -162,7 +184,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
                           <input
                             type="text"
                             value={fullName}
-                            onChange={(e) => setfullName(e.target.value)}
+                            onChange={(e) => setFullName(e.target.value)}
                           />
                         ) : (
                           <span className="info-value">{fullName}</span>
@@ -175,9 +197,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
                         <h6 className="mb-0">Email</h6>
                       </div>
                       <div className="col-sm text-secondary">
-
-                        <span className="info-value" disable>{email}</span>
-
+                        <span className="info-value">{email}</span>
                       </div>
                     </div>
                     <hr />
@@ -190,7 +210,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
                           <input
                             type="tel"
                             value={phoneNumber}
-                            onChange={(e) => setphoneNumber(e.target.value)}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                           />
                         ) : (
                           <span className="info-value">{phoneNumber}</span>
@@ -210,11 +230,37 @@ const UserProfileCard = ({ updateLatestFullName }) => {
                             onChange={(e) => setDob(e.target.value)}
                           />
                         ) : (
-                          <span className="info-value">{new Date(dob).toLocaleDateString('en-GB')}</span>
+                          <span className="info-value">
+                            {new Date(dob).toLocaleDateString("en-GB")}
+                          </span>
                         )}
                       </div>
                     </div>
                     <hr />
+                    {/* <div className="row">
+                      <div className="col-sm-5">
+                        <h6 className="mb-0">Password</h6>
+                      </div>
+                      <div className="col-sm text-secondary">
+                        <button
+                          className="btn btn-info"
+                          onClick={handleChangePasswordClick}
+                        >
+                          Change Password
+                        </button>
+                      </div>
+                      {showChangePassword && (
+                        <div>
+                          <ChangePassword
+                            onClose={handleCloseChangePassword}
+                            onSuccess={handleChangePasswordSuccess}
+                            accessToken={userData.accessToken} // Truyền token xuống component ChangePassword
+                          />
+                        </div>
+                      )}
+                    </div>
+
+                    <hr /> */}
                     <div className="row">
                       <div className="col-sm-12">
                         {isEditing ? (
@@ -223,7 +269,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
                           </button>
                         ) : (
                           <button className="btn btn-info" onClick={handleEdit}>
-                            Edit
+                            Update Profile
                           </button>
                         )}
                       </div>

@@ -6,7 +6,6 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
     const [updatedData, setUpdatedData] = useState({
         name: "",
         description: "",
-        products: [""],
     });
 
     useEffect(() => {
@@ -57,28 +56,12 @@ function UpdateCategoryModal({ categoryId, categoryData, onUpdateSuccess, onHide
                         <Form.Label>Description</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter mo ta"
+                            placeholder="Enter description"
                             value={updatedData.description}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
                                 if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
                                     setUpdatedData({ ...updatedData, description: inputValue });
-                                } else {
-                                    alert("The name must contain only alphabetic characters and spaces!");
-                                }
-                            }}
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="formProducts">
-                        <Form.Label>Code product</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter ma san pham"
-                            value={updatedData.products}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
-                                    setUpdatedData({ ...updatedData, products: inputValue });
                                 } else {
                                     alert("The name must contain only alphabetic characters and spaces!");
                                 }

@@ -57,7 +57,7 @@ function RecipeModal({ show, handleClose, warehouse, currentRecipes, onRecipeAdd
     };
 
     return (
-        <Modal show={show} onHide={handleClose} className="modal-lg">
+        <Modal show={show} onHide={handleClose} className="modal-lg mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Recipe</Modal.Title>
             </Modal.Header>

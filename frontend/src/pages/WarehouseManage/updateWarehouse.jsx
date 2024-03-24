@@ -30,7 +30,7 @@ function UpdateWarehouseModal({ warehouseId, warehouseData, onUpdateSuccess, onH
     };
 
     return (
-        <Modal show={true} onHide={onHide}>
+        <Modal show={true} onHide={onHide} className="mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Update Warehouse</Modal.Title>
             </Modal.Header>

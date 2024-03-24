@@ -46,7 +46,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
     };
 
     return (
-        <Modal show={show} onHide={onHide} animation={false}>
+        <Modal show={show} onHide={onHide} animation={false} className="mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Addition account staff</Modal.Title>
             </Modal.Header>
