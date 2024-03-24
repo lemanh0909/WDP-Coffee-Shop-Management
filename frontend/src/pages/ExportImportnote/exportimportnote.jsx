@@ -3,7 +3,8 @@ import { Container, Row, Col, Table, Pagination, Button } from "react-bootstrap"
 import { usePagination } from "../Common/hooks.js";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
-import AddModal from "./add.jsx";
+import AddImportModal from "./addImport.jsx";
+import AddExportModal from "./addExport.jsx";
 import 'react-toastify/dist/ReactToastify.css';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
@@ -14,14 +15,18 @@ function PhieuThuChi() {
   const [products, setProducts] = useState([]);
   const [paginatedItems, activePage, totalPages, handlePageChange] = usePagination(products, itemsPerPage);
 
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddImportModal, setShowAddImportModal] = useState(false);
+  const [showAddExportModal, setShowAddExportModal] = useState(false);
   const formatDate1 = (isoDate) => {
     if (!isoDate) return "";
     return format(new Date(isoDate), 'dd/MM/yyyy HH:mm:ss');
   };
 
-  const handleCloseAddModal = () => setShowAddModal(false);
-  const handleShowAddModal = () => setShowAddModal(true);
+  const handleCloseAddImportModal = () => setShowAddImportModal(false);
+  const handleShowAddImportModal = () => setShowAddImportModal(true);
+
+  const handleCloseAddExportModal = () => setShowAddExportModal(false);
+  const handleShowAddExportModal = () => setShowAddExportModal(true);
 
   const handleAddSuccess = (newProduct) => {
     setProducts([...products, newProduct]);
@@ -74,10 +79,13 @@ function PhieuThuChi() {
                 <h2>Note E-I Management</h2>
               </Col>
               <Col md={6} className="text-right">
-                <Button variant="primary" onClick={handleShowAddModal}>
-                  <i className="far fa-plus-square"></i> Add note
+                <Button variant="primary" className="mr-1" onClick={handleShowAddImportModal}>
+                  <i className="far fa-plus-square"></i> Add Import note
                 </Button>
-                <Button variant="warning" onClick={() => exportToCSV(products, "phieu_thu_chi")}>Export to excel</Button>
+                <Button variant="danger" className="mr-1" onClick={handleShowAddExportModal}>
+                  <i className="far fa-plus-square"></i> Add Export note
+                </Button>
+                <Button variant="success" className="mr-1" onClick={() => exportToCSV(products, "phieu_thu_chi")}> <i className="fa-solid fa-file-export"></i> Export to excel</Button>
               </Col>
             </Row>
             <Row className="mb-3">
@@ -134,9 +142,15 @@ function PhieuThuChi() {
                 </Pagination>
               </Col>
             </Row>
-            <AddModal
-              show={showAddModal}
-              handleClose={handleCloseAddModal}
+            <AddImportModal
+              show={showAddImportModal}
+              handleClose={handleCloseAddImportModal}
+              onAddSuccess={handleAddSuccess}
+              setProducts={setProducts}
+            />
+            <AddExportModal
+              show={showAddExportModal}
+              handleClose={handleCloseAddExportModal}
               onAddSuccess={handleAddSuccess}
               setProducts={setProducts}
             />

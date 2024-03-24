@@ -7,7 +7,6 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
         managerId: userId,
         name: "",
         description: "",
-        products: [""],
 
     });
 
@@ -42,7 +41,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                     managerId: userId,
                     name: "",
                     description: "",
-                    products: [""],
+                    // products: [""],
                 });
             } else {
                 console.error("Error:", response.data.message);
@@ -53,7 +52,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
     };
 
     return (
-        <Modal show={show} onHide={onHide} animation={false}>
+        <Modal show={show} onHide={onHide} animation={false} className="mt-10">
             <Modal.Header closeButton>
                 <Modal.Title>Addition category</Modal.Title>
             </Modal.Header>
@@ -91,24 +90,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             }}
                         />
                     </Form.Group>
-
-                    <Form.Group controlId="formProduct">
-                        <Form.Label>Product code:</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="products"
-                            value={formData.products}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
-                                    setFormData({ ...formData, products: inputValue });
-                                } else {
-                                    alert("Product code must only contain alphabetic characters and spaces!");
-                                }
-                            }}
-                        />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" className="mt-2">
                         Add
                     </Button>
                 </Form>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function AddModal({ show, handleClose, onAddSuccess }) {
   const [warehouseOptions, setWarehouseOptions] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
@@ -12,10 +13,10 @@ function AddModal({ show, handleClose, onAddSuccess }) {
 
   const fetchWarehouses = async () => {
     try {
-      const userDataString = localStorage.getItem('userData');
+      const userDataString = localStorage.getItem("userData");
 
       if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
+        throw new Error("User data not found in localStorage.");
       }
       const userData = JSON.parse(userDataString);
 
@@ -27,7 +28,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
         const warehouseData = response.data.data;
         setWarehouseOptions(warehouseData);
       } else {
-        throw new Error('Failed to fetch warehouses.');
+        throw new Error("Failed to fetch warehouses.");
       }
     } catch (error) {
       console.error("Error fetching warehouses:", error);
@@ -39,12 +40,16 @@ function AddModal({ show, handleClose, onAddSuccess }) {
   }, []);
 
   const handleSave = async () => {
+    // if (price < 0) {
+    //   toast.error("Giá không được nhập số âm");
+    //   return;
+    // }
     try {
       console.log("Selected warehouse:", selectedWarehouse);
 
-      const userDataString = localStorage.getItem('userData');
+      const userDataString = localStorage.getItem("userData");
       if (!userDataString) {
-        throw new Error('User data not found in localStorage.');
+        throw new Error("User data not found in localStorage.");
       }
       const userData = JSON.parse(userDataString);
 
@@ -55,21 +60,25 @@ function AddModal({ show, handleClose, onAddSuccess }) {
         quantity: quantity,
         price: price,
         status: status,
-        description: description
+        description: description,
       };
 
-      const response = await axios.post('http://localhost:5000/api/v1/note/createNote', data, {
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/note/createNote",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       if (response.status === 201) {
         console.log("Note created successfully:", response.data);
         onAddSuccess(response.data);
         handleClose();
       } else {
-        throw new Error('Failed to create note.');
+        throw new Error("Failed to create note.");
       }
     } catch (error) {
       console.error("Error creating note:", error);
@@ -77,9 +86,9 @@ function AddModal({ show, handleClose, onAddSuccess }) {
   };
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} className="mt-10">
       <Modal.Header closeButton>
-        <Modal.Title>Add note</Modal.Title>
+        <Modal.Title>Add Import note</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -90,7 +99,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
               value={selectedWarehouse}
               onChange={(e) => setSelectedWarehouse(e.target.value)}
             >
-              <option value="">Chọn Warehouse</option>
+              <option value="">Choose Warehouse</option>
               {warehouseOptions.map((warehouse) => (
                 <option key={warehouse._id} value={warehouse._id}>
                   {warehouse.name}
@@ -99,32 +108,47 @@ function AddModal({ show, handleClose, onAddSuccess }) {
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="quantity">
-            <Form.Label>Số lượng</Form.Label>
+            <Form.Label>Quantity</Form.Label>
             <Form.Control
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (!isNaN(value) && value >= 0) {
+                  setQuantity(value);
+                }
+              }}
             />
           </Form.Group>
+
           <Form.Group controlId="price">
-            <Form.Label>Giá</Form.Label>
+            <Form.Label>Price</Form.Label>
             <Form.Control
               type="number"
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (!isNaN(value) && value >= 0) {
+                  // Kiểm tra nếu giá trị là số và lớn hơn hoặc bằng 0
+                  setPrice(value);
+                }
+              }}
             />
           </Form.Group>
+
           <Form.Group controlId="status">
-            <Form.Label>Tình trạng</Form.Label>
+            <Form.Label>Status</Form.Label>
             <Form.Control
-              as="select"
+              type="text"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="Imported">Imported</option>
-              <option value="Exported">Exported</option>
-            </Form.Control>
+              disabled
+            />
+            <option value="Imported" disabled>
+              Imported
+            </option>
           </Form.Group>
+
           <Form.Group controlId="description">
             <Form.Label>Mô tả</Form.Label>
             <Form.Control
@@ -138,10 +162,10 @@ function AddModal({ show, handleClose, onAddSuccess }) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Hủy
+          Cancel
         </Button>
         <Button variant="primary" onClick={handleSave}>
-          Lưu
+          Save
         </Button>
       </Modal.Footer>
     </Modal>
