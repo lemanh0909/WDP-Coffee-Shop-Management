@@ -11,7 +11,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
   const [phoneNumber, setphoneNumber] = useState("");
   const [dob, setDob] = useState("");
   const [role, setRole] = useState("");
-  const [isLoading, setIsLoading] = useState(true); // State để kiểm tra xem dữ liệu đã được fetch chưa
+  const [isLoading, setIsLoading] = useState(true);
   const [latestFullName, setLatestFullName] = useState("");
   useEffect(() => {
     fetchData();
@@ -55,6 +55,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
   };
 
   const handleSave = () => {
+    localStorage.clear();
     // Kiểm tra các trường bắt buộc
     if (!fullName || !phoneNumber || !dob) {
       toast.error("Vui lòng điền đầy đủ thông tin.");
@@ -101,6 +102,7 @@ const UserProfileCard = ({ updateLatestFullName }) => {
         setfullName(updatedUserData.fullName);
         updateLatestFullName(updatedUserData.fullName);
         toast.success("Thông tin đã được cập nhật thành công!");
+        localStorage.setItem('userData', JSON.stringify(userData));
       })
       .catch((error) => {
         console.error("Error updating user data:", error);
