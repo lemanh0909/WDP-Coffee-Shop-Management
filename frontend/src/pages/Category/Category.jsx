@@ -105,7 +105,7 @@ function Category() {
   };
 
   const handleAddCategory = () => {
-    toast.success('Thêm the loai thành công!');
+    toast.success('Add Category Successfully!');
     fetchData();
   };
 
@@ -178,10 +178,6 @@ function Category() {
                   onClick={() => setShowAddModal(true)}
                 >
                   <i className="fa-solid fa-plus"></i> Add category
-                </button>
-                <button type="button" className="btn btn-success btn-color">
-                  <i className="fa-solid fa-file-export"></i>
-                  Export to excel
                 </button>
               </Col>
             </Row>
