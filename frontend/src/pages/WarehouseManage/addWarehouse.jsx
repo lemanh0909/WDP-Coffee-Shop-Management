@@ -114,8 +114,18 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
             <Form.Control
               type="number"
               name="quantity"
-              value={formData.quantity}
-              onChange={handleChange}
+              value={formData.quantity || "1"}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                if (/^[1-9]\d*$/.test(inputValue)) {
+                  setFormData({ ...formData, quantity: inputValue });
+                } else if (inputValue === "") {
+                  setFormData({ ...formData, quantity: "1" });
+                  alert("Add at least one!");
+                } else {
+                  alert("Add at least one!");
+                }
+              }}
             />
           </Form.Group>
           <Form.Group controlId="formUnit">
@@ -133,6 +143,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
               <option value="pcs">pcs</option>
             </Form.Control>
           </Form.Group>
+
           <Form.Group controlId="formImage">
             <Form.Label>Image:</Form.Label>
             <Form.Control

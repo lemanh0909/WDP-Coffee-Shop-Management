@@ -84,6 +84,15 @@ function AddExportModal({ show, handleClose, onAddSuccess }) {
     if (value === "" || (parseFloat(value) >= 0 && /^\d*\.?\d*$/.test(value))) {
       setQuantity(value);
     }
+    const numericValue = value.replace(/\D/g, '');
+    const isPositiveInteger = numericValue !== '' && !isNaN(numericValue) && parseInt(numericValue) >0;
+  
+    if (isPositiveInteger) {
+      setQuantity(numericValue);
+    } else {
+      alert('Add at least one');
+      setQuantity('1');
+    }
   };
 
   return (

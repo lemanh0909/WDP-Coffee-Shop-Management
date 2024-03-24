@@ -79,10 +79,35 @@ function AddModal({ show, handleClose, onAddSuccess }) {
       console.error("Error creating note:", error);
     }
   };
-
-  const handlePriceChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '');
-    const formattedValue = new Intl.NumberFormat('vi-VN').format(value);
+  const handleQuantityChange = (e) => {
+    const { value } = e.target;
+  const hasInvalidChars = /^-|-{2,}|[+*/]/g.test(value);
+  
+    if (hasInvalidChars) {
+      alert('Please enter index');
+      setQuantity('1');
+      return;
+    }
+    const numericValue = value.replace(/\D/g, '');
+    const isPositiveInteger = numericValue !== '' && !isNaN(numericValue) && parseInt(numericValue) >0;
+  
+    if (isPositiveInteger) {
+      setQuantity(numericValue);
+    } else {
+      alert('Add at least one');
+      setQuantity('1');
+    }
+  };
+const handlePriceChange = (e) => {
+  const { value } = e.target;
+const hasInvalidChars = /^-|-{2,}|[+*/]/g.test(value);
+  
+    if (hasInvalidChars) {
+      alert('Please enter index');
+      return;
+    }
+    const numericValue = value.replace(/\D/g, '');
+    const formattedValue = new Intl.NumberFormat('vi-VN').format(numericValue);
     setPrice(formattedValue);
   };
 
@@ -127,12 +152,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
             <Form.Control
               type="number"
               value={quantity}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (!isNaN(value) && value >= 0) {
-                  setQuantity(value);
-                }
-              }}
+              onChange={handleQuantityChange}
             />
           </Form.Group>
 
@@ -158,7 +178,7 @@ function AddModal({ show, handleClose, onAddSuccess }) {
           </Form.Group>
 
           <Form.Group controlId="description">
-            <Form.Label>Mô tả</Form.Label>
+            <Form.Label>Description</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
