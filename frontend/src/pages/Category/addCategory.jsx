@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import { toast } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css"; // Import toast css
 import axios from "axios";
 
 const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
@@ -7,16 +9,12 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
         managerId: userId,
         name: "",
         description: "",
-
     });
 
     const handleChange = async (e) => {
         e.persist();
         try {
             const { name, value } = e.target;
-
-
-
             setFormData((prevData) => ({ ...prevData, [name]: value }));
         } catch (error) {
             console.error("Error handling change:", error);
@@ -25,15 +23,11 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-
-
         try {
             const response = await axios.post(
                 "http://localhost:5000/api/v1/category/create",
                 formData
             );
-
             if (response.data.isSuccess) {
                 onHide();
                 handleAddCategory(response.data.data);
@@ -41,13 +35,13 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                     managerId: userId,
                     name: "",
                     description: "",
-                    // products: [""],
                 });
             } else {
-                console.error("Error:", response.data.message);
+                toast.error("Tên category đã tồn tại. Vui lòng chọn tên khác."); // Use toast instead of alert
             }
         } catch (error) {
-            console.error("Unexpected error:", error);
+            console.error("Error:", error);
+            toast.error("Đã có lỗi xảy ra. Vui lòng thử lại sau."); // Use toast for general error
         }
     };
 
@@ -64,14 +58,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             type="text"
                             name="name"
                             value={formData.name}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
-                                    setFormData({ ...formData, name: inputValue });
-                                } else {
-                                    alert("Product names must contain only alphabetic characters and spaces!");
-                                }
-                            }}
+                            onChange={handleChange}
                         />
                     </Form.Group>
                     <Form.Group controlId="formDes">
@@ -80,14 +67,7 @@ const AddCategoryModal = ({ userId, show, onHide, handleAddCategory }) => {
                             type="text"
                             name="description"
                             value={formData.description}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                if (/^[a-zA-Z0-9\s-]*$/.test(inputValue)) {
-                                    setFormData({ ...formData, description: inputValue });
-                                } else {
-                                    alert("Description must only contain alphabetic characters and spaces!");
-                                }
-                            }}
+                            onChange={handleChange}
                         />
                     </Form.Group>
                     <Button variant="primary" type="submit" className="mt-2">

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
-
+import { toast } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css";
 const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
   const [formData, setFormData] = useState({
     managerId: userId,
@@ -56,10 +57,11 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
           image: "",
         });
       } else {
-        console.error("Error:", response.data.message);
+        toast.error("Error: " + response.data.message); // Use toast instead of console.error
       }
     } catch (error) {
       console.error("Unexpected error:", error);
+      toast.error("Unexpected error occurred. Please try again later."); // Use toast for general error
     }
   };
 
@@ -81,9 +83,8 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                 if (/^[a-zA-Z\s]*$/.test(inputValue)) {
                   setFormData({ ...formData, name: inputValue });
                 } else {
-                  alert(
-                    "Product names must contain only alphabetic characters and spaces!"
-                  );
+                  
+                  toast.error( "Product names must contain only alphabetic characters and spaces!");
                 }
               }}
             />
@@ -99,7 +100,7 @@ const AddWarehouseModal = ({ userId, show, onHide, handleAddWarehouse }) => {
                 if (/^[1-9]\d*$/.test(inputValue)) {
                   setFormData({ ...formData, quantity: inputValue });
                 } else {
-                  alert("The quantity must be a positive integer!");
+                  toast.error("The quantity must be a positive integer!");
                 }
               }}
             />
